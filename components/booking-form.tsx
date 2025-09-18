@@ -1,31 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Loader2 } from "lucide-react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { createClient } from "@/lib/supabase/client"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface BookingFormData {
-  clientName: string
-  clientEmail: string
-  clientPhone: string
-  eventType: string
-  eventDate: Date | undefined
-  eventTime: string
-  eventLocation: string
-  eventDescription: string
-  budgetRange: string
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  eventType: string;
+  eventDate: Date | undefined;
+  eventTime: string;
+  eventLocation: string;
+  eventDescription: string;
+  budgetRange: string;
 }
 
 export function BookingForm() {
@@ -39,16 +49,16 @@ export function BookingForm() {
     eventLocation: "",
     eventDescription: "",
     budgetRange: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const supabase = createClient()
+      const supabase = createClient();
 
       const { error } = await supabase.from("bookings").insert({
         client_name: formData.clientName,
@@ -61,14 +71,15 @@ export function BookingForm() {
         event_description: formData.eventDescription,
         budget_range: formData.budgetRange,
         status: "pending",
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
       toast({
         title: "Booking Request Submitted!",
-        description: "We'll get back to you within 24 hours with a custom proposal.",
-      })
+        description:
+          "We'll get back to you within 24 hours with a custom proposal.",
+      });
 
       // Reset form
       setFormData({
@@ -81,18 +92,19 @@ export function BookingForm() {
         eventLocation: "",
         eventDescription: "",
         budgetRange: "",
-      })
+      });
     } catch (error) {
-      console.error("Error submitting booking:", error)
+      console.error("Error submitting booking:", error);
       toast({
         title: "Error",
-        description: "There was a problem submitting your booking request. Please try again.",
+        description:
+          "There was a problem submitting your booking request. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -106,7 +118,9 @@ export function BookingForm() {
             <Input
               id="clientName"
               value={formData.clientName}
-              onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientName: e.target.value })
+              }
               required
               placeholder="Your full name"
             />
@@ -118,7 +132,9 @@ export function BookingForm() {
               id="clientEmail"
               type="email"
               value={formData.clientEmail}
-              onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientEmail: e.target.value })
+              }
               required
               placeholder="your.email@example.com"
             />
@@ -131,7 +147,9 @@ export function BookingForm() {
             id="clientPhone"
             type="tel"
             value={formData.clientPhone}
-            onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, clientPhone: e.target.value })
+            }
             placeholder="+1 (555) 123-4567"
           />
         </div>
@@ -146,7 +164,9 @@ export function BookingForm() {
             <Label htmlFor="eventType">Event Type *</Label>
             <Select
               value={formData.eventType}
-              onValueChange={(value) => setFormData({ ...formData, eventType: value })}
+              onValueChange={(value) =>
+                setFormData({ ...formData, eventType: value })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select event type" />
@@ -167,7 +187,9 @@ export function BookingForm() {
             <Label htmlFor="budgetRange">Budget Range</Label>
             <Select
               value={formData.budgetRange}
-              onValueChange={(value) => setFormData({ ...formData, budgetRange: value })}
+              onValueChange={(value) =>
+                setFormData({ ...formData, budgetRange: value })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select budget range" />
@@ -193,18 +215,22 @@ export function BookingForm() {
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    !formData.eventDate && "text-muted-foreground",
+                    !formData.eventDate && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {formData.eventDate ? format(formData.eventDate, "PPP") : "Pick a date"}
+                  {formData.eventDate
+                    ? format(formData.eventDate, "PPP")
+                    : "Pick a date"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
                   selected={formData.eventDate}
-                  onSelect={(date) => setFormData({ ...formData, eventDate: date })}
+                  onSelect={(date) =>
+                    setFormData({ ...formData, eventDate: date })
+                  }
                   disabled={(date) => date < new Date()}
                   initialFocus
                 />
@@ -218,7 +244,9 @@ export function BookingForm() {
               id="eventTime"
               type="time"
               value={formData.eventTime}
-              onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, eventTime: e.target.value })
+              }
               required
             />
           </div>
@@ -229,7 +257,9 @@ export function BookingForm() {
           <Input
             id="eventLocation"
             value={formData.eventLocation}
-            onChange={(e) => setFormData({ ...formData, eventLocation: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, eventLocation: e.target.value })
+            }
             required
             placeholder="Venue name and address"
           />
@@ -240,7 +270,9 @@ export function BookingForm() {
           <Textarea
             id="eventDescription"
             value={formData.eventDescription}
-            onChange={(e) => setFormData({ ...formData, eventDescription: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, eventDescription: e.target.value })
+            }
             placeholder="Tell us more about your event, music preferences, special requests, etc."
             rows={4}
           />
@@ -259,8 +291,9 @@ export function BookingForm() {
       </Button>
 
       <p className="text-xs text-muted-foreground text-center">
-        By submitting this form, you agree to be contacted by The Midnight Echoes regarding your event booking.
+        By submitting this form, you agree to be contacted by Ultra Band
+        regarding your event booking.
       </p>
     </form>
-  )
+  );
 }
