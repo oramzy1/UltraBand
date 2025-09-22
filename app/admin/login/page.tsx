@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Music, Eye, EyeOff } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("")
@@ -20,6 +21,7 @@ export default function AdminLoginPage() {
   const [showRecovery, setShowRecovery] = useState(false)
   const [recoveryEmail, setRecoveryEmail] = useState("")
   const [recoveryMessage, setRecoveryMessage] = useState("")
+  const { toast } = useToast()
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -35,6 +37,10 @@ export default function AdminLoginPage() {
       })
 
       if (response.ok) {
+        toast({
+          title: "Login Successful!",
+          description: "You're Welcome Home...",
+        })
         router.push("/admin")
       } else {
         setError("Invalid username or password")

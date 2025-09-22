@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +27,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface BookingFormData {
+  serviceCategory: string;
   clientName: string;
   clientEmail: string;
   clientPhone: string;
@@ -39,7 +40,9 @@ interface BookingFormData {
 }
 
 export function BookingForm() {
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [formData, setFormData] = useState<BookingFormData>({
+    serviceCategory: "events",
     clientName: "",
     clientEmail: "",
     clientPhone: "",
@@ -61,6 +64,7 @@ export function BookingForm() {
       const supabase = createClient();
 
       const { error } = await supabase.from("bookings").insert({
+        service_category: formData.serviceCategory,
         client_name: formData.clientName,
         client_email: formData.clientEmail,
         client_phone: formData.clientPhone,
@@ -83,6 +87,7 @@ export function BookingForm() {
 
       // Reset form
       setFormData({
+        serviceCategory: "events",
         clientName: "",
         clientEmail: "",
         clientPhone: "",
@@ -157,7 +162,28 @@ export function BookingForm() {
 
       {/* Event Information */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Event Details</h3>
+        <h3 className="text-lg font-semibold">Service Details</h3>
+
+        <div className="space-y-2">
+          <Label htmlFor="serviceCategory">Service Category *</Label>
+          <Select
+            value={formData.serviceCategory}
+            onValueChange={(value) =>
+              setFormData({ ...formData, serviceCategory: value })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select service type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="events">Live Event Performance</SelectItem>
+              <SelectItem value="mixing">Audio Mixing Services</SelectItem>
+              <SelectItem value="video_editing">
+                Video Editing Services
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -209,35 +235,38 @@ export function BookingForm() {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Event Date *</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !formData.eventDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {formData.eventDate
-                    ? format(formData.eventDate, "PPP")
-                    : "Pick a date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={formData.eventDate}
-                  onSelect={(date) =>
-                    setFormData({ ...formData, eventDate: date })
-                  }
-                  disabled={(date) => date < new Date()}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+            <div className="relative">
+              <Button
+                variant="outline"
+                type="button"
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !formData.eventDate && "text-muted-foreground"
+                )}
+                onClick={() => setShowDatePicker(!showDatePicker)}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {formData.eventDate
+                  ? format(formData.eventDate, "PPP")
+                  : "Pick a date"}
+              </Button>
 
+              {showDatePicker && (
+                <div className="absolute top-full left-0 mt-1 bg-black border border-gray-200 rounded-md shadow-lg z-50 p-4">
+                  <Calendar
+                    mode="single"
+                    selected={formData.eventDate}
+                    onSelect={(date) => {
+                      setFormData({ ...formData, eventDate: date });
+                      setShowDatePicker(false);
+                    }}
+                    disabled={(date) => date < new Date()}
+                    className="rounded-md"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="eventTime">Event Time *</Label>
             <Input

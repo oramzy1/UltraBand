@@ -23,6 +23,8 @@ export default async function AdminPage() {
 
   const { data: gallery } = await supabase.from("gallery").select("*").order("created_at", { ascending: false })
 
+  
+
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="container mx-auto">

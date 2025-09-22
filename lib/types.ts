@@ -1,5 +1,6 @@
 export interface Booking {
   id: string
+  service_category: string
   client_name: string
   client_email: string
   client_phone?: string
@@ -10,7 +11,7 @@ export interface Booking {
   event_description?: string
   budget_range?: string
   status: "pending" | "accepted" | "rejected" | "counter_proposed"
-  admin_notes?: string
+  notes?: string
   proposed_date?: string
   proposed_time?: string
   created_at: string

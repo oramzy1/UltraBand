@@ -6,13 +6,14 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navigation } from "@/components/navigation";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Ultra Band - Professional Live Music",
   description:
     "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band for unforgettable performances.",
-  generator: "v0.app",
+  generator: "Oramzy",
 };
 
 export default function RootLayout({
@@ -33,6 +34,7 @@ export default function RootLayout({
             <Navigation />
             <main className="min-h-screen">{children}</main>
           </Suspense>
+          <Toaster />
         </ThemeProvider>
         <Analytics />
       </body>

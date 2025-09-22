@@ -31,13 +31,10 @@ export default async function AboutPage() {
             <h2 className="text-2xl font-semibold">Our Story</h2>
             <p className="text-muted-foreground leading-relaxed">
               {aboutInfo?.content ||
-                "Ultra Band is a versatile professional band with over 10 years of experience performing at weddings, corporate events, festivals, and private parties. Our repertoire spans multiple genres including rock, pop, jazz, and acoustic sets, ensuring we can adapt to any event atmosphere."}
+                "Introducing Ultra Band Entertainment – your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences. Dive into the pulsating rhythms, infectious beats, and electrifying performances that will turn your Owambe into an unforgettable celebration."}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              We pride ourselves on delivering high-energy performances that
-              keep your guests engaged and dancing all night long. Our
-              commitment to excellence and attention to detail has made us one
-              of the most sought-after bands in the region.
+            At Ultra Band Entertainment, we are the maestros of Owambe vibes in North America and beyond. We specialize in creating a musical experience that amplifies the joy and energy of your festivities. Our roots run deep in Afrobeat, Highlife, Juju, Old Skool, and other genres that define the rich cultural tapestry of celebrations.
             </p>
           </div>
 
