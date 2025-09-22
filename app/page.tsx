@@ -80,7 +80,7 @@ export default async function HomePage() {
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
               Professional musicians with years of experience creating memorable
-              moments
+              moments!
             </p>
           </div>
 
