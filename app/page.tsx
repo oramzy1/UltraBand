@@ -56,7 +56,7 @@ export default async function HomePage() {
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-muted-foreground text-pretty max-w-2xl mx-auto">
             {heroInfo?.content ||
-              "Professional live music that captivates audiences and creates unforgettable experiences for your special events."}
+              "Professional live music that captivates audiences and also creates unforgettable experiences for your special events."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="animate-pulse-glow">
