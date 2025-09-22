@@ -21,7 +21,7 @@ export default async function AboutPage() {
             About Ultra Band
           </h1>
           <p className="text-xl text-muted-foreground text-pretty">
-            Passionate musicians dedicated to creating unforgettable experiences
+            Passionate musicians dedicated to creating unforgettable experiences!
           </p>
         </div>
 
