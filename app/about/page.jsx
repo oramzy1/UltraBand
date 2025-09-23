@@ -2,6 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Music, Award, Calendar, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import Image from "next/image";
+import { FAQSection } from "@/components/faq-section";
 
 export default async function AboutPage() {
   const supabase = await createClient();
@@ -12,16 +15,31 @@ export default async function AboutPage() {
     .eq("section", "about")
     .single();
 
+  const { data: bandMembers } = await supabase
+    .from("band_members")
+    .select("*")
+    .eq("is_active", true)
+    .order("display_order");
+
+    const formattedMembers =
+    bandMembers?.map((member, idx) => ({
+      id: member.id ?? idx,
+      name: member.name,
+      designation: member.role || "Member",
+      image: member.image_url || "/default-avatar.png",
+    })) || [];
+
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen py-10 px-4">
+      <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             About Ultra Band
           </h1>
           <p className="text-xl text-muted-foreground text-pretty">
-            Passionate musicians dedicated to creating unforgettable experiences!
+            Passionate musicians dedicated to creating unforgettable
+            experiences!
           </p>
         </div>
 
@@ -34,17 +52,25 @@ export default async function AboutPage() {
                 "Introducing Ultra Band Entertainment – your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences. Dive into the pulsating rhythms, infectious beats, and electrifying performances that will turn your Owambe into an unforgettable celebration."}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-            At Ultra Band Entertainment, we are the maestros of Owambe vibes in North America and beyond. We specialize in creating a musical experience that amplifies the joy and energy of your festivities. Our roots run deep in Afrobeat, Highlife, Juju, Old Skool, and other genres that define the rich cultural tapestry of celebrations.
+              At Ultra Band Entertainment, we are the maestros of Owambe vibes
+              in North America and beyond. We specialize in creating a musical
+              experience that amplifies the joy and energy of your festivities.
+              Our roots run deep in Afrobeat, Highlife, Juju, Old Skool, and
+              other genres that define the rich cultural tapestry of
+              celebrations.
             </p>
           </div>
 
           <div className="relative">
-            <img
+            <Image
+             loading='lazy'
+            height={100}
+            width={100}
               src={
                 aboutInfo?.image_url ||
-                "/placeholder.svg?height=500&width=600&query=professional band members with instruments"
+                "/about-image.jpg"
               }
-              alt="Ultra Band band members"
+              alt="Ultra Band band"
               className="rounded-lg shadow-lg w-full"
             />
           </div>
@@ -147,6 +173,32 @@ export default async function AboutPage() {
                 </p>
               </CardContent>
             </Card>
+
+            <Card className="p-6">
+              <CardContent className="pt-6">
+                <Badge className="mb-4">Mixing</Badge>
+                <h3 className="text-xl font-semibold mb-3">
+                  Audio Mixing Services
+                </h3>
+                <p className="text-muted-foreground">
+                Professional mixing that balances vocals and instruments, enhances clarity,
+                and delivers a polished sound ready for release or live performance.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-6">
+              <CardContent className="pt-6">
+                <Badge className="mb-4">Editing</Badge>
+                <h3 className="text-xl font-semibold mb-3">
+                  Video Editing Services
+                </h3>
+                <p className="text-muted-foreground">
+                Creative video editing that transforms raw footage into compelling stories,
+                complete with smooth transitions, effects, and professional finishing touches.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -155,50 +207,12 @@ export default async function AboutPage() {
           <h2 className="text-3xl font-bold text-center mb-12">
             Meet the Band
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center p-6">
-              <CardContent className="pt-6">
-                <div className="w-24 h-24 rounded-full bg-primary/20 mx-auto mb-4 flex items-center justify-center">
-                  <Music className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Alex Rivera</h3>
-                <p className="text-primary mb-2">Lead Vocalist & Guitar</p>
-                <p className="text-sm text-muted-foreground">
-                  With 15 years of experience, Alex brings powerful vocals and
-                  masterful guitar work to every performance.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6">
-              <CardContent className="pt-6">
-                <div className="w-24 h-24 rounded-full bg-primary/20 mx-auto mb-4 flex items-center justify-center">
-                  <Music className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Sarah Chen</h3>
-                <p className="text-primary mb-2">Bass & Backing Vocals</p>
-                <p className="text-sm text-muted-foreground">
-                  Sarah's rhythmic foundation and harmonious backing vocals add
-                  depth and richness to our sound.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6">
-              <CardContent className="pt-6">
-                <div className="w-24 h-24 rounded-full bg-primary/20 mx-auto mb-4 flex items-center justify-center">
-                  <Music className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Marcus Johnson</h3>
-                <p className="text-primary mb-2">Drums & Percussion</p>
-                <p className="text-sm text-muted-foreground">
-                  Marcus drives the energy with his dynamic drumming and keeps
-                  the crowd moving with infectious rhythms.
-                </p>
-              </CardContent>
-            </Card>
+          <div className="flex flex-row items-center justify-center mb-10 w-full">
+            <AnimatedTooltip items={formattedMembers} />
           </div>
         </div>
+        {/* FAQS */}
+        <FAQSection />
       </div>
     </div>
   );

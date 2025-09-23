@@ -1,7 +1,8 @@
 import { BookingForm } from "@/components/booking-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Music, DollarSign, Users } from "lucide-react";
+import { Clock, Music, DollarSign, Users, Settings } from "lucide-react";
+import { FAQSection } from "@/components/faq-section";
 
 export default function BookingsPage() {
   return (
@@ -60,7 +61,23 @@ export default function BookingsPage() {
                 </div>
               </CardContent>
             </Card>
-
+            {/* Other Services */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-primary" />
+                  other services we offer...
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="secondary">Video Editing</Badge>
+                  <Badge variant="secondary">Production</Badge>
+                  <Badge variant="secondary">Audio Mixing</Badge>
+                  <Badge variant="secondary">lots more...</Badge>
+                </div>
+              </CardContent>
+            </Card>
             {/* Pricing Information */}
             <Card>
               <CardHeader>
@@ -132,9 +149,10 @@ export default function BookingsPage() {
                 </ul>
               </CardContent>
             </Card>
-
-            {/* Contact Information */}
-            <Card>
+          </div>
+          <div>
+             {/* Contact Information */}
+             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
@@ -157,6 +175,7 @@ export default function BookingsPage() {
             </Card>
           </div>
         </div>
+        <FAQSection />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&family=Great+Vibes&display=swap');
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -157,4 +158,11 @@
   font-size: inherit;
   color: inherit;
 }
+
+.hero-text {
+  background: linear-gradient(90deg, #d4af37, #f7e98e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 

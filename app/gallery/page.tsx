@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Play, ImageIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getLatestYouTubeVideos } from '@/lib/youtube'
 
 export default async function GalleryPage() {
   const supabase = await createClient();
@@ -11,6 +12,9 @@ export default async function GalleryPage() {
     .from("gallery")
     .select("*")
     .order("created_at", { ascending: false });
+
+  // Fetch YouTube videos
+  const youtubeVideos = await getLatestYouTubeVideos(8);
 
   const featuredItems = galleryItems?.filter((item) => item.is_featured) || [];
   const regularItems = galleryItems?.filter((item) => !item.is_featured) || [];
@@ -88,73 +92,66 @@ export default async function GalleryPage() {
           </div>
         )}
 
-        {/* All Gallery Items */}
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <h2 className="text-2xl font-bold">All Media</h2>
-            <Badge variant="outline">{galleryItems?.length || 0} Items</Badge>
-          </div>
+       {/* All Gallery Items - Now includes YouTube */}
+<div>
+  <div className="flex items-center gap-3 mb-8">
+    <h2 className="text-2xl font-bold">Latest Videos</h2>
+    <Badge variant="outline">{youtubeVideos.length} Videos</Badge>
+  </div>
 
-          {regularItems.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {regularItems.map((item) => (
-                <Card
-                  key={item.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow group"
-                >
-                  <div className="aspect-video relative">
-                    {item.media_type === "image" ? (
-                      <>
-                        <img
-                          src={item.media_url || "/placeholder.svg"}
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                          <ImageIcon className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </div>
-                      </>
-                    ) : (
-                      <div className="relative w-full h-full">
-                        <video
-                          src={item.media_url}
-                          className="w-full h-full object-cover"
-                          poster={item.media_url}
-                        />
-                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                          <Button
-                            size="sm"
-                            className="rounded-full h-12 w-12 p-0"
-                          >
-                            <Play className="h-4 w-4 ml-0.5" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-medium text-sm mb-1">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {item.description}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+  {youtubeVideos.length > 0 ? (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {youtubeVideos.map((video) => (
+        <Card
+        key={video.id}
+        className="overflow-hidden hover:shadow-lg transition-shadow group"
+      >
+        <a 
+          href={video.videoUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <div className="aspect-video relative">
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <Button
+                size="sm"
+                className="rounded-full h-12 w-12 p-0 pointer-events-none"
+              >
+                <Play className="h-4 w-4 ml-0.5" />
+              </Button>
             </div>
-          ) : (
-            <Card>
-              <CardContent className="text-center py-12">
-                <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">No Gallery Items</h3>
-                <p className="text-muted-foreground">
-                  Check back soon for photos and videos from our performances.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+            <Badge className="absolute top-3 left-3 bg-red-600">
+              YouTube
+            </Badge>
+          </div>
+          <CardContent className="p-3">
+            <h3 className="font-medium text-sm mb-1 line-clamp-2">{video.title}</h3>
+            <p className="text-xs text-muted-foreground line-clamp-2">
+              {new Date(video.publishedAt).toLocaleDateString()}
+            </p>
+          </CardContent>
+        </a>
+      </Card>
+    ))}
+  </div>
+) :(
+    <Card>
+      <CardContent className="text-center py-12">
+        <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+        <h3 className="text-lg font-semibold mb-2">No YouTube Videos</h3>
+        <p className="text-muted-foreground">
+          Connect your YouTube channel to display latest videos.
+        </p>
+      </CardContent>
+    </Card>
+  )}
+</div>
 
         {/* Call to Action */}
         <div className="mt-16 text-center">

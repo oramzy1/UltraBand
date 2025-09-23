@@ -20,7 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2, Check, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -166,69 +166,158 @@ export function BookingForm() {
 
         <div className="space-y-2">
           <Label htmlFor="serviceCategory">Service Category *</Label>
-          <Select
-            value={formData.serviceCategory}
-            onValueChange={(value) =>
-              setFormData({ ...formData, serviceCategory: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select service type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="events">Live Event Performance</SelectItem>
-              <SelectItem value="mixing">Audio Mixing Services</SelectItem>
-              <SelectItem value="video_editing">
-                Video Editing Services
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <Popover modal={false}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                className="w-full justify-between"
+              >
+                {formData.serviceCategory === "events" &&
+                  "Live Event Performance"}
+                {formData.serviceCategory === "mixing" &&
+                  "Audio Mixing Services"}
+                {formData.serviceCategory === "video_editing" &&
+                  "Video Editing Services"}
+                {!formData.serviceCategory && "Select service type"}
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0" align="start">
+              <div className="space-y-1 p-1">
+                {[
+                  { value: "events", label: "Live Event Performance" },
+                  { value: "mixing", label: "Audio Mixing Services" },
+                  { value: "video_editing", label: "Video Editing Services" },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm flex items-center"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        serviceCategory: option.value,
+                      })
+                    }
+                  >
+                    <Check
+                      className={`mr-2 h-4 w-4 ${
+                        formData.serviceCategory === option.value
+                          ? "opacity-100"
+                          : "opacity-0"
+                      }`}
+                    />
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="eventType">Event Type *</Label>
-            <Select
-              value={formData.eventType}
-              onValueChange={(value) =>
-                setFormData({ ...formData, eventType: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select event type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="wedding">Wedding</SelectItem>
-                <SelectItem value="corporate">Corporate Event</SelectItem>
-                <SelectItem value="private-party">Private Party</SelectItem>
-                <SelectItem value="birthday">Birthday Party</SelectItem>
-                <SelectItem value="anniversary">Anniversary</SelectItem>
-                <SelectItem value="festival">Festival</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
+            <Popover modal={false}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-full justify-between"
+                >
+                  {formData.eventType === "wedding" && "Wedding"}
+                  {formData.eventType === "corporate" && "Corporate Event"}
+                  {formData.eventType === "private-party" && "Private Party"}
+                  {formData.eventType === "birthday" && "Birthday Party"}
+                  {formData.eventType === "anniversary" && "Anniversary"}
+                  {formData.eventType === "festival" && "Festival"}
+                  {formData.eventType === "other" && "Other"}
+                  {!formData.eventType && "Select event type"}
+                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0" align="start">
+                <div className="space-y-1 p-1">
+                  {[
+                    { value: "wedding", label: "Wedding" },
+                    { value: "corporate", label: "Corporate Event" },
+                    { value: "private-party", label: "Private Party" },
+                    { value: "birthday", label: "Birthday Party" },
+                    { value: "anniversary", label: "Anniversary" },
+                    { value: "festival", label: "Festival" },
+                    { value: "other", label: "Other" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm flex items-center"
+                      onClick={() =>
+                        setFormData({ ...formData, eventType: option.value })
+                      }
+                    >
+                      <Check
+                        className={`mr-2 h-4 w-4 ${
+                          formData.eventType === option.value
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                      />
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="budgetRange">Budget Range</Label>
-            <Select
-              value={formData.budgetRange}
-              onValueChange={(value) =>
-                setFormData({ ...formData, budgetRange: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select budget range" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="under-2000">Under $2,000</SelectItem>
-                <SelectItem value="2000-3500">$2,000 - $3,500</SelectItem>
-                <SelectItem value="3500-5000">$3,500 - $5,000</SelectItem>
-                <SelectItem value="5000-7000">$5,000 - $7,000</SelectItem>
-                <SelectItem value="over-7000">Over $7,000</SelectItem>
-                <SelectItem value="flexible">Flexible</SelectItem>
-              </SelectContent>
-            </Select>
+            <Popover modal={false}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-full justify-between"
+                >
+                  {formData.budgetRange === "under-2000" && "Under $2,000"}
+                  {formData.budgetRange === "2000-3500" && "$2,000 - $3,500"}
+                  {formData.budgetRange === "3500-5000" && "$3,500 - $5,000"}
+                  {formData.budgetRange === "5000-7000" && "$5,000 - $7,000"}
+                  {formData.budgetRange === "over-7000" && "Over $7,000"}
+                  {formData.budgetRange === "flexible" && "Flexible"}
+                  {!formData.budgetRange && "Select budget range"}
+                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0" align="start">
+                <div className="space-y-1 p-1">
+                  {[
+                    { value: "under-2000", label: "Under $2,000" },
+                    { value: "2000-3500", label: "$2,000 - $3,500" },
+                    { value: "3500-5000", label: "$3,500 - $5,000" },
+                    { value: "5000-7000", label: "$5,000 - $7,000" },
+                    { value: "over-7000", label: "Over $7,000" },
+                    { value: "flexible", label: "Flexible" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm flex items-center"
+                      onClick={() =>
+                        setFormData({ ...formData, budgetRange: option.value })
+                      }
+                    >
+                      <Check
+                        className={`mr-2 h-4 w-4 ${
+                          formData.budgetRange === option.value
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                      />
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 

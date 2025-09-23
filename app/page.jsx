@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TypedHeroTitle from '@/components/TypedHeroTitle'
+import TypedHeroTitle from "@/components/TypedHeroTitle";
 import { Calendar, MapPin, Music, Users, Star, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -42,7 +42,7 @@ export default async function HomePage() {
           style={{
             backgroundImage: `url('${
               heroInfo?.image_url ||
-              "/dark-concert-stage-with-purple-lighting.jpg"
+              "/headerimage.png"
             }')`,
           }}
         >
@@ -50,10 +50,13 @@ export default async function HomePage() {
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
-          <h1 className="text-2xl md:text-6xl font-bold mb-2 text-balance">
-            {/* {heroInfo?.title || "Ultra Band"} */}
+          <h1
+            style={{ fontFamily: "'Great Vibes', cursive" }}
+            className="hero-text text-2xl md:text-6xl font-bold mb-2 text-balance"
+          >
             <TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
           </h1>
+
           <p className="text-xl md:text-2xl mb-8 text-muted-foreground text-pretty max-w-2xl mx-auto">
             {heroInfo?.content ||
               "Professional live music that captivates audiences and also creates unforgettable experiences for your special events."}
@@ -191,7 +194,8 @@ export default async function HomePage() {
       )}
 
       {/* Featured Gallery Preview */}
-      {/* {featuredGallery && featuredGallery.length > 0 && (
+
+      {featuredGallery && featuredGallery.length > 0 && (
         <section className="py-20 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-16">
@@ -203,67 +207,22 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {featuredGallery.map((item) => (
-                <Card
-                  key={item.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <div className="aspect-video relative">
-                    <img
-                      src={item.media_url || "/placeholder.svg"}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold mb-1">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <FocusCards
+              cards={featuredGallery.map((item) => ({
+                title: item.title,
+                description: item.description,
+                src: item.media_url || "/placeholder.svg",
+              }))}
+            />
 
             <div className="text-center mt-8">
-              <Button asChild variant="outline">
+              <Button asChild variant="ghost">
                 <Link href="/gallery">View Full Gallery</Link>
               </Button>
             </div>
           </div>
         </section>
-      )} */}
-
-{featuredGallery && featuredGallery.length > 0 && (
-  <section className="py-20 px-4">
-    <div className="container mx-auto">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          See Us in Action
-        </h2>
-        <p className="text-xl text-muted-foreground">
-          Highlights from our recent performances
-        </p>
-      </div>
-
-      <FocusCards
-        cards={featuredGallery.map((item) => ({
-          title: item.title,
-          description: item.description,
-          src: item.media_url || "/placeholder.svg",
-        }))}
-      />
-
-      <div className="text-center mt-8">
-        <Button asChild variant="outline">
-          <Link href="/gallery">View Full Gallery</Link>
-        </Button>
-      </div>
-    </div>
-  </section>
-)}
-
+      )}
 
       {/* CTA Section */}
       <section className="py-20 px-4 bg-primary/10">

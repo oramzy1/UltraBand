@@ -49,3 +49,15 @@ export interface BandInfo {
   image_url?: string
   updated_at: string
 }
+
+export interface BandMember {
+  id: string;
+  name: string;
+  role: string;
+  description: string;
+  image_url: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}

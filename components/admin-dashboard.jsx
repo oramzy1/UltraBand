@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingManagement } from "@/components/booking-management";
+import { BandMemberManagement } from "@/components/band-member-management";
 import { EventManagement } from "@/components/event-management";
 import { GalleryManagement } from "@/components/gallery-management";
 import { AdminSettings } from "@/components/admin-settings";
@@ -18,22 +19,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import type { Booking, Event, GalleryItem } from "@/lib/types";
-
-interface AdminDashboardProps {
-  initialBookings: Booking[];
-  initialEvents: Event[];
-  initialGallery: GalleryItem[];
-}
 
 export function AdminDashboard({
   initialBookings,
   initialEvents,
   initialGallery,
-}: AdminDashboardProps) {
-  const [bookings, setBookings] = useState<Booking[]>(initialBookings);
-  const [events, setEvents] = useState<Event[]>(initialEvents);
-  const [gallery, setGallery] = useState<GalleryItem[]>(initialGallery);
+  initialBandMembers,
+}) {
+  const [bookings, setBookings] = useState(initialBookings);
+  const [events, setEvents] = useState(initialEvents);
+  const [gallery, setGallery] = useState(initialGallery);
+  const [bandMembers, setBandMembers] = useState(initialBandMembers);
+
   const router = useRouter();
 
   // Calculate stats
@@ -130,7 +127,7 @@ export function AdminDashboard({
 
       {/* Management Tabs */}
       <Tabs defaultValue="bookings" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="bookings" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             Bookings
@@ -146,6 +143,10 @@ export function AdminDashboard({
           <TabsTrigger value="events" className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             Events
+          </TabsTrigger>
+          <TabsTrigger value="band" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Band
           </TabsTrigger>
           <TabsTrigger value="gallery" className="flex items-center gap-2">
             <ImageIcon className="h-4 w-4" />
@@ -166,6 +167,13 @@ export function AdminDashboard({
 
         <TabsContent value="events">
           <EventManagement events={events} onEventsUpdate={setEvents} />
+        </TabsContent>
+
+        <TabsContent value="band">
+          <BandMemberManagement
+            bandMembers={bandMembers}
+            onBandMembersUpdate={setBandMembers}
+          />
         </TabsContent>
 
         <TabsContent value="gallery">
