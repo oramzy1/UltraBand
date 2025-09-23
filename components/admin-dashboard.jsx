@@ -127,36 +127,40 @@ export function AdminDashboard({
 
       {/* Management Tabs */}
       <Tabs defaultValue="bookings" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="bookings" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Bookings
-            {pendingBookings > 0 && (
-              <Badge
-                variant="destructive"
-                className="ml-1 h-5 w-5 rounded-full p-0 text-xs"
-              >
-                {pendingBookings}
-              </Badge>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="events" className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            Events
-          </TabsTrigger>
-          <TabsTrigger value="band" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Band
-          </TabsTrigger>
-          <TabsTrigger value="gallery" className="flex items-center gap-2">
-            <ImageIcon className="h-4 w-4" />
-            Gallery
-          </TabsTrigger>
-          <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Settings
-          </TabsTrigger>
-        </TabsList>
+      <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5">
+    <TabsTrigger value="bookings" className="flex items-center gap-2 whitespace-nowrap">
+      <Users className="h-4 w-4" />
+      Bookings
+      {pendingBookings > 0 && (
+        <Badge
+          variant="destructive"
+          className="ml-1 h-5 w-5 rounded-full p-0 text-xs"
+        >
+          {pendingBookings}
+        </Badge>
+      )}
+    </TabsTrigger>
+
+    <TabsTrigger value="events" className="flex items-center gap-2 whitespace-nowrap">
+      <Calendar className="h-4 w-4" />
+      Events
+    </TabsTrigger>
+
+    <TabsTrigger value="band" className="flex items-center gap-2 whitespace-nowrap">
+      <Users className="h-4 w-4" />
+      Band
+    </TabsTrigger>
+
+    <TabsTrigger value="gallery" className="flex items-center gap-2 whitespace-nowrap">
+      <ImageIcon className="h-4 w-4" />
+      Gallery
+    </TabsTrigger>
+
+    <TabsTrigger value="settings" className="flex items-center gap-2 whitespace-nowrap">
+      <Settings className="h-4 w-4" />
+      Settings
+    </TabsTrigger>
+  </TabsList>
 
         <TabsContent value="bookings">
           <BookingManagement
