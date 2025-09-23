@@ -104,7 +104,7 @@ export function BandMemberManagement({
       } else {
         const { data, error } = await supabase
           .from("band_members")
-          .insert({ ...formData, display_order: bandMembers.length })
+          .insert({ ...formData, display_order: bandMembers.length, is_active: true })
           .select()
           .single();
 

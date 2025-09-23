@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,9 +29,26 @@ export function AdminDashboard({
   const [bookings, setBookings] = useState(initialBookings);
   const [events, setEvents] = useState(initialEvents);
   const [gallery, setGallery] = useState(initialGallery);
-  const [bandMembers, setBandMembers] = useState(initialBandMembers);
+  const [bandMembers, setBandMembers] = useState([]);
+  const [loadingBand, setLoadingBand] = useState(true);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchBand = async () => {
+      try {
+        const res = await fetch("/api/admin/band-members");
+        const data = await res.json();
+        setBandMembers(data);
+      } catch (err) {
+        console.error("Error fetching band members", err);
+      } finally {
+        setLoadingBand(false);
+      }
+    };
+
+    fetchBand();
+  }, []);
 
   // Calculate stats
   const pendingBookings = bookings.filter(
@@ -174,10 +191,14 @@ export function AdminDashboard({
         </TabsContent>
 
         <TabsContent value="band">
-          <BandMemberManagement
-            bandMembers={bandMembers}
-            onBandMembersUpdate={setBandMembers}
-          />
+          {loadingBand ? (
+            <p>Loading band members...</p>
+          ) : (
+            <BandMemberManagement
+              bandMembers={bandMembers}
+              onBandMembersUpdate={setBandMembers}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="gallery">
