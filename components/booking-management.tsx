@@ -166,8 +166,8 @@ export function BookingManagement({
                     {booking.service_category === "events"
                       ? booking.event_type
                       : booking.service_category === "mixing"
-                      ? "Audio Mixing Service"
-                      : "Video Editing Service"}
+                      ? "Audio Mixing & Mastering"
+                      : "Video Editing"}
                   </p>
                 </div>
                 <Badge className={getStatusColor(booking.status)}>

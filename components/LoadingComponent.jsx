@@ -6,7 +6,7 @@ function LoadingComponent() {
     <div className="flex justify-center items-center h-screen w-screen animate-pulse bg-black">
       <div className="relative h-[300px] w-[300px]">
         <Image
-          src="/logo.png"
+          src="/Ultra Band white-logo (1).png"
           alt="logo"
           fill
           priority

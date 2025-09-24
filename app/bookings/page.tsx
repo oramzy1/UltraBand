@@ -11,7 +11,7 @@ export default function BookingsPage() {
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Book Ultra Band
+            Book Us Now
           </h1>
           <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
             Ready to make your event unforgettable? Fill out the form below and
@@ -151,8 +151,8 @@ export default function BookingsPage() {
             </Card>
           </div>
           <div>
-             {/* Contact Information */}
-             <Card>
+            {/* Contact Information */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />

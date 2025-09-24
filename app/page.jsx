@@ -6,6 +6,9 @@ import { Calendar, MapPin, Music, Users, Star, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { FocusCards } from "@/components/ui/focus-cards";
+import { LocationsSection } from "@/components/LocationsSection";
+import { FAQSection } from "@/components/faq-section";
+import SocialIcons from "@/components/social-icons"
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -41,8 +44,7 @@ export default async function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url('${
-              heroInfo?.image_url ||
-              "/headerimage.png"
+              heroInfo?.image_url || "/headerimage.jpg"
             }')`,
           }}
         >
@@ -74,16 +76,20 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Where We've Been */}
+      <section className="py-10 px-4">
+        <LocationsSection />
+      </section>
+
       {/* Features Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose Ultra Band?
+              Why Choose Ultra Band Music?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              Professional musicians with years of experience creating memorable
-              moments!
+              ...your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences
             </p>
           </div>
 
@@ -224,6 +230,9 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* FAQs & Contact Us */}
+      <FAQSection/>
+
       {/* CTA Section */}
       <section className="py-20 px-4 bg-primary/10">
         <div className="container mx-auto text-center">
@@ -241,6 +250,8 @@ export default async function HomePage() {
           </Button>
         </div>
       </section>
+
+      <SocialIcons/>
     </div>
   );
 }

@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/layout.jsx", "components/admin-dashboard.jsx", "app/admin/page.jsx", "app/about/page.jsx", "app/page.jsx", "components/band-member-management.jsx", "components/ui/animated-tooltip.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/layout.jsx", "components/admin-dashboard.jsx", "app/admin/page.jsx", "app/about/page.jsx", "app/page.jsx", "components/band-member-management.jsx", "components/ui/animated-tooltip.jsx", "components/navigation.jsx"],
   "exclude": ["node_modules"]
 }

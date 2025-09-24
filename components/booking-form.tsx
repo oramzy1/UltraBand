@@ -176,7 +176,7 @@ export function BookingForm() {
                 {formData.serviceCategory === "events" &&
                   "Live Event Performance"}
                 {formData.serviceCategory === "mixing" &&
-                  "Audio Mixing Services"}
+                  "Audio Mixing & Mastering"}
                 {formData.serviceCategory === "video_editing" &&
                   "Video Editing Services"}
                 {!formData.serviceCategory && "Select service type"}
@@ -409,7 +409,7 @@ export function BookingForm() {
       </Button>
 
       <p className="text-xs text-muted-foreground text-center">
-        By submitting this form, you agree to be contacted by Ultra Band
+        By submitting this form, you agree to be contacted by Ultra Band Music
         regarding your event booking.
       </p>
     </form>

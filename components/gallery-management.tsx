@@ -493,7 +493,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"; 
 import {
   Dialog,
   DialogContent,
@@ -505,6 +505,12 @@ import { ImageIcon, Plus, Edit, Trash2, Star } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { GalleryItem } from "@/lib/types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface GalleryManagementProps {
   gallery: GalleryItem[];
@@ -937,7 +943,7 @@ export function GalleryManagement({
         </Dialog>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {gallery.map((item) => (
           <Card key={item.id} className="overflow-hidden">
             <div className="aspect-video relative">
@@ -1012,7 +1018,92 @@ export function GalleryManagement({
             </Card>
           </div>
         )}
+      </div> */}
+      <TooltipProvider>
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {gallery.map((item) => (
+      <Card key={item.id} className="overflow-hidden">
+        <div className="aspect-video relative">
+          {item.media_type === "image" ? (
+            <img
+              src={item.media_url || "/placeholder.svg"}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <video
+              src={item.media_url}
+              className="w-full h-full object-cover"
+              controls
+            />
+          )}
+          {item.is_featured && (
+            <div className="absolute top-2 right-2">
+              <Star className="h-5 w-5 text-yellow-500 fill-current" />
+            </div>
+          )}
+        </div>
+        <CardContent className="p-4">
+          <h3 className="font-semibold mb-1">{item.title}</h3>
+          {item.description && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="text-sm text-muted-foreground mb-3 line-clamp-2 cursor-help">
+                  {item.description}
+                </p>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p className="text-sm">{item.description}</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleEdit(item)}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant={item.is_featured ? "default" : "outline"}
+                onClick={() => toggleFeatured(item.id, item.is_featured)}
+              >
+                <Star className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => handleDelete(item.id)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <span className="text-xs text-muted-foreground capitalize">
+              {item.media_type}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    ))}
+
+    {gallery.length === 0 && (
+      <div className="col-span-full">
+        <Card>
+          <CardContent className="text-center py-12">
+            <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-semibold mb-2">No Gallery Items</h3>
+            <p className="text-muted-foreground">
+              Add your first photo or video to get started.
+            </p>
+          </CardContent>
+        </Card>
       </div>
+    )}
+  </div>
+</TooltipProvider>
     </div>
   );
 }

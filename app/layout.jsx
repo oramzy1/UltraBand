@@ -13,9 +13,9 @@
 // import Footer from "@/components/footer"
 
 // export const metadata = {
-//   title: "Ultra Band - Professional Live Music",
+//   title: "Ultra Band Music - Professional Live Music",
 //   description:
-//     "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band for unforgettable performances.",
+//     "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
 //   generator: "Oramzy",
 // };
 
@@ -45,7 +45,6 @@
 //   );
 // }
 
-
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
@@ -54,9 +53,9 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata = {
-  title: "Ultra Band - Professional Live Music",
+  title: "Ultra Band Music - Professional Live Music",
   description:
-    "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band for unforgettable performances.",
+    "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
   generator: "Oramzy",
 };
 

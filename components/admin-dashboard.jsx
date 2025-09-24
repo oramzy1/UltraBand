@@ -9,6 +9,8 @@ import { BandMemberManagement } from "@/components/band-member-management";
 import { EventManagement } from "@/components/event-management";
 import { GalleryManagement } from "@/components/gallery-management";
 import { AdminSettings } from "@/components/admin-settings";
+import { LocationManagement } from "@/components/location-management";
+import { ServicesManagement } from '@/components/services-management'
 import {
   Calendar,
   Users,
@@ -24,14 +26,16 @@ export function AdminDashboard({
   initialBookings,
   initialEvents,
   initialGallery,
-  initialBandMembers,
+  initialLocations,
 }) {
   const [bookings, setBookings] = useState(initialBookings);
   const [events, setEvents] = useState(initialEvents);
   const [gallery, setGallery] = useState(initialGallery);
+  const [locations, setLocations] = useState([]);
   const [bandMembers, setBandMembers] = useState([]);
+  const [services, setServices] = useState([])
   const [loadingBand, setLoadingBand] = useState(true);
-
+;
   const router = useRouter();
 
   useEffect(() => {
@@ -48,6 +52,38 @@ export function AdminDashboard({
     };
 
     fetchBand();
+  }, []);
+
+  useEffect(() => {
+    const fetchLocation= async () => {
+      try {
+        const res = await fetch("/api/locations");
+        const data = await res.json();
+        setLocations(data);
+      } catch (err) {
+        console.error("Error fetching band members", err);
+      } finally {
+        setLoadingBand(false);
+      }
+    };
+
+    fetchLocation();
+  }, []);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await fetch("/api/services");
+        const data = await res.json();
+        setServices(data);
+      } catch (err) {
+        console.error("Error fetching services", err);
+      } finally {
+        setLoadingBand(false);
+      }
+    };
+
+    fetchServices();
   }, []);
 
   // Calculate stats
@@ -144,40 +180,55 @@ export function AdminDashboard({
 
       {/* Management Tabs */}
       <Tabs defaultValue="bookings" className="space-y-6">
-      <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5">
-    <TabsTrigger value="bookings" className="flex items-center gap-2 whitespace-nowrap">
-      <Users className="h-4 w-4" />
-      Bookings
-      {pendingBookings > 0 && (
-        <Badge
-          variant="destructive"
-          className="ml-1 h-5 w-5 rounded-full p-0 text-xs"
-        >
-          {pendingBookings}
-        </Badge>
-      )}
-    </TabsTrigger>
+        <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5">
+          <TabsTrigger
+            value="bookings"
+            className="flex items-center gap-2 whitespace-nowrap"
+          >
+            <Users className="h-4 w-4" />
+            Bookings
+            {pendingBookings > 0 && (
+              <Badge
+                variant="destructive"
+                className="ml-1 h-5 w-5 rounded-full p-0 text-xs"
+              >
+                {pendingBookings}
+              </Badge>
+            )}
+          </TabsTrigger>
 
-    <TabsTrigger value="events" className="flex items-center gap-2 whitespace-nowrap">
-      <Calendar className="h-4 w-4" />
-      Events
-    </TabsTrigger>
+          <TabsTrigger
+            value="events"
+            className="flex items-center gap-2 whitespace-nowrap"
+          >
+            <Calendar className="h-4 w-4" />
+            Events
+          </TabsTrigger>
 
-    <TabsTrigger value="band" className="flex items-center gap-2 whitespace-nowrap">
-      <Users className="h-4 w-4" />
-      Band
-    </TabsTrigger>
+          <TabsTrigger
+            value="management"
+            className="flex items-center gap-2 whitespace-nowrap"
+          >
+            <Users className="h-4 w-4" />
+            Management
+          </TabsTrigger>
 
-    <TabsTrigger value="gallery" className="flex items-center gap-2 whitespace-nowrap">
-      <ImageIcon className="h-4 w-4" />
-      Gallery
-    </TabsTrigger>
+          <TabsTrigger
+            value="gallery"
+            className="flex items-center gap-2 whitespace-nowrap"
+          >
+            <ImageIcon className="h-4 w-4" />
+            Gallery
+          </TabsTrigger>
 
-    <TabsTrigger value="settings" className="flex items-center gap-2 whitespace-nowrap">
-      <Settings className="h-4 w-4" />
-      Settings
-    </TabsTrigger>
-  </TabsList>
+          <TabsTrigger
+            value="settings"
+            className="flex items-center gap-2 whitespace-nowrap"
+          >
+            <Settings className="h-4 w-4" />
+            Settings
+          </TabsTrigger>
+        </TabsList>
 
         <TabsContent value="bookings">
           <BookingManagement
@@ -190,14 +241,24 @@ export function AdminDashboard({
           <EventManagement events={events} onEventsUpdate={setEvents} />
         </TabsContent>
 
-        <TabsContent value="band">
+        <TabsContent value="management">
           {loadingBand ? (
-            <p>Loading band members...</p>
+            <p className="text-center animate-bounce">Loading...</p>
           ) : (
-            <BandMemberManagement
-              bandMembers={bandMembers}
-              onBandMembersUpdate={setBandMembers}
-            />
+            <div className="space-y-6">
+              <BandMemberManagement
+                bandMembers={bandMembers}
+                onBandMembersUpdate={setBandMembers}
+              />
+              <LocationManagement
+                locations={locations}
+                onLocationsUpdate={setLocations}
+              />
+              <ServicesManagement 
+              services={services}
+              onServicesUpdate={setServices}
+              />
+            </div>
           )}
         </TabsContent>
 

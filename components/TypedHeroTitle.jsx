@@ -10,7 +10,7 @@ export default function TypedHeroTitle({ defaultText }) {
   useEffect(() => {
     if (el.current) {
       typedInstance.current = new Typed(el.current, {
-        strings: [defaultText, "We Are", "Ultra Band"],
+        strings: [defaultText, "We Are", "Ultra Band Music"],
         typeSpeed: 100,
         backSpeed: 40,
         backDelay: 1500,
@@ -27,6 +27,9 @@ export default function TypedHeroTitle({ defaultText }) {
   }, [defaultText]);
 
   return (
-    <span ref={el} className="text-2xl md:text-6xl font-bold mb-6 inline-block"></span>
+    <span
+      ref={el}
+      className="text-2xl md:text-6xl font-bold mb-6 inline-block"
+    ></span>
   );
 }

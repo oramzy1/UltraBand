@@ -29,7 +29,8 @@ export default async function EventsPage() {
         <div className="text-center mb-16 animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Events</h1>
           <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
-            Join us at our upcoming performances and experience Ultra Band live
+            Join us at our upcoming performances and experience Ultra Band Music
+            live
           </p>
         </div>
 
