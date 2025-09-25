@@ -57,6 +57,27 @@ export const metadata = {
   description:
     "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
   generator: "Oramzy",
+  openGraph: {
+    title: "Ultra Band Music - Professional Live Music",
+    description: "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
+    url: "https://ultra-band.vercel.app",
+    images: [
+      {
+        url: "https:/ultra-band.vercel.app/meta-image.jpg",
+        width: 1064,
+        height: 651,
+        alt: "Ultra Band Music Preview",
+      },
+    ],
+    siteName: "Vendora",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ultra Band Music - Professional Live Music",
+    description: "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
+    images: ["https:/ultra-band.app/meta-image.jpg"],
+  },
 };
 
 export default function RootLayout({ children }) {
