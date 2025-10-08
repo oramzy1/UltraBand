@@ -62,7 +62,7 @@ export default async function AboutPage() {
             <h2 className="text-2xl font-semibold">Our Story</h2>
             <p className="text-muted-foreground leading-relaxed">
               {aboutInfo?.content ||
-                "Introducing Ultra Band Music Entertainment – your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences. Dive into the pulsating rhythms, infectious beats, and electrifying performances that will turn your Owambe into an unforgettable celebration."}
+                "Your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences. Dive into the pulsating rhythms, infectious beats, and electrifying performances that will turn your Owambe into an unforgettable celebration."}
             </p>
             <p className="text-muted-foreground leading-relaxed">
               At Ultra Band Music Entertainment, we are the maestros of Owambe

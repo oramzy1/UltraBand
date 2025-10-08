@@ -115,7 +115,7 @@ export function BookingForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Personal Information */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Contact Information</h3>
+        <h3 className="text-lg font-semibold border-b border-gray-500">Contact Information</h3>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -162,7 +162,7 @@ export function BookingForm() {
 
       {/* Event Information */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Service Details</h3>
+        <h3 className="text-lg font-semibold border-b border-gray-500">Service Details</h3>
 
         <div className="space-y-2">
           <Label htmlFor="serviceCategory">Service Category *</Label>
@@ -193,12 +193,14 @@ export function BookingForm() {
                   <button
                     key={option.value}
                     className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm flex items-center"
-                    onClick={() =>
+                    onClick={() => {
+                      const newCategory = option.value;
                       setFormData({
                         ...formData,
-                        serviceCategory: option.value,
-                      })
-                    }
+                        serviceCategory: newCategory,
+                        eventType: newCategory === "events" ? formData.eventType : "",
+                      });
+                    }}
                   >
                     <Check
                       className={`mr-2 h-4 w-4 ${
@@ -215,8 +217,9 @@ export function BookingForm() {
           </Popover>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="space-y-2">
+        <div className={`grid gap-4 ${formData.serviceCategory === "events" ? "md:grid-cols-2" : "md:grid-cols-1"}`}>
+        { formData.serviceCategory === "events" && (
+            <div className="space-y-2">
             <Label htmlFor="eventType">Event Type *</Label>
             <Popover modal={false}>
               <PopoverTrigger asChild>
@@ -268,6 +271,7 @@ export function BookingForm() {
               </PopoverContent>
             </Popover>
           </div>
+        )}
 
           <div className="space-y-2">
             <Label htmlFor="budgetRange">Budget Range</Label>

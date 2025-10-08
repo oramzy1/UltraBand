@@ -13,7 +13,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +35,7 @@ import {
   DollarSign,
   MessageSquare,
   Users,
+  ChevronDown,
 } from "lucide-react";
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/client";
@@ -138,17 +144,35 @@ export function BookingManagement({
       <div className="block md:flex justify-between items-center">
         <h2 className="text-2xl font-bold">Booking Requests</h2>
         <div className="flex items-center gap-4">
-          <Select value={serviceFilter} onValueChange={setServiceFilter}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Filter by service" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Services</SelectItem>
-              <SelectItem value="events">Live Performance</SelectItem>
-              <SelectItem value="mixing">Audio Mixing</SelectItem>
-              <SelectItem value="video_editing">Video Editing</SelectItem>
-            </SelectContent>
-          </Select>
+          <Popover modal={false}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-48 justify-between">
+                {serviceFilter === "all" && "All Services"}
+                {serviceFilter === "events" && "Live Performance"}
+                {serviceFilter === "mixing" && "Audio Mixing"}
+                {serviceFilter === "video_editing" && "Video Editing"}
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-48 p-0" align="start">
+              <div className="space-y-1 p-1">
+                {[
+                  { value: "all", label: "All Services" },
+                  { value: "events", label: "Live Performance" },
+                  { value: "mixing", label: "Audio Mixing" },
+                  { value: "video_editing", label: "Video Editing" },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent rounded-sm"
+                    onClick={() => setServiceFilter(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
           <Badge variant="outline">{filteredBookings.length} Total</Badge>
         </div>
       </div>

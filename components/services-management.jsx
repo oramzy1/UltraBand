@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -137,6 +137,175 @@ function PackagesBuilder({ packages, setPackages }) {
   );
 }
 
+// 🔹 Portfolio Builder Component
+function PortfolioBuilder({ portfolio, setPortfolio }) {
+  const fileInputRef = useRef(null);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
+  const { toast } = useToast();
+
+  const addPortfolioItem = () => {
+    setPortfolio([
+      ...portfolio,
+      { image_url: "", client_name: "", description: "" },
+    ]);
+  };
+
+  const updatePortfolioItem = (index, field, value) => {
+    const newPortfolio = [...portfolio];
+    newPortfolio[index][field] = value;
+    setPortfolio(newPortfolio);
+  };
+
+  const removePortfolioItem = (index) => {
+    setPortfolio(portfolio.filter((_, i) => i !== index));
+  };
+
+  const uploadImage = async (file, index) => {
+    if (!file) return null;
+
+    setUploadingIndex(index);
+    try {
+      const supabase = createClient();
+      const fileExt = file.name.split(".").pop();
+      const fileName = `portfolio-${Date.now()}.${fileExt}`;
+      const filePath = `portfolio/${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from("gallery")
+        .upload(filePath, file);
+
+      if (error) throw error;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("gallery").getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setUploadingIndex(null);
+    }
+  };
+
+  const handleImageUpload = async (e, index) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = await uploadImage(file, index);
+    if (imageUrl) {
+      updatePortfolioItem(index, "image_url", imageUrl);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      {portfolio.map((item, index) => (
+        <div key={index} className="border p-4 rounded space-y-3">
+          <div className="flex justify-between items-center">
+            <h4 className="font-medium">Portfolio Item {index + 1}</h4>
+            <button
+              type="button"
+              onClick={() => removePortfolioItem(index)}
+              className="text-red-500"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Image Upload */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Image</p>
+            <div className="flex gap-2">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={(e) => handleImageUpload(e, index)}
+                accept="image/*"
+                style={{ display: "none" }}
+                id={`file-${index}`}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  document.getElementById(`file-${index}`)?.click()
+                }
+                disabled={uploadingIndex === index}
+              >
+                {uploadingIndex === index ? "Uploading..." : "Upload Image"}
+              </Button>
+              {item.image_url && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => updatePortfolioItem(index, "image_url", "")}
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+            {/* <input
+              type="text"
+              placeholder="Or paste image URL"
+              value={item.image_url}
+              onChange={(e) =>
+                updatePortfolioItem(index, "image_url", e.target.value)
+              }
+              className="w-full border rounded p-2 text-sm"
+            /> */}
+            {item.image_url && (
+              <img
+                src={item.image_url}
+                alt="Preview"
+                className="w-full h-32 object-cover rounded"
+              />
+            )}
+          </div>
+
+          {/* Client Name */}
+          <input
+            type="text"
+            placeholder="Client Name"
+            value={item.client_name}
+            onChange={(e) =>
+              updatePortfolioItem(index, "client_name", e.target.value)
+            }
+            className="w-full border rounded p-2"
+          />
+
+          {/* Description */}
+          <textarea
+            placeholder="Project Description"
+            value={item.description}
+            onChange={(e) =>
+              updatePortfolioItem(index, "description", e.target.value)
+            }
+            className="w-full border rounded p-2"
+            rows={3}
+          />
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addPortfolioItem}
+        className="text-sm text-green-600 flex items-center gap-1"
+      >
+        <Plus size={14} /> Add Portfolio Item
+      </button>
+    </div>
+  );
+}
+
 export function ServicesManagement({ services = [], onServicesUpdate }) {
   const [editingService, setEditingService] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -145,7 +314,8 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
     category: "",
     description: "",
   });
-  const [packages, setPackages] = useState([]); // ✅ real array instead of JSON string
+  const [packages, setPackages] = useState([]);
+  const [portfolio, setPortfolio] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -163,7 +333,8 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
           .update({
             ...formData,
             slug,
-            packages, // ✅ array
+            packages,
+            portfolio,
           })
           .eq("id", editingService.id)
           .select()
@@ -183,7 +354,8 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
           .insert({
             ...formData,
             slug,
-            packages, // ✅ array
+            packages, 
+            portfolio,
             display_order: services.length,
             is_active: true,
           })
@@ -229,7 +401,8 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
 
   const resetForm = () => {
     setFormData({ title: "", category: "", description: "" });
-    setPackages([]); // ✅ clear packages
+    setPackages([]); 
+    setPortfolio([]);
     setEditingService(null);
     setIsDialogOpen(false);
   };
@@ -237,7 +410,9 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Services</h2>
+        <h2 className="text-2xl font-bold border-b border-gray-500">
+          Services
+        </h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
@@ -301,6 +476,15 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                 />
               </div>
 
+              {/* 🔹 Portfolio Builder */}
+              <div className="space-y-2">
+                <Label>Portfolio</Label>
+                <PortfolioBuilder
+                  portfolio={portfolio}
+                  setPortfolio={setPortfolio}
+                />
+              </div>
+
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting
                   ? "Saving..."
@@ -356,7 +540,8 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                       category: service.category || "",
                       description: service.description || "",
                     });
-                    setPackages(service.packages || []); // ✅ populate packages
+                    setPackages(service.packages || []);
+                    setPortfolio(service.portfolio || []); 
                     setIsDialogOpen(true);
                   }}
                 >

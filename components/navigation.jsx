@@ -27,7 +27,7 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/events", label: "Events" }, // Added Events navigation item
+  { href: "/events", label: "Events" },
   { href: "/bookings", label: "Bookings" },
 ];
 

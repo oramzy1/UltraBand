@@ -94,7 +94,7 @@ export function LocationManagement({ locations = [], onLocationsUpdate }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Locations</h2>
+        <h2 className="text-2xl font-bold border-b border-gray-500">Locations</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
