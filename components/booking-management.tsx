@@ -81,61 +81,64 @@ export function BookingManagement({
           (booking) => booking.service_category === serviceFilter
         );
 
-        const updateBookingStatus = async (
-          bookingId: string,
-          status: string,
-          notes?: string,
-          propDate?: string,
-          propTime?: string
-        ) => {
-          setIsUpdating(true);
-          try {
-            const updateData: any = {
-              status,
-              notes: notes || null,
-            };
-        
-            if (status === "counter_proposed" && propDate && propTime) {
-              updateData.proposed_date = propDate;
-              updateData.proposed_time = propTime;
-            }
-        
-            const response = await fetch(`/api/bookings/${bookingId}`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(updateData),
-            });
-        
-            if (!response.ok) throw new Error('Failed to update booking');
-        
-            const result = await response.json();
-        
-            // Update local state
-            const updatedBookings = bookings.map((booking) =>
-              booking.id === bookingId ? { ...booking, ...result.booking } : booking
-            );
-            onBookingsUpdate(updatedBookings);
-        
-            toast({
-              title: "Booking Updated",
-              description: `Booking status changed to ${status.replace("_", " ")}. Client has been notified via email.`,
-            });
-        
-            setSelectedBooking(null);
-            setAdminNotes("");
-            setProposedDate("");
-            setProposedTime("");
-          } catch (error) {
-            console.error("Error updating booking:", error);
-            toast({
-              title: "Error",
-              description: "Failed to update booking status",
-              variant: "destructive",
-            });
-          } finally {
-            setIsUpdating(false);
-          }
-        };
+  const updateBookingStatus = async (
+    bookingId: string,
+    status: string,
+    notes?: string,
+    propDate?: string,
+    propTime?: string
+  ) => {
+    setIsUpdating(true);
+    try {
+      const updateData: any = {
+        status,
+        notes: notes || null,
+      };
+
+      if (status === "counter_proposed" && propDate && propTime) {
+        updateData.proposed_date = propDate;
+        updateData.proposed_time = propTime;
+      }
+
+      const response = await fetch(`/api/bookings/${bookingId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      });
+
+      if (!response.ok) throw new Error("Failed to update booking");
+
+      const result = await response.json();
+
+      // Update local state
+      const updatedBookings = bookings.map((booking) =>
+        booking.id === bookingId ? { ...booking, ...result.booking } : booking
+      );
+      onBookingsUpdate(updatedBookings);
+
+      toast({
+        title: "Booking Updated",
+        description: `Booking status changed to ${status.replace(
+          "_",
+          " "
+        )}. Client has been notified via email.`,
+      });
+
+      setSelectedBooking(null);
+      setAdminNotes("");
+      setProposedDate("");
+      setProposedTime("");
+    } catch (error) {
+      console.error("Error updating booking:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update booking status",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -176,247 +179,269 @@ export function BookingManagement({
       </div>
 
       <div className="grid gap-4">
-        {filteredBookings.map((booking) => (
-          <Card key={booking.id} className="hover:shadow-md transition-shadow">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-lg">
-                    {booking.client_name}
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    {booking.service_category === "events"
-                      ? booking.event_type
-                      : booking.service_category === "mixing"
-                      ? "Audio Mixing & Mastering"
-                      : "Video Editing"}
-                  </p>
+        {[...filteredBookings]
+          .sort((a, b) => {
+            const order = [
+              "pending",
+              "counter_proposed",
+              "accepted",
+              "rejected",
+            ];
+            return order.indexOf(a.status) - order.indexOf(b.status);
+          })
+          .map((booking) => (
+            <Card
+              key={booking.id}
+              className="hover:shadow-md transition-shadow"
+            >
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">
+                      {booking.client_name}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      {booking.service_category === "events"
+                        ? booking.event_type
+                        : booking.service_category === "mixing"
+                        ? "Audio Mixing & Mastering"
+                        : "Video Editing"}
+                    </p>
+                  </div>
+                  <Badge className={getStatusColor(booking.status)}>
+                    {booking.status.replace("_", " ")}
+                  </Badge>
                 </div>
-                <Badge className={getStatusColor(booking.status)}>
-                  {booking.status.replace("_", " ")}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span>{format(new Date(booking.event_date), "PPP")}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock className="h-4 w-4 text-primary" />
-                    <span>{booking.event_time}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <span>{booking.event_location}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-primary" />
-                    <span>{booking.client_email}</span>
-                  </div>
-                  {booking.client_phone && (
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-primary" />
-                      <span>{booking.client_phone}</span>
+                      <Calendar className="h-4 w-4 text-primary" />
+                      <span>{format(new Date(booking.event_date), "PPP")}</span>
                     </div>
-                  )}
-                  {booking.budget_range && (
                     <div className="flex items-center gap-2 text-sm">
-                      <DollarSign className="h-4 w-4 text-primary" />
-                      <span>{booking.budget_range}</span>
+                      <Clock className="h-4 w-4 text-primary" />
+                      <span>{booking.event_time}</span>
                     </div>
-                  )}
-                </div>
-              </div>
-
-              {booking.event_description && (
-                <div className="mb-4">
-                  <p className="text-sm text-muted-foreground">
-                    {booking.event_description}
-                  </p>
-                </div>
-              )}
-
-              <div className="flex gap-2 flex-wrap">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedBooking(booking);
-                        setAdminNotes(booking.notes || "");
-                      }}
-                    >
-                      Manage
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                      <DialogTitle>
-                        Manage Booking - {booking.client_name}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-6">
-                      {/* Quick Actions */}
-                      <div className="flex gap-2 flex-wrap">
-                        <Button
-                          size="sm"
-                          onClick={() =>
-                            updateBookingStatus(
-                              booking.id,
-                              "accepted",
-                              adminNotes
-                            )
-                          }
-                          disabled={isUpdating}
-                        >
-                          Accept
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() =>
-                            updateBookingStatus(
-                              booking.id,
-                              "rejected",
-                              adminNotes
-                            )
-                          }
-                          disabled={isUpdating}
-                        >
-                          Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            updateBookingStatus(
-                              booking.id,
-                              "pending",
-                              adminNotes
-                            )
-                          }
-                          disabled={isUpdating}
-                        >
-                          Mark Pending
-                        </Button>
+                    <div className="flex items-center gap-2 text-sm">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <span>{booking.event_location}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-4 w-4 text-primary" />
+                      <span>{booking.client_email}</span>
+                    </div>
+                    {booking.client_phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-4 w-4 text-primary" />
+                        <span>{booking.client_phone}</span>
                       </div>
+                    )}
+                    {booking.budget_range && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <DollarSign className="h-4 w-4 text-primary" />
+                        <span>{booking.budget_range}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                      {/* Counter Proposal */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold">Counter Proposal</h4>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="proposedDate">Proposed Date</Label>
-                            <Input
-                              id="proposedDate"
-                              type="date"
-                              value={proposedDate}
-                              onChange={(e) => setProposedDate(e.target.value)}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="proposedTime">Proposed Time</Label>
-                            <Input
-                              id="proposedTime"
-                              type="time"
-                              value={proposedTime}
-                              onChange={(e) => setProposedTime(e.target.value)}
-                            />
-                          </div>
+                {booking.event_description && (
+                  <div className="mb-4">
+                    <p className="text-sm text-muted-foreground">
+                      {booking.event_description}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex gap-2 flex-wrap">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          setAdminNotes(booking.notes || "");
+                        }}
+                      >
+                        Manage
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>
+                          Manage Booking - {booking.client_name}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        {/* Quick Actions */}
+                        <div className="flex gap-2 flex-wrap">
+                          <Button
+                            size="sm"
+                            onClick={() =>
+                              updateBookingStatus(
+                                booking.id,
+                                "accepted",
+                                adminNotes
+                              )
+                            }
+                            disabled={isUpdating}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() =>
+                              updateBookingStatus(
+                                booking.id,
+                                "rejected",
+                                adminNotes
+                              )
+                            }
+                            disabled={isUpdating}
+                          >
+                            Reject
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() =>
+                              updateBookingStatus(
+                                booking.id,
+                                "pending",
+                                adminNotes
+                              )
+                            }
+                            disabled={isUpdating}
+                          >
+                            Mark Pending
+                          </Button>
                         </div>
-                        <Button
-                          onClick={() =>
-                            updateBookingStatus(
-                              booking.id,
-                              "counter_proposed",
-                              adminNotes,
-                              proposedDate,
-                              proposedTime
-                            )
-                          }
-                          disabled={
-                            isUpdating || !proposedDate || !proposedTime
-                          }
-                        >
-                          Send Counter Proposal
-                        </Button>
+
+                        {/* Counter Proposal */}
+                        <div className="space-y-4">
+                          <h4 className="font-semibold">Counter Proposal</h4>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="proposedDate">
+                                Proposed Date
+                              </Label>
+                              <Input
+                                id="proposedDate"
+                                type="date"
+                                value={proposedDate}
+                                onChange={(e) =>
+                                  setProposedDate(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="proposedTime">
+                                Proposed Time
+                              </Label>
+                              <Input
+                                id="proposedTime"
+                                type="time"
+                                value={proposedTime}
+                                onChange={(e) =>
+                                  setProposedTime(e.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            onClick={() =>
+                              updateBookingStatus(
+                                booking.id,
+                                "counter_proposed",
+                                adminNotes,
+                                proposedDate,
+                                proposedTime
+                              )
+                            }
+                            disabled={
+                              isUpdating || !proposedDate || !proposedTime
+                            }
+                          >
+                            Send Counter Proposal
+                          </Button>
+                        </div>
+
+                        {/* Admin Notes */}
+                        <div className="space-y-2">
+                          <Label htmlFor="adminNotes">Admin Notes</Label>
+                          <Textarea
+                            id="adminNotes"
+                            value={adminNotes}
+                            onChange={(e) => setAdminNotes(e.target.value)}
+                            placeholder="Add internal notes about this booking..."
+                            rows={3}
+                          />
+                        </div>
                       </div>
+                    </DialogContent>
+                  </Dialog>
 
-                      {/* Admin Notes */}
-                      <div className="space-y-2">
-                        <Label htmlFor="adminNotes">Admin Notes</Label>
-                        <Textarea
-                          id="adminNotes"
-                          value={adminNotes}
-                          onChange={(e) => setAdminNotes(e.target.value)}
-                          placeholder="Add internal notes about this booking..."
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-
-                {booking.status === "pending" && (
-                  // <>
-                  //   <Button
-                  //     size="sm"
-                  //     onClick={() =>
-                  //       updateBookingStatus(booking.id, "accepted")
-                  //     }
-                  //     disabled={isUpdating}
-                  //   >
-                  //     Quick Accept
-                  //   </Button>
-                  //   <Button
-                  //     size="sm"
-                  //     variant="destructive"
-                  //     onClick={() =>
-                  //       updateBookingStatus(booking.id, "rejected")
-                  //     }
-                  //     disabled={isUpdating}
-                  //   >
-                  //     Quick Reject
-                  //   </Button>
-                  // </>
-                  <></>
-                )}
-              </div>
-
-              {booking.notes && (
-                <div className="mt-4 p-3 bg-muted rounded-md">
-                  <div className="flex items-center gap-2 mb-1">
-                    <MessageSquare className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">Admin Notes</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {booking.notes}
-                  </p>
+                  {booking.status === "pending" && (
+                    // <>
+                    //   <Button
+                    //     size="sm"
+                    //     onClick={() =>
+                    //       updateBookingStatus(booking.id, "accepted")
+                    //     }
+                    //     disabled={isUpdating}
+                    //   >
+                    //     Quick Accept
+                    //   </Button>
+                    //   <Button
+                    //     size="sm"
+                    //     variant="destructive"
+                    //     onClick={() =>
+                    //       updateBookingStatus(booking.id, "rejected")
+                    //     }
+                    //     disabled={isUpdating}
+                    //   >
+                    //     Quick Reject
+                    //   </Button>
+                    // </>
+                    <></>
+                  )}
                 </div>
-              )}
 
-              {booking.status === "counter_proposed" &&
-                booking.proposed_date &&
-                booking.proposed_time && (
-                  <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-md">
-                    <p className="text-sm font-medium text-blue-600 mb-1">
-                      Counter Proposal Sent
-                    </p>
-                    <p className="text-sm text-blue-600">
-                      Proposed: {format(new Date(booking.proposed_date), "PPP")}{" "}
-                      at {booking.proposed_time}
+                {booking.notes && (
+                  <div className="mt-4 p-3 bg-muted rounded-md">
+                    <div className="flex items-center gap-2 mb-1">
+                      <MessageSquare className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-medium">Admin Notes</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {booking.notes}
                     </p>
                   </div>
                 )}
-            </CardContent>
-          </Card>
-        ))}
+
+                {booking.status === "counter_proposed" &&
+                  booking.proposed_date &&
+                  booking.proposed_time && (
+                    <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-md">
+                      <p className="text-sm font-medium text-blue-600 mb-1">
+                        Counter Proposal Sent
+                      </p>
+                      <p className="text-sm text-blue-600">
+                        Proposed:{" "}
+                        {format(new Date(booking.proposed_date), "PPP")} at{" "}
+                        {booking.proposed_time}
+                      </p>
+                    </div>
+                  )}
+              </CardContent>
+            </Card>
+          ))}
 
         {filteredBookings.length === 0 && (
           <Card>
