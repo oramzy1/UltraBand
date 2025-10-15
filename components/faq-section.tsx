@@ -13,11 +13,14 @@ import {
   Shield,
   CreditCard,
   MapPin,
+  Loader2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -91,6 +94,53 @@ const faqData: FAQItem[] = [
 ];
 
 export function FAQSection() {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      message: formData.get('message') as string,
+    };
+  
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message');
+      }
+  
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours.",
+      });
+  
+      form.reset();
+    } catch (error) {
+      console.error('Contact form error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="py-20 px-4 bg-gradient-secondary">
       <div className="container mx-auto">
@@ -150,16 +200,41 @@ export function FAQSection() {
             <CardHeader>
               <CardTitle className="text-2xl font-bold">Get in Touch</CardTitle>
               <p className="text-muted-foreground">
-                Have more questions? Fill out the form and we’ll get back to you.
+                Have more questions? Fill out the form and we'll get back to you.
               </p>
             </CardHeader>
             <CardContent>
-              <form className="space-y-4">
-                <Input type="text" placeholder="Your Name" required />
-                <Input type="email" placeholder="Your Email" required />
-                <Textarea placeholder="Your Message" rows={4} required />
-                <Button type="submit" className="w-full">
-                  Send Message
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <Input 
+                  type="text" 
+                  name="name"
+                  placeholder="Your Name" 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <Input 
+                  type="email" 
+                  name="email"
+                  placeholder="Your Email" 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <Textarea 
+                  name="message"
+                  placeholder="Your Message" 
+                  rows={4} 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending Message...
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
                 </Button>
               </form>
             </CardContent>

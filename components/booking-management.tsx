@@ -81,63 +81,61 @@ export function BookingManagement({
           (booking) => booking.service_category === serviceFilter
         );
 
-  const updateBookingStatus = async (
-    bookingId: string,
-    status: string,
-    notes?: string,
-    propDate?: string,
-    propTime?: string
-  ) => {
-    setIsUpdating(true);
-    try {
-      const supabase = createClient();
-
-      const updateData: any = {
-        status,
-        notes: notes || null,
-        updated_at: new Date().toISOString(),
-      };
-
-      if (status === "counter_proposed" && propDate && propTime) {
-        updateData.proposed_date = propDate;
-        updateData.proposed_time = propTime;
-      }
-
-      const { data, error } = await supabase
-        .from("bookings")
-        .update(updateData)
-        .eq("id", bookingId)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Update local state
-      const updatedBookings = bookings.map((booking) =>
-        booking.id === bookingId ? { ...booking, ...data } : booking
-      );
-      onBookingsUpdate(updatedBookings);
-
-      toast({
-        title: "Booking Updated",
-        description: `Booking status changed to ${status.replace("_", " ")}`,
-      });
-
-      setSelectedBooking(null);
-      setAdminNotes("");
-      setProposedDate("");
-      setProposedTime("");
-    } catch (error) {
-      console.error("Error updating booking:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update booking status",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+        const updateBookingStatus = async (
+          bookingId: string,
+          status: string,
+          notes?: string,
+          propDate?: string,
+          propTime?: string
+        ) => {
+          setIsUpdating(true);
+          try {
+            const updateData: any = {
+              status,
+              notes: notes || null,
+            };
+        
+            if (status === "counter_proposed" && propDate && propTime) {
+              updateData.proposed_date = propDate;
+              updateData.proposed_time = propTime;
+            }
+        
+            const response = await fetch(`/api/bookings/${bookingId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updateData),
+            });
+        
+            if (!response.ok) throw new Error('Failed to update booking');
+        
+            const result = await response.json();
+        
+            // Update local state
+            const updatedBookings = bookings.map((booking) =>
+              booking.id === bookingId ? { ...booking, ...result.booking } : booking
+            );
+            onBookingsUpdate(updatedBookings);
+        
+            toast({
+              title: "Booking Updated",
+              description: `Booking status changed to ${status.replace("_", " ")}. Client has been notified via email.`,
+            });
+        
+            setSelectedBooking(null);
+            setAdminNotes("");
+            setProposedDate("");
+            setProposedTime("");
+          } catch (error) {
+            console.error("Error updating booking:", error);
+            toast({
+              title: "Error",
+              description: "Failed to update booking status",
+              variant: "destructive",
+            });
+          } finally {
+            setIsUpdating(false);
+          }
+        };
 
   return (
     <div className="space-y-6">
@@ -366,27 +364,28 @@ export function BookingManagement({
                 </Dialog>
 
                 {booking.status === "pending" && (
-                  <>
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        updateBookingStatus(booking.id, "accepted")
-                      }
-                      disabled={isUpdating}
-                    >
-                      Quick Accept
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() =>
-                        updateBookingStatus(booking.id, "rejected")
-                      }
-                      disabled={isUpdating}
-                    >
-                      Quick Reject
-                    </Button>
-                  </>
+                  // <>
+                  //   <Button
+                  //     size="sm"
+                  //     onClick={() =>
+                  //       updateBookingStatus(booking.id, "accepted")
+                  //     }
+                  //     disabled={isUpdating}
+                  //   >
+                  //     Quick Accept
+                  //   </Button>
+                  //   <Button
+                  //     size="sm"
+                  //     variant="destructive"
+                  //     onClick={() =>
+                  //       updateBookingStatus(booking.id, "rejected")
+                  //     }
+                  //     disabled={isUpdating}
+                  //   >
+                  //     Quick Reject
+                  //   </Button>
+                  // </>
+                  <></>
                 )}
               </div>
 

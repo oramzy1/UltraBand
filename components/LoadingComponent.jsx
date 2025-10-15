@@ -4,7 +4,7 @@ import Image from "next/image";
 function LoadingComponent() {
   return (
     <div className="flex justify-center items-center h-screen w-screen animate-pulse bg-black">
-      <div className="relative h-[300px] w-[300px]">
+      <div className="relative h-[200px] w-[200px] md:h-[300px] md:w-[300px]">
         <Image
           src="/Ultra Band white-logo (1).png"
           alt="logo"

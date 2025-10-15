@@ -56,35 +56,90 @@ export function BookingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const supabase = createClient();
+
+  //     const { error } = await supabase.from("bookings").insert({
+  //       service_category: formData.serviceCategory,
+  //       client_name: formData.clientName,
+  //       client_email: formData.clientEmail,
+  //       client_phone: formData.clientPhone,
+  //       event_type: formData.eventType,
+  //       event_date: formData.eventDate?.toISOString().split("T")[0],
+  //       event_time: formData.eventTime,
+  //       event_location: formData.eventLocation,
+  //       event_description: formData.eventDescription,
+  //       budget_range: formData.budgetRange,
+  //       status: "pending",
+  //     });
+
+  //     if (error) throw error;
+
+  //     toast({
+  //       title: "Booking Request Submitted!",
+  //       description:
+  //         "We'll get back to you within 24 hours with a custom proposal.",
+  //     });
+
+  //     // Reset form
+  //     setFormData({
+  //       serviceCategory: "events",
+  //       clientName: "",
+  //       clientEmail: "",
+  //       clientPhone: "",
+  //       eventType: "",
+  //       eventDate: undefined,
+  //       eventTime: "",
+  //       eventLocation: "",
+  //       eventDescription: "",
+  //       budgetRange: "",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error submitting booking:", error);
+  //     toast({
+  //       title: "Error",
+  //       description:
+  //         "There was a problem submitting your booking request. Please try again.",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     try {
-      const supabase = createClient();
-
-      const { error } = await supabase.from("bookings").insert({
-        service_category: formData.serviceCategory,
-        client_name: formData.clientName,
-        client_email: formData.clientEmail,
-        client_phone: formData.clientPhone,
-        event_type: formData.eventType,
-        event_date: formData.eventDate?.toISOString().split("T")[0],
-        event_time: formData.eventTime,
-        event_location: formData.eventLocation,
-        event_description: formData.eventDescription,
-        budget_range: formData.budgetRange,
-        status: "pending",
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceCategory: formData.serviceCategory,
+          clientName: formData.clientName,
+          clientEmail: formData.clientEmail,
+          clientPhone: formData.clientPhone,
+          eventType: formData.eventType,
+          eventDate: formData.eventDate?.toISOString().split('T')[0],
+          eventTime: formData.eventTime,
+          eventLocation: formData.eventLocation,
+          eventDescription: formData.eventDescription,
+          budgetRange: formData.budgetRange,
+        }),
       });
-
-      if (error) throw error;
-
+  
+      if (!response.ok) throw new Error('Failed to submit booking');
+  
       toast({
         title: "Booking Request Submitted!",
-        description:
-          "We'll get back to you within 24 hours with a custom proposal.",
+        description: "We'll get back to you within 24 hours with a custom proposal.",
       });
-
+  
       // Reset form
       setFormData({
         serviceCategory: "events",
@@ -99,11 +154,10 @@ export function BookingForm() {
         budgetRange: "",
       });
     } catch (error) {
-      console.error("Error submitting booking:", error);
+      console.error('Error submitting booking:', error);
       toast({
         title: "Error",
-        description:
-          "There was a problem submitting your booking request. Please try again.",
+        description: "There was a problem submitting your booking request. Please try again.",
         variant: "destructive",
       });
     } finally {

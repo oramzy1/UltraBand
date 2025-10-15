@@ -52,23 +52,23 @@ export function AdminSettings() {
   }
 
   const handleUpdateCredentials = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setMessage("")
-    setError("")
-
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
+    setError("");
+  
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match")
-      setIsLoading(false)
-      return
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
     }
-
+  
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters long")
-      setIsLoading(false)
-      return
+      setError("Password must be at least 6 characters long");
+      setIsLoading(false);
+      return;
     }
-
+  
     try {
       const response = await fetch("/api/admin/credentials", {
         method: "PUT",
@@ -79,23 +79,32 @@ export function AdminSettings() {
           newPassword,
           recoveryEmail,
         }),
-      })
-
+      });
+  
+      const result = await response.json();
+  
       if (response.ok) {
-        setMessage("Credentials updated successfully")
-        setCurrentUsername(newUsername)
-        setNewPassword("")
-        setConfirmPassword("")
-        fetchCredentials()
+        setMessage("Credentials updated successfully! Please log in again with your new credentials.");
+        setCurrentUsername(newUsername);
+        setNewPassword("");
+        setConfirmPassword("");
+        fetchCredentials();
+        
+        // If username changed, user should re-login
+        if (currentUsername !== newUsername) {
+          setTimeout(() => {
+            window.location.href = "/admin/login";
+          }, 2000);
+        }
       } else {
-        setError("Failed to update credentials")
+        setError(result.error || "Failed to update credentials");
       }
     } catch (error) {
-      setError("Update failed. Please try again.")
+      setError("Update failed. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
