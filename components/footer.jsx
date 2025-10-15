@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-black text-gray-300 pt-14 pb-6 mt-20">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-7">
         {/* Brand / Logo */}
         <div>
             {/* Logo */}
@@ -43,11 +43,6 @@ export default function Footer() {
             <li>
               <Link href="/events" className="hover:text-purple-400">
                 Events
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-purple-400">
-                Contact
               </Link>
             </li>
           </ul>
