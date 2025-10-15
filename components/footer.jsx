@@ -62,19 +62,19 @@ export default function Footer() {
             <li>
               Email:{" "}
               <a
-                href="mailto:info@ultraband.com"
+                href="mailto:info@ultrabandentertainment.com"
                 className="hover:text-purple-400"
               >
-                info@ultraband.com
+                info@ultrabandentertainment.com
               </a>
             </li>
             <li>
               Phone:{" "}
-              <a href="tel:+2348000000000" className="hover:text-purple-400">
-                +234 800 000 0000
+              <a href="tel:+12817608305" className="hover:text-purple-400">
+              +1 281-760-8305
               </a>
             </li>
-            <li>Location: Lagos, Nigeria</li>
+            <li>Location: North America, United States</li>
           </ul>
         </div>
 

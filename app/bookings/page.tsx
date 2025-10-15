@@ -164,10 +164,10 @@ export default function BookingsPage() {
                   We typically respond to booking requests within 24 hours. For
                   urgent requests, please call us directly at{" "}
                   <a
-                    href="tel:+1-555-ECHOES"
+                    href="tel:+1287608305"
                     className="text-primary hover:underline"
                   >
-                    +1-555-ECHOES
+                    +1 281-760-8305
                   </a>
                   .
                 </p>

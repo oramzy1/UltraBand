@@ -85,7 +85,10 @@ export default function SocialIcons() {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center space-y-4">
+    <div 
+    onMouseEnter={() => setIsOpen(true)}
+    onMouseLeave={() => setIsOpen(false)}
+    className="fixed bottom-6 right-6 z-50 flex flex-col items-center space-y-4">
       {/* Social Icons */}
       <div
         className={`flex flex-col items-center space-y-4 transition-all duration-500 ${
@@ -114,8 +117,6 @@ export default function SocialIcons() {
       {/* Plus Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
         className={`flex items-center justify-center w-14 h-14 rounded-full 
         bg-purple-600 text-white shadow-lg transition-transform duration-500
         hover:bg-purple-700 ${isOpen ? "rotate-45" : ""}

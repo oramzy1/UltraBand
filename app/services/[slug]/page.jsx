@@ -38,7 +38,8 @@ export default async function ServiceDetail({ params }) {
       {/* Portfolio Section */}
       {service.portfolio?.length > 0 && (
         <div className="my-12">
-          <h2 className="text-2xl font-bold mb-6 px-4">{service.title + `${"'"}`}</h2>
+          <h2 className="text-2xl font-bold mb-6 px-4">{service.title}{""}— Portfolio Highlights`</h2>
+          <div className="h-1 w-24 bg-purple-600 rounded-full mb-6 ml-4"></div>
           <TooltipProvider>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
               {service.portfolio.map((item, idx) => (
