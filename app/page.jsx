@@ -61,7 +61,7 @@ export default async function HomePage() {
 
           <p className="text-xl md:text-2xl mb-8 text-muted-foreground text-pretty max-w-2xl mx-auto">
             {heroInfo?.content ||
-              "...your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences"}
+              "Your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences"}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="animate-pulse-glow">

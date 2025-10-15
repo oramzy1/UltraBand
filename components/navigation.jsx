@@ -9,7 +9,7 @@ import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Shield } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +39,7 @@ export function Navigation() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -51,6 +52,24 @@ export function Navigation() {
       setTheme("light");
     }
   }, [setTheme]);
+
+  useEffect(() => {
+    // Check admin session
+    const checkAdminSession = async () => {
+      try {
+        const response = await fetch("/api/admin/session");
+        if (response.ok) {
+          const data = await response.json();
+          setIsAdmin(data.authenticated);
+        }
+      } catch (error) {
+        console.error("Error checking admin session:", error);
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminSession();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -106,6 +125,20 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
+
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary flex items-center",
+                  pathname.startsWith("/admin")
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                Dashboard
+              </Link>
+            )}
 
             <DropdownMenu open={open} modal={false}>
               <DropdownMenuTrigger
@@ -195,9 +228,23 @@ export function Navigation() {
                       {item.label}
                     </Link>
                   ))}
+                    {isAdmin && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "text-lg font-medium transition-colors hover:text-primary flex items-center",
+                        pathname.startsWith("/admin")
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                   <Accordion type="single" collapsible>
                     <AccordionItem value="services">
-                      <AccordionTrigger className="text-lg font-medium text-muted-foreground hover:text-primary">
+                      <AccordionTrigger className="text-lg font-medium text-muted-foreground hover:text-primary mt-[-1rem]">
                         Services
                       </AccordionTrigger>
                       <AccordionContent>
@@ -206,7 +253,7 @@ export function Navigation() {
                             <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                           </div>
                         ) : services.length > 0 ? (
-                          <div className="flex flex-col px-2 space-y-2">
+                          <div className="flex flex-col px-2">
                             {services.map((service) => (
                               <Link
                                 key={service.id}

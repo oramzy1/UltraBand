@@ -1,11 +1,8 @@
 import nodemailer from "nodemailer";
-import fs from "fs";
 import path from "path";
 
 
-const logoPath = path.resolve("./Ultra Band white-logo (1).png");
-const logoBase64 = fs.readFileSync(logoPath).toString("base64");
-const logoSrc = `data:image/png;base64,${logoBase64}`;
+const logoPath = path.resolve("./public/Ultra Band white-logo (1).png");
 
 // Create reusable transporter
 const transporter = nodemailer.createTransport({
@@ -224,7 +221,7 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
         
         <!-- HEADER -->
         <div style="background:#000;padding:25px;text-align:center;">
-          <img src="${logoSrc}" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
         </div>
         
         <!-- STATUS HEADER -->
@@ -277,6 +274,13 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
       </div>
     </div>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Email to business (notification)
@@ -290,7 +294,7 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
       <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);overflow:hidden;">
         
         <div style="background:#000;padding:25px;text-align:center;">
-          <img src="${logoSrc}" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
         </div>
         
         <div style="background:${statusColor};color:#fff;text-align:center;padding:15px 20px;font-size:20px;font-weight:bold;">
@@ -320,6 +324,13 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
       </div>
     </div>     
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Send both emails
