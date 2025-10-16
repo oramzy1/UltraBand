@@ -158,7 +158,7 @@ export function FeaturedVideos() {
         <div className="max-w-5xl mx-auto">
           <Card
             className="overflow-hidden hover:shadow-lg transition-shadow group"
-          > <div className="aspect-video relative w-[90%] mx-auto rounded-lg overflow-hidden">
+          > <div className="aspect-video relative w-[95%] mx-auto rounded-lg overflow-hidden">
           <iframe
             src={`https://www.youtube.com/embed/${video.videoUrl.split("v=")[1]}?autoplay=0&rel=0&modestbranding=1`}
             title={video.title}
@@ -167,11 +167,12 @@ export function FeaturedVideos() {
             allowFullScreen
           />
         </div>
-            <CardContent className="p-4">
+            <CardContent className="px-4 py-2">
               <h3 className="font-medium text-lg mb-2 line-clamp-2">
                 {video.title}
               </h3>
-              <p className="text-sm text-muted-foreground mb-4">
+             <div className="flex justify-between items-center">
+             <p className="text-sm text-muted-foreground">
                 Published {new Date(video.publishedAt).toLocaleDateString()}
               </p>
               <Button asChild variant="outline" className="gap-2">
@@ -184,6 +185,7 @@ export function FeaturedVideos() {
                   Watch on YouTube
                 </a>
               </Button>
+             </div>
             </CardContent>
           </Card>
         </div>
