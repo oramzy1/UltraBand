@@ -238,7 +238,7 @@ export default async function HomePage() {
       )}
 
       {/* Featured videos */}
-      <FeaturedVideos youtubeVideos={youtubeVideos}/>
+      <FeaturedVideos />
 
       {/* FAQs & Contact Us */}
       <FAQSection/>

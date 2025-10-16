@@ -806,7 +806,7 @@ export function GalleryManagement({
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Gallery Management</h2>
+        <h2 className="md:text-2xl font-bold">Gallery Management</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={resetForm}>

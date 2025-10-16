@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { YouTubeVideoSelection } from "./youtube-video-selection";
 
 export function AdminDashboard({
   initialBookings,
@@ -263,7 +264,17 @@ export function AdminDashboard({
         </TabsContent>
 
         <TabsContent value="gallery">
-          <GalleryManagement gallery={gallery} onGalleryUpdate={setGallery} />
+        <div className="space-y-8">
+      {/* Existing Gallery Management */}
+    <div>
+      <GalleryManagement gallery={gallery} onGalleryUpdate={setGallery} />
+    </div>
+
+    {/* YouTube Video Selection */}
+    <div className="border-t pt-8">
+      <YouTubeVideoSelection />
+    </div>
+  </div>
         </TabsContent>
 
         <TabsContent value="settings">
