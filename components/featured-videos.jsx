@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Play, ImageIcon, ExternalLink, X } from "lucide-react";
+import Link from "next/link";
 
 // Video Player Component
 function VideoPlayer({ video, isOpen, onClose }) {
@@ -78,19 +79,21 @@ function VideoPlayer({ video, isOpen, onClose }) {
 }
 
 // Main Gallery Component (replace the YouTube videos section)
-export function GalleryVideos({ youtubeVideos }) {
+export function FeaturedVideos({ youtubeVideos }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   return (
-    <>
-      <div>
-        <div className="flex items-center gap-3 mb-8">
-          <h2 className="text-2xl font-bold">Latest Videos</h2>
-          <Badge variant="outline">{youtubeVideos.length} Videos</Badge>
+    <section className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Videos</h2>
+          <p className="text-xl text-muted-foreground">
+                A selection of our recent performances
+              </p>
         </div>
 
         {youtubeVideos.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
             {youtubeVideos.map((video) => (
               <Card
                 key={video.id}
@@ -111,9 +114,6 @@ export function GalleryVideos({ youtubeVideos }) {
                       <Play className="h-4 w-4 ml-0.5" />
                     </Button>
                   </div>
-                  {/* <Badge className="absolute top-3 left-3 bg-red-600">
-                    YouTube
-                  </Badge> */}
                   <div className="absolute top-3 right-3">
                     <Button
                       variant="ghost"
@@ -158,6 +158,11 @@ export function GalleryVideos({ youtubeVideos }) {
             </CardContent>
           </Card>
         )}
+         <div className="text-center mt-8">
+              <Button asChild variant="ghost">
+                <Link href="/gallery">View More Videos</Link>
+              </Button>
+            </div>
       </div>
 
       {/* Video Player Modal */}
@@ -166,6 +171,6 @@ export function GalleryVideos({ youtubeVideos }) {
         isOpen={!!selectedVideo}
         onClose={() => setSelectedVideo(null)}
       />
-    </>
+    </section>
   );
 }

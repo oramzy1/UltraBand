@@ -165,4 +165,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-
+.leaflet-control-attribution {
+  display: none !important;
+}

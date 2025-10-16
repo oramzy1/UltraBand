@@ -9,6 +9,8 @@ import { FocusCards } from "@/components/ui/focus-cards";
 import { LocationsSection } from "@/components/LocationsSection";
 import { FAQSection } from "@/components/faq-section";
 import SocialIcons from "@/components/social-icons"
+import { getLatestYouTubeVideos } from "@/lib/youtube";
+import { FeaturedVideos } from "@/components/featured-videos"
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -35,6 +37,10 @@ export default async function HomePage() {
 
   const heroInfo = bandInfo?.find((info) => info.section === "hero");
   const aboutInfo = bandInfo?.find((info) => info.section === "about");
+
+  
+  // Fetch YouTube videos
+  const youtubeVideos = await getLatestYouTubeVideos(4);
 
   return (
     <div className="min-h-screen">
@@ -230,6 +236,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Featured videos */}
+      <FeaturedVideos youtubeVideos={youtubeVideos}/>
 
       {/* FAQs & Contact Us */}
       <FAQSection/>
