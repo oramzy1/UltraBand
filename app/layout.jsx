@@ -53,13 +53,13 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata = {
-  title: "Ultra Band Music - Professional Live Music",
+  title: "Ultra Band Music - Owambe Maestros",
   description:
-    "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
+    "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
   generator: "Oramzy",
   openGraph: {
     title: "Ultra Band Music - Professional Live Music",
-    description: "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
+    description: "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
     url: "https://ultra-band.vercel.app",
     images: [
       {
@@ -74,8 +74,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ultra Band Music - Professional Live Music",
-    description: "Professional live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
+    title: "Ultra Band Music - Owambe Maetros",
+    description: "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
     images: ["https:/ultra-band.app/meta-image.jpg"],
   },
 };

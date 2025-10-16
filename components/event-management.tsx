@@ -225,7 +225,7 @@ export function EventManagement({ events, onEventsUpdate }: EventManagementProps
                 />
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="ticket_url">Ticket URL</Label>
                 <Input
                   id="ticket_url"
@@ -234,7 +234,7 @@ export function EventManagement({ events, onEventsUpdate }: EventManagementProps
                   onChange={(e) => setFormData({ ...formData, ticket_url: e.target.value })}
                   placeholder="https://tickets.example.com"
                 />
-              </div>
+              </div> */}
 
               <div className="flex items-center space-x-2">
                 <Switch

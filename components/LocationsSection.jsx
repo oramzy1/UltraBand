@@ -40,7 +40,7 @@ export function LocationsSection() {
             ) : (
               <div>
                 {locations.map((loc, idx) => (
-                  <span key={loc.id}>
+                  <span className="hover:text-white" key={loc.id}>
                     {loc.name}
                     {idx < locations.length - 1 && " | "}
                   </span>
