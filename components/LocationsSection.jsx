@@ -256,7 +256,7 @@ export function LocationsSection() {
                     key={loc.id}
                   >
                     {loc.name}
-                    {idx < locations.length - 1 && " | "}
+                    {idx < locations.length - 1 && <span className='hover:text-gray-400'> | </span>}
                   </span>
                 ))}
                 <span className="font-semibold">

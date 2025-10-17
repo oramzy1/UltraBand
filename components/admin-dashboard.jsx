@@ -181,10 +181,10 @@ export function AdminDashboard({
 
       {/* Management Tabs */}
       <Tabs defaultValue="bookings" className="space-y-6">
-        <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5">
+        <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5 ps-60 sm:ps-0 snap-x snap-mandatory scroll-smooth">
           <TabsTrigger
             value="bookings"
-            className="flex items-center gap-2 whitespace-nowrap"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
             <Users className="h-4 w-4" />
             Bookings
@@ -200,7 +200,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="events"
-            className="flex items-center gap-2 whitespace-nowrap"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
             <Calendar className="h-4 w-4" />
             Events
@@ -208,7 +208,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="management"
-            className="flex items-center gap-2 whitespace-nowrap"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
             <Users className="h-4 w-4" />
             Management
@@ -216,7 +216,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="gallery"
-            className="flex items-center gap-2 whitespace-nowrap"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
             <ImageIcon className="h-4 w-4" />
             Gallery
@@ -224,7 +224,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="settings"
-            className="flex items-center gap-2 whitespace-nowrap"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
             <Settings className="h-4 w-4" />
             Settings
