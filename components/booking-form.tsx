@@ -7,13 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -23,7 +16,6 @@ import {
 import { CalendarIcon, Loader2, Check, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface BookingFormData {
@@ -55,61 +47,6 @@ export function BookingForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     const supabase = createClient();
-
-  //     const { error } = await supabase.from("bookings").insert({
-  //       service_category: formData.serviceCategory,
-  //       client_name: formData.clientName,
-  //       client_email: formData.clientEmail,
-  //       client_phone: formData.clientPhone,
-  //       event_type: formData.eventType,
-  //       event_date: formData.eventDate?.toISOString().split("T")[0],
-  //       event_time: formData.eventTime,
-  //       event_location: formData.eventLocation,
-  //       event_description: formData.eventDescription,
-  //       budget_range: formData.budgetRange,
-  //       status: "pending",
-  //     });
-
-  //     if (error) throw error;
-
-  //     toast({
-  //       title: "Booking Request Submitted!",
-  //       description:
-  //         "We'll get back to you within 24 hours with a custom proposal.",
-  //     });
-
-  //     // Reset form
-  //     setFormData({
-  //       serviceCategory: "events",
-  //       clientName: "",
-  //       clientEmail: "",
-  //       clientPhone: "",
-  //       eventType: "",
-  //       eventDate: undefined,
-  //       eventTime: "",
-  //       eventLocation: "",
-  //       eventDescription: "",
-  //       budgetRange: "",
-  //     });
-  //   } catch (error) {
-  //     console.error("Error submitting booking:", error);
-  //     toast({
-  //       title: "Error",
-  //       description:
-  //         "There was a problem submitting your booking request. Please try again.",
-  //       variant: "destructive",
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -271,7 +208,7 @@ export function BookingForm() {
           </Popover>
         </div>
 
-        <div className={`grid gap-4 ${formData.serviceCategory === "events" ? "md:grid-cols-2" : "md:grid-cols-1"}`}>
+        <div className={`grid gap-4 ${formData.serviceCategory === "events" ? "md:grid-cols-1" : "md:grid-cols-1"}`}>
         { formData.serviceCategory === "events" && (
             <div className="space-y-2">
             <Label htmlFor="eventType">Event Type *</Label>
@@ -327,7 +264,10 @@ export function BookingForm() {
           </div>
         )}
 
-          <div className="space-y-2">
+          {formData.serviceCategory === 'events' ? (
+            <></>
+          ): (
+            <div className="space-y-2">
             <Label htmlFor="budgetRange">Budget Range</Label>
             <Popover modal={false}>
               <PopoverTrigger asChild>
@@ -377,6 +317,7 @@ export function BookingForm() {
               </PopoverContent>
             </Popover>
           </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">

@@ -11,7 +11,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     if (error) throw error
 
-    return NextResponse.json({ booking: data })
+    // Return the booking directly, not wrapped in { booking: data }
+    return NextResponse.json(data)
   } catch (error) {
     console.error("Error fetching booking:", error)
     return NextResponse.json({ error: "Failed to fetch booking" }, { status: 500 })

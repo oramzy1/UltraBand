@@ -79,7 +79,7 @@ export default function BookingsPage() {
               </CardContent>
             </Card>
             {/* Pricing Information */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-primary" />
@@ -110,7 +110,7 @@ export default function BookingsPage() {
                   requirements. Custom quotes available.
                 </p>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* What's Included */}
             <Card>
@@ -149,9 +149,8 @@ export default function BookingsPage() {
                 </ul>
               </CardContent>
             </Card>
-          </div>
-          <div>
-            {/* Contact Information */}
+
+              {/* Contact Information */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -173,6 +172,8 @@ export default function BookingsPage() {
                 </p>
               </CardContent>
             </Card>
+          </div>
+          <div>
           </div>
         </div>
         <FAQSection />

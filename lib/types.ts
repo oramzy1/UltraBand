@@ -14,8 +14,21 @@ export interface Booking {
   notes?: string
   proposed_date?: string
   proposed_time?: string
+  proposed_cost?: number;
+  client_counter_offer?: number;
+  payment_link?: string;
+  payment_status?: 'pending' | 'paid' | 'cancelled';
+  negotiation_history?: NegotiationEntry[];
   created_at: string
   updated_at: string
+}
+
+export interface NegotiationEntry {
+  timestamp: string;
+  actor: 'admin' | 'client';
+  action: 'propose_cost' | 'accept' | 'counter_offer' | 'cancel';
+  amount?: number;
+  notes?: string;
 }
 
 export interface GalleryItem {

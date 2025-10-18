@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import path from "path";
+import { format } from "date-fns";
 
 
 const logoPath = path.resolve("./public/Ultra Band white-logo (1).png");
@@ -42,6 +43,7 @@ interface BookingEmailData {
   eventDescription: string;
   budgetRange: string;
 }
+
 
 // Contact Form Emails
 export async function sendContactEmails(data: ContactEmailData) {
@@ -606,4 +608,160 @@ export async function sendPasswordRecoveryEmail(data: PasswordRecoveryData) {
   };
 
   await transporter.sendMail(recoveryEmail);
+}
+
+
+// Cost Proposal Email to Client
+export async function sendCostProposalEmail(data: {
+  clientName: string;
+  clientEmail: string;
+  proposedCost: number;
+  notes?: string;
+  eventDate: string;
+  eventTime: string;
+  eventLocation: string;
+  bookingId: string;
+}) {
+  const responseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/booking-response/${data.bookingId}`;
+
+  const email = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: data.clientEmail,
+    subject: "Cost Proposal for Your Event - Ultra Band Music",
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#8328FA,#5B14E5);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:22px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .cost-box{background:#f2f0ff;border-left:4px solid #8328FA;padding:16px;border-radius:6px;margin:20px 0;}
+          .cost-box h2{color:#8328FA;margin:0 0 10px 0;font-size:20px;}
+          .button{display:inline-block;background:#8328FA;color:#fff!important;padding:12px 24px;border-radius:6px;text-decoration:none;margin:10px 5px;font-weight:500;}
+          .button-secondary{background:#6c757d;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>Cost Proposal for Your Event</h1></div>
+          <div class="content">
+            <p>Hi ${data.clientName},</p>
+            <p>Thank you for your interest! We've prepared a cost proposal for your event:</p>
+            
+            <div class="cost-box">
+              <h2>Proposed Cost: $${data.proposedCost.toFixed(2)}</h2>
+              <p><strong>Event Date:</strong> ${format(new Date(data.eventDate), "PPP")}</p>
+              <p><strong>Time:</strong> ${data.eventTime}</p>
+              <p><strong>Location:</strong> ${data.eventLocation}</p>
+              ${data.notes ? `<p><strong>Details:</strong> ${data.notes}</p>` : ''}
+            </div>
+
+            <p><strong>What would you like to do?</strong></p>
+            
+            <div style="text-align:center;margin:30px 0;">
+              <a href="${responseUrl}?action=accept" class="button">Accept Proposal</a>
+              <a href="${responseUrl}?action=counter" class="button button-secondary">Make Counter Offer</a>
+            </div>
+
+            <p style="text-align:center;font-size:12px;color:#888;margin-top:20px;">
+              <a href="${responseUrl}?action=cancel" style="color:#dc3545;text-decoration:underline;">Cancel Booking</a>
+            </p>
+
+            <p style="margin-top:30px;">We look forward to hearing from you!</p>
+            <p>Best regards,<br><strong>Ultra Band Music Team</strong></p>
+          </div>
+          <div class="footer">
+            This is an automated email from Ultra Band Music. You can reply directly with any questions.
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  console.log("📧 Attempting to send cost proposal email to:", data.clientEmail);
+  console.log("📧 Response URL:", responseUrl);
+  
+  await transporter.sendMail(email);
+}
+
+// Payment Link Email
+export async function sendPaymentLinkEmail(data: {
+  clientName: string;
+  clientEmail: string;
+  amount: number;
+  paymentLink: string;
+  eventDate: string;
+}) {
+  const email = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: data.clientEmail,
+    subject: "Payment Link - Ultra Band Music",
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#8328FA,#5B14E5);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:22px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .cost-box{background:#f2f0ff;border-left:4px solid #8328FA;padding:16px;border-radius:6px;margin:20px 0;}
+          .cost-box h2{color:#8328FA;margin:0 0 10px 0;font-size:20px;}
+          .button{display:inline-block;background:#8328FA;color:#fff!important;padding:14px 28px;border-radius:6px;text-decoration:none;margin:10px 5px;font-weight:600;font-size:16px;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>Complete Your Booking Payment</h1></div>
+          <div class="content">
+            <p>Hi ${data.clientName},</p>
+            <p>Great news! We've agreed on the booking details. Please complete your payment to confirm:</p>
+            
+            <div class="cost-box">
+              <h2>Amount Due: $${data.amount.toFixed(2)}</h2>
+              <p><strong>Event Date:</strong> ${format(new Date(data.eventDate), "PPP")}</p>
+            </div>
+
+            <div style="text-align:center;margin:30px 0;">
+              <a href="${data.paymentLink}" class="button">Pay Now via PayPal</a>
+            </div>
+
+            <p>Once payment is confirmed, your booking will be finalized!</p>
+            <p style="margin-top:30px;">Best regards,<br><strong>Ultra Band Music Team</strong></p>
+          </div>
+          <div class="footer">
+            This is an automated email from Ultra Band Music.
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  console.log("📧 Sending payment link email to:", data.clientEmail);
+  await transporter.sendMail(email);
+}
+
+// Counter Offer Notification to Admin
+export async function sendCounterOfferNotification(data: {
+  clientName: string;
+  counterOffer: number;
+  bookingId: string;
+}) {
+  const email = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: process.env.BUSINESS_EMAIL,
+    subject: `Counter Offer Received - ${data.clientName}`,
+    html: `
+      <p><strong>${data.clientName}</strong> has sent a counter offer of <strong>$${data.counterOffer.toFixed(2)}</strong></p>
+      <p>Review it in your admin dashboard.</p>
+    `,
+  };
+
+  await transporter.sendMail(email);
 }

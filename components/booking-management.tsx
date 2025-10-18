@@ -57,6 +57,8 @@ export function BookingManagement({
   const [adminNotes, setAdminNotes] = useState("");
   const [proposedDate, setProposedDate] = useState("");
   const [proposedTime, setProposedTime] = useState("");
+  const [proposedCost, setProposedCost] = useState("");
+  const [costNotes, setCostNotes] = useState("");
   const { toast } = useToast();
 
   const getStatusColor = (status: string) => {
@@ -133,6 +135,75 @@ export function BookingManagement({
       toast({
         title: "Error",
         description: "Failed to update booking status",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const sendCostProposal = async (bookingId: string, cost: string, notes: string) => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/bookings/${bookingId}/propose-cost`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          proposed_cost: parseFloat(cost),
+          notes 
+        }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to send proposal');
+  
+      const result = await response.json();
+      const updatedBookings = bookings.map((booking) =>
+        booking.id === bookingId ? { ...booking, ...result.booking } : booking
+      );
+      onBookingsUpdate(updatedBookings);
+  
+      toast({
+        title: "Cost Proposal Sent",
+        description: "Client has been notified via email.",
+      });
+  
+      setProposedCost("");
+      setCostNotes("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send cost proposal",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+  
+  const acceptCounterOffer = async (bookingId: string) => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/bookings/${bookingId}/accept-counter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      if (!response.ok) throw new Error('Failed to accept counter offer');
+  
+      const result = await response.json();
+      const updatedBookings = bookings.map((booking) =>
+        booking.id === bookingId ? { ...booking, ...result.booking } : booking
+      );
+      onBookingsUpdate(updatedBookings);
+  
+      toast({
+        title: "Counter Offer Accepted",
+        description: "Payment link sent to client.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to accept counter offer",
         variant: "destructive",
       });
     } finally {
@@ -271,7 +342,7 @@ export function BookingManagement({
                         Manage
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
+                    <DialogContent className="max-w-4xl max-h-[95vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>
                           Manage Booking - {booking.client_name}
@@ -322,7 +393,6 @@ export function BookingManagement({
                             Mark Pending
                           </Button>
                         </div>
-
                         {/* Counter Proposal */}
                         <div className="space-y-4">
                           <h4 className="font-semibold">Counter Proposal</h4>
@@ -371,7 +441,6 @@ export function BookingManagement({
                             Send Counter Proposal
                           </Button>
                         </div>
-
                         {/* Admin Notes */}
                         <div className="space-y-2">
                           <Label htmlFor="adminNotes">Admin Notes</Label>
@@ -383,6 +452,129 @@ export function BookingManagement({
                             rows={3}
                           />
                         </div>
+                        {booking.service_category === "events" && (
+                          <div className="space-y-4 border-t pt-4">
+                            <h4 className="font-semibold">Cost Proposal</h4>
+
+                            {/* Show negotiation history */}
+                            {booking.negotiation_history &&
+                              booking.negotiation_history.length > 0 && (
+                                <div className="space-y-2 max-h-40 overflow-y-auto bg-muted p-3 rounded-md">
+                                  <p className="text-sm font-medium">
+                                    Negotiation History:
+                                  </p>
+                                  {booking.negotiation_history.map(
+                                    (entry, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="text-sm border-b pb-2 last:border-0"
+                                      >
+                                        <p className="text-muted-foreground">
+                                          {format(
+                                            new Date(entry.timestamp),
+                                            "PPp"
+                                          )}
+                                        </p>
+                                        <p>
+                                          <strong>
+                                            {entry.actor === "admin"
+                                              ? "You"
+                                              : "Client"}
+                                            :
+                                          </strong>{" "}
+                                          {entry.action === "propose_cost" &&
+                                            `Proposed $${entry.amount}`}
+                                          {entry.action === "counter_offer" &&
+                                            `Counter-offered $${entry.amount}`}
+                                          {entry.action === "accept" &&
+                                            "Accepted offer"}
+                                          {entry.action === "cancel" &&
+                                            "Cancelled booking"}
+                                        </p>
+                                        {entry.notes && (
+                                          <p className="text-muted-foreground italic">
+                                            {entry.notes}
+                                          </p>
+                                        )}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              )}
+
+                            {/* Current status */}
+                            {booking.proposed_cost && (
+                              <div className="bg-blue-950 p-3 rounded-md">
+                                <p className="text-sm">
+                                  <strong>Your Last Proposal:</strong> $
+                                  {booking.proposed_cost}
+                                </p>
+                                {booking.client_counter_offer && (
+                                  <p className="text-sm text-orange-400">
+                                    <strong>Client Counter-Offer:</strong> $
+                                    {booking.client_counter_offer}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Admin cost proposal input */}
+                            <div className="space-y-2">
+                              <Label htmlFor="proposedCost">
+                                Propose Cost ($)
+                              </Label>
+                              <Input
+                                id="proposedCost"
+                                type="number"
+                                step="0.01"
+                                value={proposedCost}
+                                onChange={(e) =>
+                                  setProposedCost(e.target.value)
+                                }
+                                placeholder="Enter proposed cost"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="costNotes">
+                                Additional Notes (Optional)
+                              </Label>
+                              <Textarea
+                                id="costNotes"
+                                value={costNotes}
+                                onChange={(e) => setCostNotes(e.target.value)}
+                                placeholder="Explain the cost breakdown..."
+                                rows={2}
+                              />
+                            </div>
+
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() =>
+                                  sendCostProposal(
+                                    booking.id,
+                                    proposedCost,
+                                    costNotes
+                                  )
+                                }
+                                disabled={isUpdating || !proposedCost}
+                              >
+                                Send Cost Proposal
+                              </Button>
+
+                              {booking.client_counter_offer && (
+                                <Button
+                                  variant="outline"
+                                  onClick={() => acceptCounterOffer(booking.id)}
+                                  disabled={isUpdating}
+                                >
+                                  Accept Client's $
+                                  {booking.client_counter_offer}
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </DialogContent>
                   </Dialog>
