@@ -77,12 +77,12 @@ export function BookingManagement({
   };
 
   const filteredBookings =
-    serviceFilter === "all"
-      ? bookings
-      : bookings.filter(
-          (booking) => booking.service_category === serviceFilter
-        );
-
+  serviceFilter === "all"
+    ? bookings.filter(b => !b.archived) // Exclude archived
+    : bookings.filter(
+        (booking) => booking.service_category === serviceFilter && !booking.archived
+      );
+      
   const updateBookingStatus = async (
     bookingId: string,
     status: string,
@@ -350,51 +350,55 @@ export function BookingManagement({
                       </DialogHeader>
                       <div className="space-y-6">
                         {/* Quick Actions */}
-                        <div className="flex gap-2 flex-wrap">
-                          <Button
-                            size="sm"
-                            onClick={() =>
-                              updateBookingStatus(
-                                booking.id,
-                                "accepted",
-                                adminNotes
-                              )
-                            }
-                            disabled={isUpdating}
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() =>
-                              updateBookingStatus(
-                                booking.id,
-                                "rejected",
-                                adminNotes
-                              )
-                            }
-                            disabled={isUpdating}
-                          >
-                            Reject
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              updateBookingStatus(
-                                booking.id,
-                                "pending",
-                                adminNotes
-                              )
-                            }
-                            disabled={isUpdating}
-                          >
-                            Mark Pending
-                          </Button>
-                        </div>
+                       {booking.service_category !== "events" && (
+                         <div className="flex gap-2 flex-wrap">
+                         <Button
+                           size="sm"
+                           onClick={() =>
+                             updateBookingStatus(
+                               booking.id,
+                               "accepted",
+                               adminNotes
+                             )
+                           }
+                           disabled={isUpdating}
+                         >
+                           Accept
+                         </Button>
+                         <Button
+                           size="sm"
+                           variant="destructive"
+                           onClick={() =>
+                             updateBookingStatus(
+                               booking.id,
+                               "rejected",
+                               adminNotes
+                             )
+                           }
+                           disabled={isUpdating}
+                         >
+                           Reject
+                         </Button>
+                         <Button
+                           size="sm"
+                           variant="outline"
+                           onClick={() =>
+                             updateBookingStatus(
+                               booking.id,
+                               "pending",
+                               adminNotes
+                             )
+                           }
+                           disabled={isUpdating}
+                         >
+                           Mark Pending
+                         </Button>
+                       </div>
+                       )}
                         {/* Counter Proposal */}
-                        <div className="space-y-4">
+                       {booking.service_category !== "events" && (
+                        <>
+                         <div className="space-y-4">
                           <h4 className="font-semibold">Counter Proposal</h4>
                           <div className="grid md:grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -452,6 +456,8 @@ export function BookingManagement({
                             rows={3}
                           />
                         </div>
+                        </>
+                       )}
                         {booking.service_category === "events" && (
                           <div className="space-y-4 border-t pt-4">
                             <h4 className="font-semibold">Cost Proposal</h4>
@@ -578,31 +584,6 @@ export function BookingManagement({
                       </div>
                     </DialogContent>
                   </Dialog>
-
-                  {booking.status === "pending" && (
-                    // <>
-                    //   <Button
-                    //     size="sm"
-                    //     onClick={() =>
-                    //       updateBookingStatus(booking.id, "accepted")
-                    //     }
-                    //     disabled={isUpdating}
-                    //   >
-                    //     Quick Accept
-                    //   </Button>
-                    //   <Button
-                    //     size="sm"
-                    //     variant="destructive"
-                    //     onClick={() =>
-                    //       updateBookingStatus(booking.id, "rejected")
-                    //     }
-                    //     disabled={isUpdating}
-                    //   >
-                    //     Quick Reject
-                    //   </Button>
-                    // </>
-                    <></>
-                  )}
                 </div>
 
                 {booking.notes && (

@@ -67,7 +67,7 @@ export default function PaymentSuccessPage() {
           {status === "success" && (
             <div className="text-center space-y-4">
               <CheckCircle className="h-16 w-16 mx-auto text-green-600" />
-              <h1 className="text-3xl font-bold text-green-600">Payment Successful! 🎉</h1>
+              <h1 className="text-3xl font-bold text-green-600">Payment Successful!</h1>
               <p className="text-lg">{message}</p>
               <div className="border border-gray-800 rounded-lg p-4 mt-4">
                 <p className="text-sm text-gray-300">

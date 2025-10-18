@@ -13,6 +13,7 @@ export interface Booking {
   status: "pending" | "accepted" | "rejected" | "counter_proposed"
   notes?: string
   proposed_date?: string
+  archived?: boolean
   proposed_time?: string
   proposed_cost?: number;
   client_counter_offer?: number;

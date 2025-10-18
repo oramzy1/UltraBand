@@ -819,7 +819,7 @@ export async function sendCounterOfferNotification(data: {
       </head>
       <body>
         <div class="wrapper">
-          <div class="header"><h1>📊 Counter Offer Received</h1></div>
+          <div class="header"><h1>Counter Offer Received</h1></div>
           <div class="content">
             <p><strong>${
               data.clientName

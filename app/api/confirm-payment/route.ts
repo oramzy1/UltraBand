@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
       .update({
         payment_status: "paid",
         status: "accepted",
+        archived: true,
         updated_at: new Date().toISOString(),
       })
       .eq("id", booking_id);
