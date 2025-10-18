@@ -25,7 +25,7 @@ export default function PaymentCancelPage() {
               <Button onClick={() => router.push("/")}>
                 Return to Home
               </Button>
-              <Button variant="outline" onClick={() => router.push("/contact")}>
+              <Button variant="outline" onClick={() => router.push("/bookings")}>
                 Contact Support
               </Button>
             </div>
