@@ -2,7 +2,6 @@ import nodemailer from "nodemailer";
 import path from "path";
 import { format } from "date-fns";
 
-
 const logoPath = path.resolve("./public/Ultra Band white-logo (1).png");
 
 // Create reusable transporter
@@ -44,7 +43,6 @@ interface BookingEmailData {
   eventDescription: string;
   budgetRange: string;
 }
-
 
 // Contact Form Emails
 export async function sendContactEmails(data: ContactEmailData) {
@@ -243,7 +241,14 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
               : status === "counter_proposed" && proposedDate && proposedTime
               ? `<p>We have a counter proposal for you:</p>
                  <ul style="list-style:none;padding-left:0;">
-                   <li><strong>Proposed Date:</strong> ${new Date(proposedDate).toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}</li>
+                   <li><strong>Proposed Date:</strong> ${new Date(
+                     proposedDate
+                   ).toLocaleDateString("en-US", {
+                     weekday: "long",
+                     year: "numeric",
+                     month: "long",
+                     day: "numeric",
+                   })}</li>
                    <li><strong>Proposed Time:</strong> ${proposedTime}</li>
                  </ul>
                  <p>Please let us know if this new date and time work for you.</p>`
@@ -253,8 +258,20 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
           <h3 style="margin-top:30px;border-bottom:2px solid ${statusColor};padding-bottom:5px;">Your Booking Details</h3>
           <ul style="list-style:none;padding-left:0;line-height:1.6;">
             <li><strong>Service:</strong> ${serviceName}</li>
-            ${eventType ? `<li><strong>Event Type:</strong> ${eventType}</li>` : ""}
-            <li><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}</li>
+            ${
+              eventType
+                ? `<li><strong>Event Type:</strong> ${eventType}</li>`
+                : ""
+            }
+            <li><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString(
+              "en-US",
+              {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )}</li>
             <li><strong>Time:</strong> ${eventTime}</li>
             <li><strong>Location:</strong> ${eventLocation}</li>
           </ul>
@@ -309,7 +326,10 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
           <p><strong>Email:</strong> ${clientEmail}</p>
           <p><strong>New Status:</strong> ${status}</p>
           <p><strong>Service:</strong> ${serviceName}</p>
-          <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"})}</p>
+          <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString(
+            "en-US",
+            { weekday: "long", year: "numeric", month: "long", day: "numeric" }
+          )}</p>
           <p><strong>Location:</strong> ${eventLocation}</p>
 
           ${
@@ -365,8 +385,7 @@ export async function sendBookingEmails(data: BookingEmailData) {
       ? "Audio Mixing & Mastering"
       : "Video Editing Services";
 
-  
-      const baseStyle = `
+  const baseStyle = `
       <style>
         body {
           font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -456,8 +475,14 @@ export async function sendBookingEmails(data: BookingEmailData) {
             <h2>Service Details</h2>
             <div class="details">
               <p><strong>Service Category:</strong> ${serviceName}</p>
-              ${eventType ? `<p><strong>Event Type:</strong> ${eventType}</p>` : ""}
-              <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString("en-US", {
+              ${
+                eventType
+                  ? `<p><strong>Event Type:</strong> ${eventType}</p>`
+                  : ""
+              }
+              <p><strong>Date:</strong> ${new Date(
+                eventDate
+              ).toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -513,8 +538,14 @@ export async function sendBookingEmails(data: BookingEmailData) {
             <h2>Your Booking Details</h2>
             <div class="details">
               <p><strong>Service:</strong> ${serviceName}</p>
-              ${eventType ? `<p><strong>Event Type:</strong> ${eventType}</p>` : ""}
-              <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString("en-US", {
+              ${
+                eventType
+                  ? `<p><strong>Event Type:</strong> ${eventType}</p>`
+                  : ""
+              }
+              <p><strong>Date:</strong> ${new Date(
+                eventDate
+              ).toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -611,7 +642,6 @@ export async function sendPasswordRecoveryEmail(data: PasswordRecoveryData) {
   await transporter.sendMail(recoveryEmail);
 }
 
-
 // Cost Proposal Email to Client
 export async function sendCostProposalEmail(data: {
   clientName: string;
@@ -654,10 +684,17 @@ export async function sendCostProposalEmail(data: {
             
             <div class="cost-box">
               <h2>Proposed Cost: $${data.proposedCost.toFixed(2)}</h2>
-              <p><strong>Event Date:</strong> ${format(new Date(data.eventDate), "PPP")}</p>
+              <p><strong>Event Date:</strong> ${format(
+                new Date(data.eventDate),
+                "PPP"
+              )}</p>
               <p><strong>Time:</strong> ${data.eventTime}</p>
               <p><strong>Location:</strong> ${data.eventLocation}</p>
-              ${data.notes ? `<p><strong>Details:</strong> ${data.notes}</p>` : ''}
+              ${
+                data.notes
+                  ? `<p><strong>Details:</strong> ${data.notes}</p>`
+                  : ""
+              }
             </div>
 
             <p><strong>What would you like to do?</strong></p>
@@ -683,9 +720,12 @@ export async function sendCostProposalEmail(data: {
     `,
   };
 
-  console.log("📧 Attempting to send cost proposal email to:", data.clientEmail);
+  console.log(
+    "📧 Attempting to send cost proposal email to:",
+    data.clientEmail
+  );
   console.log("📧 Response URL:", responseUrl);
-  
+
   await transporter.sendMail(email);
 }
 
@@ -725,11 +765,16 @@ export async function sendPaymentLinkEmail(data: {
             
             <div class="cost-box">
               <h2>Amount Due: $${data.amount.toFixed(2)}</h2>
-              <p><strong>Event Date:</strong> ${format(new Date(data.eventDate), "PPP")}</p>
+              <p><strong>Event Date:</strong> ${format(
+                new Date(data.eventDate),
+                "PPP"
+              )}</p>
             </div>
 
             <div style="text-align:center;margin:30px 0;">
-              <a href="${data.paymentLink}" class="button">Pay Now via PayPal</a>
+              <a href="${
+                data.paymentLink
+              }" class="button">Pay Now via PayPal</a>
             </div>
 
             <p>Once payment is confirmed, your booking will be finalized!</p>
@@ -759,10 +804,205 @@ export async function sendCounterOfferNotification(data: {
     to: process.env.BUSINESS_EMAIL,
     subject: `Counter Offer Received - ${data.clientName}`,
     html: `
-      <p><strong>${data.clientName}</strong> has sent a counter offer of <strong>$${data.counterOffer.toFixed(2)}</strong></p>
-      <p>Review it in your admin dashboard.</p>
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:22px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .offer-box{background:#fff3e0;border-left:4px solid #ff9800;padding:16px;border-radius:6px;margin:20px 0;}
+          .button{display:inline-block;background:#8328FA;color:#fff!important;padding:12px 24px;border-radius:6px;text-decoration:none;margin-top:15px;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>📊 Counter Offer Received</h1></div>
+          <div class="content">
+            <p><strong>${
+              data.clientName
+            }</strong> has sent a counter offer for their booking.</p>
+            
+            <div class="offer-box">
+              <h3 style="margin:0 0 10px 0;color:#ff9800;">Counter Offer Amount</h3>
+              <p style="font-size:28px;font-weight:bold;color:#ff5722;margin:10px 0;">$${data.counterOffer.toFixed(
+                2
+              )}</p>
+            </div>
+
+            <p>Please review this offer in your admin dashboard and respond accordingly.</p>
+            
+            <div style="text-align:center;">
+              <a href="${
+                process.env.NEXT_PUBLIC_APP_URL
+              }/admin" class="button">Review in Dashboard</a>
+            </div>
+          </div>
+          <div class="footer">Internal notification from Ultra Band Music</div>
+        </div>
+      </body>
+      </html>
     `,
   };
 
   await transporter.sendMail(email);
+}
+
+// Add after sendCounterOfferNotification
+
+interface PaymentSuccessData {
+  clientName: string;
+  clientEmail: string;
+  amount: number;
+  transactionId: string;
+  bookingDetails: {
+    eventType?: string;
+    eventDate: string;
+    eventTime: string;
+    eventLocation: string;
+    serviceCategory: string;
+  };
+}
+
+export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
+  const { clientName, clientEmail, amount, transactionId, bookingDetails } =
+    data;
+
+  const serviceName =
+    bookingDetails.serviceCategory === "events"
+      ? "Live Event Performance"
+      : bookingDetails.serviceCategory === "mixing"
+      ? "Audio Mixing & Mastering"
+      : "Video Editing Services";
+
+  const invoiceHtml = `
+    <div style="background:#f2f0ff;border:2px solid #8328FA;padding:20px;border-radius:8px;margin:20px 0;">
+      <h3 style="color:#8328FA;margin-top:0;">Invoice Details</h3>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Service:</strong></td>
+          <td style="padding:8px;">${serviceName}</td>
+        </tr>
+        ${
+          bookingDetails.eventType
+            ? `
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Event Type:</strong></td>
+          <td style="padding:8px;">${bookingDetails.eventType}</td>
+        </tr>`
+            : ""
+        }
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Date:</strong></td>
+          <td style="padding:8px;">${format(
+            new Date(bookingDetails.eventDate),
+            "PPP"
+          )}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Time:</strong></td>
+          <td style="padding:8px;">${bookingDetails.eventTime}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Location:</strong></td>
+          <td style="padding:8px;">${bookingDetails.eventLocation}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #ddd;">
+          <td style="padding:8px;"><strong>Transaction ID:</strong></td>
+          <td style="padding:8px;font-family:monospace;">${transactionId}</td>
+        </tr>
+        <tr style="background:#e8f5e9;">
+          <td style="padding:12px;"><strong style="font-size:16px;">Total Paid:</strong></td>
+          <td style="padding:12px;"><strong style="font-size:18px;color:#28a745;">$${amount.toFixed(
+            2
+          )}</strong></td>
+        </tr>
+      </table>
+    </div>
+  `;
+
+  // Email to customer
+  const customerEmail = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: clientEmail,
+    subject: "Payment Successful - Booking Confirmed! - Ultra Band Music",
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#28a745,#20c997);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:24px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header">
+            <h1>🎉 Payment Successful!</h1>
+          </div>
+          <div class="content">
+            <p>Hi ${clientName},</p>
+            <p>Thank you for your payment! Your booking is now <strong>confirmed</strong>.</p>
+            
+            ${invoiceHtml}
+
+            <p style="margin-top:30px;">We're excited to be part of your special event! Our team will be in touch with final details closer to the date.</p>
+            
+            <p style="margin-top:20px;">If you have any questions, feel free to reply to this email.</p>
+            
+            <p style="margin-top:30px;">Best regards,<br><strong>Ultra Band Music Team</strong></p>
+          </div>
+          <div class="footer">
+            Keep this email as your receipt and booking confirmation.
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  // Email to admin
+  const adminEmail = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: process.env.BUSINESS_EMAIL,
+    subject: `💰 Payment Received - ${clientName} - $${amount.toFixed(2)}`,
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#28a745,#20c997);color:white;padding:24px;text-align:center;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>Payment Received</h1></div>
+          <div class="content">
+            <p><strong>Client:</strong> ${clientName}</p>
+            <p><strong>Email:</strong> ${clientEmail}</p>
+            <p><strong>Amount:</strong> $${amount.toFixed(2)}</p>
+            
+            ${invoiceHtml}
+
+            <p style="margin-top:20px;"><strong>Note:</strong> A private event has been automatically created in your dashboard. You can make it public when ready.</p>
+          </div>
+          <div class="footer">Automated notification from Ultra Band Music</div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  await Promise.all([
+    transporter.sendMail(customerEmail),
+    transporter.sendMail(adminEmail),
+  ]);
 }

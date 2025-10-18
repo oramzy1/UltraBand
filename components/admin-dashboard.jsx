@@ -10,7 +10,7 @@ import { EventManagement } from "@/components/event-management";
 import { GalleryManagement } from "@/components/gallery-management";
 import { AdminSettings } from "@/components/admin-settings";
 import { LocationManagement } from "@/components/location-management";
-import { ServicesManagement } from '@/components/services-management'
+import { ServicesManagement } from "@/components/services-management";
 import {
   Calendar,
   Users,
@@ -18,6 +18,7 @@ import {
   Bell,
   Settings,
   LogOut,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -34,10 +35,24 @@ export function AdminDashboard({
   const [gallery, setGallery] = useState(initialGallery);
   const [locations, setLocations] = useState([]);
   const [bandMembers, setBandMembers] = useState([]);
-  const [services, setServices] = useState([])
+  const [services, setServices] = useState([]);
   const [loadingBand, setLoadingBand] = useState(true);
-;
+  const [transactions, setTransactions] = useState([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch("/api/transactions");
+        const data = await res.json();
+        setTransactions(data);
+      } catch (err) {
+        console.error("Error fetching transactions", err);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
 
   useEffect(() => {
     const fetchBand = async () => {
@@ -56,7 +71,7 @@ export function AdminDashboard({
   }, []);
 
   useEffect(() => {
-    const fetchLocation= async () => {
+    const fetchLocation = async () => {
       try {
         const res = await fetch("/api/locations");
         const data = await res.json();
@@ -215,6 +230,14 @@ export function AdminDashboard({
           </TabsTrigger>
 
           <TabsTrigger
+            value="transactions"
+            className="flex items-center gap-2 whitespace-nowrap snap-start"
+          >
+            <DollarSign className="h-4 w-4" />
+            Transactions
+          </TabsTrigger>
+
+          <TabsTrigger
             value="gallery"
             className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
@@ -255,26 +278,70 @@ export function AdminDashboard({
                 locations={locations}
                 onLocationsUpdate={setLocations}
               />
-              <ServicesManagement 
-              services={services}
-              onServicesUpdate={setServices}
+              <ServicesManagement
+                services={services}
+                onServicesUpdate={setServices}
               />
             </div>
           )}
         </TabsContent>
 
-        <TabsContent value="gallery">
-        <div className="space-y-8">
-      {/* Existing Gallery Management */}
-    <div>
-      <GalleryManagement gallery={gallery} onGalleryUpdate={setGallery} />
-    </div>
+        <TabsContent value="transactions">
+          <Card>
+            <CardHeader>
+              <CardTitle>Transaction History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {transactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="flex justify-between items-center border-b pb-4"
+                  >
+                    <div>
+                      <p className="font-semibold">{transaction.client_name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {transaction.client_email}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(transaction.created_at), "PPP 'at' p")}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-green-600">
+                        ${transaction.amount.toFixed(2)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        ID: {transaction.transaction_id?.slice(0, 12)}...
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {transactions.length === 0 && (
+                  <p className="text-center text-muted-foreground py-8">
+                    No transactions yet
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-    {/* YouTube Video Selection */}
-    <div className="border-t pt-8">
-      <YouTubeVideoSelection />
-    </div>
-  </div>
+        <TabsContent value="gallery">
+          <div className="space-y-8">
+            {/* Existing Gallery Management */}
+            <div>
+              <GalleryManagement
+                gallery={gallery}
+                onGalleryUpdate={setGallery}
+              />
+            </div>
+
+            {/* YouTube Video Selection */}
+            <div className="border-t pt-8">
+              <YouTubeVideoSelection />
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="settings">
