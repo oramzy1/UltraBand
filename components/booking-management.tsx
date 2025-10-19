@@ -82,7 +82,7 @@ export function BookingManagement({
     : bookings.filter(
         (booking) => booking.service_category === serviceFilter && !booking.archived
       );
-      
+
   const updateBookingStatus = async (
     bookingId: string,
     status: string,
@@ -342,9 +342,9 @@ export function BookingManagement({
                         Manage
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl max-h-[95vh] overflow-y-auto">
+                    <DialogContent className="sm:max-w-4xl max-h-[95vh] overflow-y-auto">
                       <DialogHeader>
-                        <DialogTitle>
+                        <DialogTitle className="text-sm sm:text-base">
                           Manage Booking - {booking.client_name}
                         </DialogTitle>
                       </DialogHeader>
@@ -565,7 +565,7 @@ export function BookingManagement({
                                 }
                                 disabled={isUpdating || !proposedCost}
                               >
-                                Send Cost Proposal
+                                Send Proposal
                               </Button>
 
                               {booking.client_counter_offer && (
@@ -574,7 +574,7 @@ export function BookingManagement({
                                   onClick={() => acceptCounterOffer(booking.id)}
                                   disabled={isUpdating}
                                 >
-                                  Accept Client's $
+                                  Accept $
                                   {booking.client_counter_offer}
                                 </Button>
                               )}

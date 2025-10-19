@@ -19,6 +19,7 @@ import {
   Settings,
   LogOut,
   DollarSign,
+  History
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -197,7 +198,7 @@ export function AdminDashboard({
 
       {/* Management Tabs */}
       <Tabs defaultValue="bookings" className="space-y-6">
-        <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-5 ps-60 sm:ps-0 snap-x snap-mandatory scroll-smooth">
+        <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-6 ps-80 sm:ps-0 snap-x snap-mandatory scroll-smooth">
           <TabsTrigger
             value="bookings"
             className="flex items-center gap-2 whitespace-nowrap snap-start"
@@ -234,7 +235,7 @@ export function AdminDashboard({
             value="transactions"
             className="flex items-center gap-2 whitespace-nowrap snap-start"
           >
-            <DollarSign className="h-4 w-4" />
+            <History className="h-4 w-4" />
             Transactions
           </TabsTrigger>
 
