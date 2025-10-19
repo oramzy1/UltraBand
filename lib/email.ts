@@ -670,6 +670,11 @@ export async function sendCostProposalEmail(data: {
           .content{padding:32px 24px;line-height:1.6;}
           .cost-box{background:#f2f0ff;border-left:4px solid #8328FA;padding:16px;border-radius:6px;margin:20px 0;}
           .cost-box h2{color:#8328FA;margin:0 0 10px 0;font-size:20px;}
+          .breakdown{background:#fff;border:1px solid #e5e7eb;padding:16px;border-radius:6px;margin:15px 0;}
+          .breakdown h2{font-size:16px;color:#333;margin-top:12px;margin-bottom:8px;}
+          .breakdown ul, .breakdown ol{margin:8px 0;padding-left:20px;}
+          .breakdown li{margin-bottom:4px;}
+          .breakdown blockquote{border-left:3px solid #8328FA;padding-left:12px;color:#666;font-style:italic;}
           .button{display:inline-block;background:#8328FA;color:#fff!important;padding:12px 24px;border-radius:6px;text-decoration:none;margin:10px 5px;font-weight:500;}
           .button-secondary{background:#6c757d;}
           .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
@@ -684,18 +689,17 @@ export async function sendCostProposalEmail(data: {
             
             <div class="cost-box">
               <h2>Proposed Cost: $${data.proposedCost.toFixed(2)}</h2>
-              <p><strong>Event Date:</strong> ${format(
-                new Date(data.eventDate),
-                "PPP"
-              )}</p>
+              <p><strong>Event Date:</strong> ${format(new Date(data.eventDate), "PPP")}</p>
               <p><strong>Time:</strong> ${data.eventTime}</p>
               <p><strong>Location:</strong> ${data.eventLocation}</p>
-              ${
-                data.notes
-                  ? `<p><strong>Details:</strong> ${data.notes}</p>`
-                  : ""
-              }
             </div>
+
+            ${data.notes ? `
+              <div class="breakdown">
+                <h3 style="color:#8328FA;margin-top:0;">Cost Breakdown:</h3>
+                ${data.notes}
+              </div>
+            ` : ''}
 
             <p><strong>What would you like to do?</strong></p>
             
