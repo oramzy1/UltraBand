@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
     
     console.log("Confirming payment for booking:", booking_id);
     
-    const supabase = createClient();
+    const supabase = await createClient();
     
     // Get booking details
-    const { data: booking, error: fetchError } = await (await supabase)
+    const { data: booking, error: fetchError } = await supabase
       .from("bookings")
       .select("*")
       .eq("id", booking_id)
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const transactionId = paypal_token || `manual-${Date.now()}`;
     
     // Update booking status
-    const { error: updateError } = await (await supabase)
+    const { error: updateError } = await supabase
       .from("bookings")
       .update({
         payment_status: "paid",
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     console.log("Booking status updated to paid");
     
     // Create automatic event (not public)
-    const { error: eventError } = await (await supabase).from("events").insert({
+    const { error: eventError } = await supabase.from("events").insert({
       title: `${booking.event_type || 'Event'} - ${booking.client_name}`,
       description: booking.event_description || `Booking for ${booking.client_name}`,
       event_date: booking.event_date,
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Create transaction record
-    const { error: transactionError } = await (await supabase).from("transactions").insert({
+    const { error: transactionError } = await supabase.from("transactions").insert({
       booking_id: booking_id,
       amount,
       payment_method: "paypal",
