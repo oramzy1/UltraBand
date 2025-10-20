@@ -53,43 +53,97 @@ export async function POST(request: NextRequest) {
     }
     
     console.log("Booking status updated to paid");
+
+    const { data: existingEvent } = await supabase
+  .from("events")
+  .select("id")
+  .eq("booking_id", booking_id)
+  .maybeSingle();
+
+if (!existingEvent)try {
+  await supabase.from("events").insert({
+    title: `${booking.event_type || 'Event'} - ${booking.client_name}`,
+    description: booking.event_description || `Booking for ${booking.client_name}`,
+    event_date: booking.event_date,
+    event_time: booking.event_time,
+    venue: booking.event_location.split(',')[0]?.trim() || booking.event_location,
+    venue_address: booking.event_location,
+    is_public: false,
+    booking_id,
+  });
+  console.log("Private event created");
+} catch (eventError) {
+  if (eventError.code === "23505") {
+    console.log("Event already exists, skipping...");
+  } else {
+    console.error("Error creating event:", eventError);
+  }
+}
     
     // Create automatic event (not public)
-    const { error: eventError } = await supabase.from("events").insert({
-      title: `${booking.event_type || 'Event'} - ${booking.client_name}`,
-      description: booking.event_description || `Booking for ${booking.client_name}`,
-      event_date: booking.event_date,
-      event_time: booking.event_time,
-      venue: booking.event_location.split(',')[0]?.trim() || booking.event_location,
-      venue_address: booking.event_location,
-      is_public: false,
-      booking_id: booking_id,
-    });
+    // const { error: eventError } = await supabase.from("events").insert({
+    //   title: `${booking.event_type || 'Event'} - ${booking.client_name}`,
+    //   description: booking.event_description || `Booking for ${booking.client_name}`,
+    //   event_date: booking.event_date,
+    //   event_time: booking.event_time,
+    //   venue: booking.event_location.split(',')[0]?.trim() || booking.event_location,
+    //   venue_address: booking.event_location,
+    //   is_public: false,
+    //   booking_id: booking_id,
+    // });
     
-    if (eventError) {
-      console.error("Error creating event:", eventError);
-      // Don't fail the request, event creation is secondary
-    } else {
-      console.log("Private event created");
-    }
+    // if (eventError) {
+    //   console.error("Error creating event:", eventError);
+    //   // Don't fail the request, event creation is secondary
+    // } else {
+    //   console.log("Private event created");
+    // }
     
     // Create transaction record
-    const { error: transactionError } = await supabase.from("transactions").insert({
-      booking_id: booking_id,
-      amount,
-      payment_method: "paypal",
-      transaction_id: transactionId,
-      status: "completed",
-      client_name: booking.client_name,
-      client_email: booking.client_email,
-    });
+
+    const { data: existingTx } = await supabase
+  .from("transactions")
+  .select("id")
+  .eq("booking_id", booking_id)
+  .maybeSingle();
+
+    // const { error: transactionError } = await supabase.from("transactions").insert({
+    //   booking_id: booking_id,
+    //   amount,
+    //   payment_method: "paypal",
+    //   transaction_id: transactionId,
+    //   status: "completed",
+    //   client_name: booking.client_name,
+    //   client_email: booking.client_email,
+    // });
     
-    if (transactionError) {
-      console.error("Error creating transaction:", transactionError);
-      // Don't fail the request, transaction record is secondary
-    } else {
-      console.log("Transaction record created");
-    }
+    // if (transactionError) {
+    //   console.error("Error creating transaction:", transactionError);
+    //   // Don't fail the request, transaction record is secondary
+    // } else {
+    //   console.log("Transaction record created");
+    // }
+
+    if (!existingTx) 
+      try {
+        await supabase.from("transactions").insert({
+          booking_id,
+          amount,
+          payment_method: "paypal",
+          transaction_id: transactionId,
+          status: "completed",
+          client_name: booking.client_name,
+          client_email: booking.client_email,
+        });
+        console.log("Transaction record created");
+      } catch (txError) {
+        if (txError.code === "23505") {
+          // 23505 = unique_violation
+          console.log("Transaction already exists, skipping...");
+        } else {
+          console.error("Error creating transaction:", txError);
+        }
+      }
     
     // Send success emails with invoice
     try {

@@ -161,10 +161,10 @@ export default function BookingResponsePage() {
           {/* Show payment link after accepting */}
           {paymentLink && (
             <div className="space-y-4 border-t pt-4">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="border-gray-800 border rounded-lg p-4">
                 <h3 className="font-semibold text-green-800 mb-2">Ready to Complete Payment!</h3>
-                <p className="text-sm text-green-700 mb-4">
-                  Your booking proposal has been accepted. Click the button below to proceed to PayPal and complete your payment.
+                <p className="text-sm text-gray-300 mb-4">
+                  Click the button below to proceed to PayPal and complete your payment.
                 </p>
                 <a 
                   href={paymentLink}

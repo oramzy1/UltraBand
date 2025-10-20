@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Loader2, XCircle } from "lucide-react";
@@ -15,8 +15,14 @@ export default function PaymentSuccessPage() {
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [message, setMessage] = useState("Processing your payment...");
 
+  const hasConfirmed = useRef(false);
+
   useEffect(() => {
     const confirmPayment = async () => {
+
+      if (hasConfirmed.current) return; // 🚫 prevent duplicate call
+      hasConfirmed.current = true;
+
       if (!bookingId) {
         setStatus("error");
         setMessage("Booking ID not found");
