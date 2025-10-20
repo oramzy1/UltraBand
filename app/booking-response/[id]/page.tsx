@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, ExternalLink } from "lucide-react";
 
 export default function BookingResponsePage() {
   const params = useParams();
@@ -18,6 +18,7 @@ export default function BookingResponsePage() {
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [paymentLink, setPaymentLink] = useState("");
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -60,8 +61,14 @@ export default function BookingResponsePage() {
 
       const result = await res.json();
       
-      if (responseAction === 'accept') {
-        setSuccess("Payment link sent! Check your email.");
+      if (responseAction === 'accept')  {
+        // Store payment link from response
+        if (result.paymentLink) {
+          setPaymentLink(result.paymentLink);
+          setSuccess("Proposal accepted! Click below to proceed to payment.");
+        } else {
+          setError("Failed to generate payment link");
+        }
       } else if (responseAction === 'counter') {
         setSuccess("Counter offer submitted successfully!");
       } else if (responseAction === 'cancel') {
@@ -142,12 +149,36 @@ export default function BookingResponsePage() {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
+                    Generating Payment Link...
                   </>
                 ) : (
                   "Confirm & Proceed to Payment"
                 )}
               </Button>
+            </div>
+          )}
+
+          {/* Show payment link after accepting */}
+          {paymentLink && (
+            <div className="space-y-4 border-t pt-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h3 className="font-semibold text-green-800 mb-2">Ready to Complete Payment!</h3>
+                <p className="text-sm text-green-700 mb-4">
+                  Your booking proposal has been accepted. Click the button below to proceed to PayPal and complete your payment.
+                </p>
+                <a 
+                  href={paymentLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+                >
+                  Proceed to PayPal Payment
+                  <ExternalLink className="ml-2 h-5 w-5" />
+                </a>
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                You'll be redirected to PayPal to complete your payment securely
+              </p>
             </div>
           )}
 

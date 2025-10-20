@@ -456,12 +456,12 @@ export function BookingManagement({
                             <div className="space-y-2">
                               <Label htmlFor="adminNotes">Admin Notes</Label>
                               <Textarea
-                            id="adminNotes"
-                            value={adminNotes}
-                            onChange={(e) => setAdminNotes(e.target.value)}
-                            placeholder="Add internal notes about this booking..."
-                            rows={3}
-                          />
+                                id="adminNotes"
+                                value={adminNotes}
+                                onChange={(e) => setAdminNotes(e.target.value)}
+                                placeholder="Add internal notes about this booking..."
+                                rows={3}
+                              />
                             </div>
                           </>
                         )}
@@ -471,9 +471,11 @@ export function BookingManagement({
 
                             {/* Show negotiation history */}
                             {booking.negotiation_history &&
-  booking.negotiation_history.length > 0 && (
-    <div className="space-y-2 max-h-40 overflow-y-auto bg-muted p-3 rounded-md">
-      <style dangerouslySetInnerHTML={{__html: `
+                              booking.negotiation_history.length > 0 && (
+                                <div className="space-y-2 max-h-40 overflow-y-auto bg-muted p-3 rounded-md">
+                                  <style
+                                    dangerouslySetInnerHTML={{
+                                      __html: `
         .negotiation-notes h1 {
           font-size: 1.875rem !important;
           font-weight: 700 !important;
@@ -517,50 +519,54 @@ export function BookingManagement({
         .negotiation-notes em, .negotiation-notes i {
           font-style: italic !important;
         }
-      `}} />
-      
-      <p className="text-sm font-medium">
-        Negotiation History:
-      </p>
-      {booking.negotiation_history.map(
-        (entry, idx) => (
-          <div
-            key={idx}
-            className="text-sm border-b pb-2 last:border-0"
-          >
-            <p className="text-muted-foreground">
-              {format(
-                new Date(entry.timestamp),
-                "PPp"
-              )}
-            </p>
-            <p>
-              <strong>
-                {entry.actor === "admin"
-                  ? "You"
-                  : "Client"}
-                :
-              </strong>{" "}
-              {entry.action === "propose_cost" &&
-                `Proposed $${entry.amount}`}
-              {entry.action === "counter_offer" &&
-                `Counter-offered $${entry.amount}`}
-              {entry.action === "accept" &&
-                "Accepted offer"}
-              {entry.action === "cancel" &&
-                "Cancelled booking"}
-            </p>
-            {entry.notes && (
-              <div 
-                className="negotiation-notes text-muted-foreground text-sm mt-2"
-                dangerouslySetInnerHTML={{ __html: entry.notes }}
-              />
-            )}
-          </div>
-        )
-      )}
-    </div>
-  )}
+      `,
+                                    }}
+                                  />
+
+                                  <p className="text-sm font-medium">
+                                    Negotiation History:
+                                  </p>
+                                  {booking.negotiation_history.map(
+                                    (entry, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="text-sm border-b pb-2 last:border-0"
+                                      >
+                                        <p className="text-muted-foreground">
+                                          {format(
+                                            new Date(entry.timestamp),
+                                            "PPp"
+                                          )}
+                                        </p>
+                                        <p>
+                                          <strong>
+                                            {entry.actor === "admin"
+                                              ? "You"
+                                              : "Client"}
+                                            :
+                                          </strong>{" "}
+                                          {entry.action === "propose_cost" &&
+                                            `Proposed $${entry.amount}`}
+                                          {entry.action === "counter_offer" &&
+                                            `Counter-offered $${entry.amount}`}
+                                          {entry.action === "accept" &&
+                                            "Accepted offer"}
+                                          {entry.action === "cancel" &&
+                                            "Cancelled booking"}
+                                        </p>
+                                        {entry.notes && (
+                                          <div
+                                            className="negotiation-notes text-muted-foreground text-sm mt-2"
+                                            dangerouslySetInnerHTML={{
+                                              __html: entry.notes,
+                                            }}
+                                          />
+                                        )}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              )}
 
                             {/* Current status */}
                             {booking.proposed_cost && (

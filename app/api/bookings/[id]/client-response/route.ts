@@ -25,6 +25,8 @@ export async function POST(
       actor: 'client',
     };
 
+    let paymentLink: string | null = null;
+
     if (action === 'accept') {
       // Generate PayPal link
       const paymentLink = await generatePayPalLink({
@@ -39,13 +41,15 @@ export async function POST(
         payment_link: paymentLink,
       };
 
-      await sendPaymentLinkEmail({
-        clientName: booking.client_name,
-        clientEmail: booking.client_email,
-        amount: booking.proposed_cost,
-        paymentLink,
-        eventDate: booking.event_date,
-      });
+      // await sendPaymentLinkEmail({
+      //   clientName: booking.client_name,
+      //   clientEmail: booking.client_email,
+      //   amount: booking.proposed_cost,
+      //   paymentLink,
+      //   eventDate: booking.event_date,
+      // });
+
+      console.log("Payment link generated:", paymentLink);
 
     } else if (action === 'counter') {
       negotiationEntry.action = 'counter_offer';
@@ -85,7 +89,7 @@ export async function POST(
       .select()
       .single();
 
-    return NextResponse.json({ booking: updatedBooking });
+    return NextResponse.json({ booking: updatedBooking, paymentLink });
   } catch (error) {
     console.error("Error processing client response:", error);
     return NextResponse.json(
