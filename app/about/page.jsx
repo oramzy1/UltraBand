@@ -70,7 +70,7 @@ export default async function AboutPage() {
               musical experience that amplifies the joy and energy of your
               festivities. Our roots run deep in Afrobeat, Highlife, Juju, Old
               Skool, and other genres that define the rich cultural tapestry of
-              celebrations.
+              celebrations.   
             </p>
           </div>
 
