@@ -19,7 +19,8 @@ import {
   Settings,
   LogOut,
   DollarSign,
-  History
+  History,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -39,17 +40,21 @@ export function AdminDashboard({
   const [bandMembers, setBandMembers] = useState([]);
   const [services, setServices] = useState([]);
   const [loadingBand, setLoadingBand] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      setLoading(true);
       try {
         const res = await fetch("/api/transactions");
         const data = await res.json();
         setTransactions(data);
       } catch (err) {
         console.error("Error fetching transactions", err);
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -294,7 +299,10 @@ export function AdminDashboard({
               <CardTitle>Transaction History</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              { loading ? (                
+              <Loader2 className="h-16 w-16 animate-spin mx-auto text-primary" />
+              ):(
+                <div className="space-y-4">
                 {transactions.map((transaction) => (
                   <div
                     key={transaction.id}
@@ -325,6 +333,7 @@ export function AdminDashboard({
                   </p>
                 )}
               </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
