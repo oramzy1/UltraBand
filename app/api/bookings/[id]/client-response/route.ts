@@ -29,7 +29,7 @@ export async function POST(
 
     if (action === 'accept') {
       // Generate PayPal link
-      const paymentLink = await generatePayPalLink({
+      paymentLink = await generatePayPalLink({
         amount: booking.proposed_cost,
         description: `Event Booking - ${booking.client_name}`,
         bookingId: params.id,
