@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function PaymentCancelPage() {
+export default function PaymentCancelPage() { 
   const router = useRouter();
 
   return (
