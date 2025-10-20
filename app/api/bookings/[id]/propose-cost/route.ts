@@ -8,11 +8,11 @@ export async function POST(
 ) {
   try {
     const params = await context.params; // Await params
-    const supabase = createClient();
+    const supabase = await createClient();
     const { proposed_cost, notes } = await request.json();
 
     // Fetch booking
-    const { data: booking, error: fetchError } = await (await supabase)
+    const { data: booking, error: fetchError } = await supabase
       .from("bookings")
       .select("*")
       .eq("id", params.id)
@@ -35,7 +35,7 @@ export async function POST(
     ];
 
     // Update booking - use 'counter_proposed' status since it exists
-    const { data: updatedBooking, error: updateError } = await (await supabase)
+    const { data: updatedBooking, error: updateError } = await supabase
       .from("bookings")
       .update({
         proposed_cost,
@@ -84,9 +84,9 @@ export async function GET(
   ) {
     try {
       const params = await context.params;
-      const supabase = createClient();
+      const supabase = await createClient();
   
-      const { data: booking, error } = await (await supabase)
+      const { data: booking, error } = await supabase
         .from("bookings")
         .select("*")
         .eq("id", params.id)

@@ -9,11 +9,11 @@ export async function POST(
 ) {
   try {
     const params = await context.params; // Await params
-    const supabase = createClient();
+    const supabase = await createClient();
     const { action, counter_offer } = await request.json();
     // action: 'accept' | 'counter' | 'cancel'
 
-    const { data: booking } = await (await supabase)
+    const { data: booking } = await supabase
       .from("bookings")
       .select("*")
       .eq("id", params.id)
@@ -75,7 +75,7 @@ export async function POST(
       negotiationEntry,
     ];
 
-    const { data: updatedBooking } = await (await supabase)
+    const { data: updatedBooking } = await supabase
       .from("bookings")
       .update({
         ...updatedData,

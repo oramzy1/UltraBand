@@ -3,9 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
-    const { data, error } = await (await supabase)
+    const { data, error } = await supabase
       .from("transactions")
       .select("*")
       .order("created_at", { ascending: false });

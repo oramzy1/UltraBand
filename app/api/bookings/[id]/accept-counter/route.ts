@@ -9,10 +9,10 @@ export async function POST(
 ) {
   try {
     const params = await context.params; // Await params
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Fetch booking
-    const { data: booking } = await (await supabase)
+    const { data: booking } = await supabase
       .from("bookings")
       .select("*")
       .eq("id", params.id)
@@ -41,7 +41,7 @@ export async function POST(
     ];
 
     // Update booking
-    const { data: updatedBooking } = await (await supabase)
+    const { data: updatedBooking } = await supabase
       .from("bookings")
       .update({
         proposed_cost: finalAmount,
