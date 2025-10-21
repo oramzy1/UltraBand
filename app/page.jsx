@@ -9,8 +9,8 @@ import { FocusCards } from "@/components/ui/focus-cards";
 import { LocationsSection } from "@/components/LocationsSection";
 import { FAQSection } from "@/components/faq-section";
 import SocialIcons from "@/components/social-icons"
-import { getLatestYouTubeVideos } from "@/lib/youtube";
 import { FeaturedVideos } from "@/components/featured-videos"
+import BackgroundContent from "@/components/BackgroundContent";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -36,33 +36,26 @@ export default async function HomePage() {
     .limit(3);
 
   const heroInfo = bandInfo?.find((info) => info.section === "hero");
-  const aboutInfo = bandInfo?.find((info) => info.section === "about");
-
-  
-  // Fetch YouTube videos
-  const youtubeVideos = await getLatestYouTubeVideos(4);
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="inset-0 fixed bg-cover bg-center bg-no-repeat -z-10"
           style={{
-            backgroundImage: `url('${
-              heroInfo?.image_url || "/headerimage.jpg"
-            }')`,
-          }}
+                  backgroundImage: `url('${heroInfo?.image_url || "/headerimage.jpg"}')`,
+                  willChange: "transform",
+              }}
         >
           <div className="absolute inset-0 bg-black/60" />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
           <h1
-            style={{ fontFamily: "'Great Vibes', cursive" }}
-            className="hero-text text-2xl md:text-6xl font-bold mb-2 text-balance"
+            // style={{ fontFamily: "'Great Vibes', cursive" }}
+            className="hero-text text-2xl md:text-6xl font-bold mb-2 text-balance text-[#d4af37]"
           >
-            <TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
+            {""}<TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
           </h1>
 
           <p className="text-xl md:text-2xl mb-8 text-muted-foreground text-pretty max-w-2xl mx-auto">
@@ -81,7 +74,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
+      <section className="bg-black">
+      <div className="absolute inset-0 z-0">
+    <BackgroundContent />
+  </div>
+        
       {/* Where We've Been */}
       <section className="py-10 px-4">
         <LocationsSection />
@@ -262,6 +259,7 @@ export default async function HomePage() {
       </section>
 
       <SocialIcons/>
+      </section>
     </div>
   );
 }

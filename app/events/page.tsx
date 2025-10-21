@@ -23,7 +23,7 @@ export default async function EventsPage() {
     [];
 
   return (
-    <div className="min-h-screen py-20 px-4">
+    <div className="min-h-screen py-20 px-4 mb-20">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">

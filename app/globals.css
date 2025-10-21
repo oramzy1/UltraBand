@@ -159,11 +159,11 @@
   color: inherit;
 }
 
-.hero-text {
+/* .hero-text {
   background: linear-gradient(90deg, #d4af37, #f7e98e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
+} */
 
 .leaflet-control-attribution {
   display: none !important;
