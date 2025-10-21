@@ -15,7 +15,7 @@ export default function PaymentSuccessPage() {
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [message, setMessage] = useState("Processing your payment...");
 
-  const hasConfirmed = useRef(false);
+  const hasConfirmed = useRef(false);  
 
   useEffect(() => {
     const confirmPayment = async () => {
