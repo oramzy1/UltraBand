@@ -16,7 +16,7 @@ export default function Footer() {
            <Image alt="Ulta Band" loading='lazy' height={120} width={120} src={'/logo.png'} /> 
           </Link>
           <p className="mt-3 text-sm text-gray-400 leading-relaxed">
-            Bringing you unforgettable live music experiences – from festivals
+            Bringing you unforgettable live music experiences - from festivals
             to private events.
           </p>
         </div>

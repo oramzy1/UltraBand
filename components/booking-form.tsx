@@ -279,7 +279,7 @@ export function BookingForm() {
             </div>
           )}
 
-          {formData.serviceCategory === "events" ? (
+          {/* {formData.serviceCategory === "events" ? (
             <></>
           ) : (
             <div className="space-y-2">
@@ -335,7 +335,7 @@ export function BookingForm() {
                 </PopoverContent>
               </Popover>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
