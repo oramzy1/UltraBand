@@ -306,7 +306,7 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
           ${
             notes
               ? `<div class="breakdown" style="margin-top:10px;">
-               <h3 style="color:#8328FA;margin-top:0;">Cost Breakdown:</h3>
+               <h3 style="color:#8328FA;margin-top:0;">Admin Notes:</h3>
                  ${notes}
                </div>`
               : ""

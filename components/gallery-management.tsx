@@ -867,6 +867,7 @@ export function GalleryManagement({
                   onChange={handleFileChange}
                   required={!editingItem}
                   disabled={isSubmitting}
+                  className="cursor-pointer"
                 />
                 {!editingItem && (
                   <p className="text-xs text-muted-foreground">
