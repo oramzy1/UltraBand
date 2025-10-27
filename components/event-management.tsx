@@ -152,7 +152,7 @@ export function EventManagement({ events, onEventsUpdate }: EventManagementProps
         <h2 className="text-2xl font-bold">Event Management</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={resetForm}>
+            <Button className="cursor-pointer" onClick={resetForm}>
               <Plus className="h-4 w-4 mr-2" />
               Add Event
             </Button>
@@ -268,10 +268,10 @@ export function EventManagement({ events, onEventsUpdate }: EventManagementProps
                   {event.description && <p className="text-sm text-muted-foreground mt-1">{event.description}</p>}
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(event)}>
+                  <Button className="cursor-pointer" size="sm" variant="outline" onClick={() => handleEdit(event)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => handleDelete(event.id)}>
+                  <Button className="cursor-pointer" size="sm" variant="destructive" onClick={() => handleDelete(event.id)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

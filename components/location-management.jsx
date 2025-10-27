@@ -171,6 +171,7 @@ export function LocationManagement({ locations = [], onLocationsUpdate }) {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
+              className="cursor-pointer"
               onClick={() => {
                 setEditingLocation(null);
                 setFormData({ name: "", description: "" });
@@ -213,7 +214,7 @@ export function LocationManagement({ locations = [], onLocationsUpdate }) {
               </div>
               <Button 
                 type="submit" 
-                className="w-full" 
+                className="w-full cursor-pointer" 
                 disabled={isSubmitting || geocoding}
               >
                 {geocoding ? (
@@ -264,6 +265,7 @@ export function LocationManagement({ locations = [], onLocationsUpdate }) {
                   <Button
                     size="sm"
                     variant="outline"
+                    className="cursor-pointer"
                     onClick={() => {
                       setEditingLocation(loc);
                       setFormData({
@@ -277,6 +279,7 @@ export function LocationManagement({ locations = [], onLocationsUpdate }) {
                   </Button>
                   <Button
                     size="sm"
+                    className="cursor-pointer"
                     variant="destructive"
                     onClick={() => deleteLocation(loc.id)}
                   >

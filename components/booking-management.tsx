@@ -223,7 +223,7 @@ export function BookingManagement({
         <div className="flex items-center gap-4">
           <Popover modal={false}>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="w-48 justify-between">
+              <Button variant="outline" className="w-48 justify-between cursor-pointer">
                 {serviceFilter === "all" && "All Services"}
                 {serviceFilter === "events" && "Live Performance"}
                 {serviceFilter === "mixing" && "Audio Mixing"}
@@ -241,7 +241,7 @@ export function BookingManagement({
                 ].map((option) => (
                   <button
                     key={option.value}
-                    className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent rounded-sm"
+                    className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent rounded-sm cursor-pointer"
                     onClick={() => setServiceFilter(option.value)}
                   >
                     {option.label}
@@ -343,6 +343,7 @@ export function BookingManagement({
                           setSelectedBooking(booking);
                           setAdminNotes(booking.notes || "");
                         }}
+                        className='cursor-pointer'
                       >
                         Manage
                       </Button>
@@ -359,6 +360,7 @@ export function BookingManagement({
                           <div className="flex gap-2 flex-wrap">
                             <Button
                               size="sm"
+                              className="cursor-pointer"
                               onClick={() =>
                                 updateBookingStatus(
                                   booking.id,
@@ -372,6 +374,7 @@ export function BookingManagement({
                             </Button>
                             <Button
                               size="sm"
+                              className="cursor-pointer"
                               variant="destructive"
                               onClick={() =>
                                 updateBookingStatus(
@@ -386,6 +389,7 @@ export function BookingManagement({
                             </Button>
                             <Button
                               size="sm"
+                              className="cursor-pointer"
                               variant="outline"
                               onClick={() =>
                                 updateBookingStatus(
@@ -448,6 +452,7 @@ export function BookingManagement({
                                 disabled={
                                   isUpdating || !proposedDate || !proposedTime
                                 }
+                                className="cursor-pointer"
                               >
                                 Send Counter Proposal
                               </Button>
@@ -455,12 +460,11 @@ export function BookingManagement({
                             {/* Admin Notes */}
                             <div className="space-y-2">
                               <Label htmlFor="adminNotes">Admin Notes</Label>
-                              <Textarea
-                                id="adminNotes"
+                              <RichTextEditor
                                 value={adminNotes}
-                                onChange={(e) => setAdminNotes(e.target.value)}
+                                onChange={setAdminNotes}
                                 placeholder="Add internal notes about this booking..."
-                                rows={3}
+                                rows={4}
                               />
                             </div>
                           </>
@@ -623,6 +627,7 @@ export function BookingManagement({
                                   )
                                 }
                                 disabled={isUpdating || !proposedCost}
+                                className="cursor-pointer"
                               >
                                 Send Proposal
                               </Button>
@@ -632,6 +637,7 @@ export function BookingManagement({
                                   variant="outline"
                                   onClick={() => acceptCounterOffer(booking.id)}
                                   disabled={isUpdating}
+                                  className="cursor-pointer"
                                 >
                                   Accept ${booking.client_counter_offer}
                                 </Button>

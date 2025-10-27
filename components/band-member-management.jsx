@@ -157,6 +157,7 @@ export function BandMemberManagement({
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
+            className="cursor-pointer"
               onClick={() => {
                 setEditingMember(null);
                 setFormData({
@@ -228,7 +229,7 @@ export function BandMemberManagement({
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploadingImage}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 cursor-pointer"
                     >
                       <Upload className="h-4 w-4" />
                       {uploadingImage ? "Uploading..." : "Upload Image"}
@@ -237,6 +238,7 @@ export function BandMemberManagement({
                       <Button
                         type="button"
                         variant="ghost"
+                        className="cursor-pointer"
                         onClick={() =>
                           setFormData({ ...formData, image_url: "" })
                         }
@@ -245,13 +247,13 @@ export function BandMemberManagement({
                       </Button>
                     )}
                   </div>
-                  <Input
+                  {/* <Input
                     placeholder="Or paste image URL"
                     value={formData.image_url}
                     onChange={(e) =>
                       setFormData({ ...formData, image_url: e.target.value })
                     }
-                  />
+                  /> */}
                   {formData.image_url && (
                     <div className="mt-2">
                       <img
@@ -263,7 +265,7 @@ export function BandMemberManagement({
                   )}
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
                 {isSubmitting
                   ? "Saving..."
                   : editingMember
@@ -297,6 +299,7 @@ export function BandMemberManagement({
               </div>
               <div className="flex gap-2 mt-4">
                 <Button
+                  className="cursor-pointer"
                   size="sm"
                   variant="outline"
                   onClick={() => {
@@ -313,6 +316,7 @@ export function BandMemberManagement({
                   <Edit className="h-4 w-4" />
                 </Button>
                 <Button
+                  className="cursor-pointer"
                   size="sm"
                   variant="destructive"
                   onClick={() => deleteMember(member.id)}

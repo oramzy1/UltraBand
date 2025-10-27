@@ -137,7 +137,7 @@ export function AdminDashboard({
         <Button
           variant="outline"
           onClick={handleLogout}
-          className="flex items-center gap-2 bg-transparent"
+          className="flex items-center gap-2 bg-transparent cursor-pointer"
         >
           <LogOut className="h-4 w-4" />
           Logout
@@ -206,7 +206,7 @@ export function AdminDashboard({
         <TabsList className="flex w-full overflow-x-auto sm:grid sm:grid-cols-6 ps-80 sm:ps-0 snap-x snap-mandatory scroll-smooth">
           <TabsTrigger
             value="bookings"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <Users className="h-4 w-4" />
             Bookings
@@ -222,7 +222,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="events"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <Calendar className="h-4 w-4" />
             Events
@@ -230,7 +230,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="management"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <Users className="h-4 w-4" />
             Management
@@ -238,7 +238,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="transactions"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <History className="h-4 w-4" />
             Transactions
@@ -246,7 +246,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="gallery"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <ImageIcon className="h-4 w-4" />
             Gallery
@@ -254,7 +254,7 @@ export function AdminDashboard({
 
           <TabsTrigger
             value="settings"
-            className="flex items-center gap-2 whitespace-nowrap snap-start"
+            className="flex items-center gap-2 whitespace-nowrap snap-start cursor-pointer"
           >
             <Settings className="h-4 w-4" />
             Settings

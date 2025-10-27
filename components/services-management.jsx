@@ -69,7 +69,7 @@ function PackagesBuilder({ packages, setPackages }) {
             <button
               type="button"
               onClick={() => removePackage(pkgIndex)}
-              className="text-red-500"
+              className="text-red-500 cursor-pointer"
             >
               <X size={16} />
             </button>
@@ -116,7 +116,7 @@ function PackagesBuilder({ packages, setPackages }) {
                 <button
                   type="button"
                   onClick={() => removeFeature(pkgIndex, featIndex)}
-                  className="text-red-500"
+                  className="text-red-500 cursor-pointer"
                 >
                   <X size={14} />
                 </button>
@@ -129,7 +129,7 @@ function PackagesBuilder({ packages, setPackages }) {
       <button
         type="button"
         onClick={addPackage}
-        className="text-sm text-green-600 flex items-center gap-1"
+        className="text-sm text-green-600 flex items-center gap-1 cursor-pointer"
       >
         <Plus size={14} /> Add Package
       </button>
@@ -239,6 +239,7 @@ function PortfolioBuilder({ portfolio, setPortfolio }) {
                   document.getElementById(`file-${index}`)?.click()
                 }
                 disabled={uploadingIndex === index}
+                className="cursor-pointer"
               >
                 {uploadingIndex === index ? "Uploading..." : "Upload Image"}
               </Button>
@@ -298,7 +299,7 @@ function PortfolioBuilder({ portfolio, setPortfolio }) {
       <button
         type="button"
         onClick={addPortfolioItem}
-        className="text-sm text-green-600 flex items-center gap-1"
+        className="text-sm text-green-600 flex items-center gap-1 cursor-pointer"
       >
         <Plus size={14} /> Add Portfolio Item
       </button>
@@ -419,6 +420,7 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
               onClick={() => {
                 resetForm();
               }}
+              className="cursor-pointer"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Service
@@ -485,7 +487,7 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
                 {isSubmitting
                   ? "Saving..."
                   : editingService
@@ -533,6 +535,7 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                 <Button
                   size="sm"
                   variant="outline"
+                  className="cursor-pointer"
                   onClick={() => {
                     setEditingService(service);
                     setFormData({
@@ -550,6 +553,7 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                 <Button
                   size="sm"
                   variant="destructive"
+                  className="cursor-pointer"
                   onClick={() => deleteService(service.id)}
                 >
                   <Trash2 className="h-4 w-4" />

@@ -809,7 +809,7 @@ export function GalleryManagement({
         <h2 className="md:text-2xl font-bold">Gallery Management</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={resetForm}>
+            <Button className="cursor-pointer" onClick={resetForm}>
               <Plus className="h-4 w-4 mr-2" />
               Add Media
             </Button>
@@ -1062,12 +1062,14 @@ export function GalleryManagement({
               <Button
                 size="sm"
                 variant="outline"
+                className="cursor-pointer"
                 onClick={() => handleEdit(item)}
               >
                 <Edit className="h-4 w-4" />
               </Button>
               <Button
                 size="sm"
+                className="cursor-pointer"
                 variant={item.is_featured ? "default" : "outline"}
                 onClick={() => toggleFeatured(item.id, item.is_featured)}
               >
@@ -1076,6 +1078,7 @@ export function GalleryManagement({
               <Button
                 size="sm"
                 variant="destructive"
+                className="cursor-pointer"
                 onClick={() => handleDelete(item.id)}
               >
                 <Trash2 className="h-4 w-4" />

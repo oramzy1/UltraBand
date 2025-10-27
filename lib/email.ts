@@ -103,6 +103,9 @@ export async function sendContactEmails(data: ContactEmailData) {
         </div>
         <p>Sent from the Ultra Band Music website contact form.</p>
       </div>
+         <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
       <div class="footer">Automated notification from Ultra Band Music.</div>
     </div>
   </body>
@@ -141,6 +144,9 @@ export async function sendContactEmails(data: ContactEmailData) {
         </div>
         <p>Best regards,<br><strong>Ultra Band Music Team</strong></p>
       </div>
+         <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
       <div class="footer">This is an automated confirmation email — please do not reply.</div>
     </div>
   </body>
@@ -170,6 +176,7 @@ interface BookingUpdateData {
   proposedTime?: string;
 }
 
+// Update to Bookings - Audio Mixing & Video Editing
 export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
   const {
     clientName,
@@ -217,7 +224,27 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
     subject: `${statusTitle} - Ultra Band Music`,
     html: `
       
-         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color:#f8f9fa; padding:40px 0; color:#333;">
+      <html>
+       <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#8328FA,#5B14E5);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:22px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .cost-box{background:#f2f0ff;border-left:4px solid #8328FA;padding:16px;border-radius:6px;margin:20px 0;}
+          .cost-box h2{color:#8328FA;margin:0 0 10px 0;font-size:20px;}
+          .breakdown{background:#fff;border:1px solid #e5e7eb;padding:16px;border-radius:6px;margin:15px 0;}
+          .breakdown h2{font-size:16px;color:#333;margin-top:12px;margin-bottom:8px;}
+          .breakdown ul, .breakdown ol{margin:8px 0;padding-left:20px;}
+          .breakdown li{margin-bottom:4px;}
+          .breakdown blockquote{border-left:3px solid #8328FA;padding-left:12px;color:#666;font-style:italic;}
+          .button{display:inline-block;background:#8328FA;color:#fff!important;padding:12px 24px;border-radius:6px;text-decoration:none;margin:10px 5px;font-weight:500;}
+          .button-secondary{background:#6c757d;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color:#f8f9fa; padding:40px 0; color:#333;">
       <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);overflow:hidden;">
         
         <!-- HEADER -->
@@ -278,7 +305,10 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
 
           ${
             notes
-              ? `<div style="margin-top:20px;"><strong>Additional Notes:</strong><br>${notes}</div>`
+              ? `<div class="breakdown" style="margin-top:10px;">
+               <h3 style="color:#8328FA;margin-top:0;">Cost Breakdown:</h3>
+                 ${notes}
+               </div>`
               : ""
           }
 
@@ -293,6 +323,7 @@ export async function sendBookingStatusUpdateEmails(data: BookingUpdateData) {
         </div>
       </div>
     </div>
+      </html>
     `,
     attachments: [
       {
@@ -461,7 +492,6 @@ export async function sendBookingEmails(data: BookingEmailData) {
       <div class="email-wrapper">
         <div class="header"><h1>New Booking Request</h1></div>
         <div class="content">
-
           <div class="section">
             <h2>Contact Information</h2>
             <div class="details">
@@ -508,6 +538,9 @@ export async function sendBookingEmails(data: BookingEmailData) {
 
           <p style="margin-top: 24px;">Sent automatically from <strong>Ultra Band Music</strong> booking system.</p>
         </div>
+         <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
 
         <div class="footer">
           This message was generated from your website booking form.
@@ -516,6 +549,13 @@ export async function sendBookingEmails(data: BookingEmailData) {
     </body>
     </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Email to customer
@@ -570,6 +610,9 @@ export async function sendBookingEmails(data: BookingEmailData) {
 
           <p style="margin-top: 20px;">Best regards,<br><strong>The Ultra Band Music Team</strong></p>
         </div>
+         <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
 
         <div class="footer">
           This is an automated confirmation email. You can reply if you have any questions.
@@ -579,6 +622,13 @@ export async function sendBookingEmails(data: BookingEmailData) {
     </html>
       
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Send both emails
@@ -594,6 +644,7 @@ interface PasswordRecoveryData {
   temporaryPassword: string;
 }
 
+// Password Recovery Mail- To Admin
 export async function sendPasswordRecoveryEmail(data: PasswordRecoveryData) {
   const { email, username, temporaryPassword } = data;
 
@@ -630,6 +681,9 @@ export async function sendPasswordRecoveryEmail(data: PasswordRecoveryData) {
             Update your recovery email if needed</p>
         <p>If you didn’t request this, you can safely ignore this email.</p>
       </div>
+       <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
       <div class="footer">Ultra Band Music — your ultimate choice for an Owambe live band experience.</div>
     </div>
   </body>
@@ -637,6 +691,13 @@ export async function sendPasswordRecoveryEmail(data: PasswordRecoveryData) {
         
       
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   await transporter.sendMail(recoveryEmail);
@@ -715,6 +776,9 @@ export async function sendCostProposalEmail(data: {
             <p style="margin-top:30px;">We look forward to hearing from you!</p>
             <p>Best regards,<br><strong>Ultra Band Music Team</strong></p>
           </div>
+           <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
           <div class="footer">
             This is an automated email from Ultra Band Music. You can reply directly with any questions.
           </div>
@@ -722,6 +786,13 @@ export async function sendCostProposalEmail(data: {
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   console.log(
@@ -784,6 +855,9 @@ export async function sendPaymentLinkEmail(data: {
             <p>Once payment is confirmed, your booking will be finalized!</p>
             <p style="margin-top:30px;">Best regards,<br><strong>Ultra Band Music Team</strong></p>
           </div>
+           <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
           <div class="footer">
             This is an automated email from Ultra Band Music.
           </div>
@@ -791,6 +865,13 @@ export async function sendPaymentLinkEmail(data: {
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   console.log("📧 Sending payment link email to:", data.clientEmail);
@@ -844,17 +925,25 @@ export async function sendCounterOfferNotification(data: {
               }/admin" class="button">Review in Dashboard</a>
             </div>
           </div>
+           <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
           <div class="footer">Internal notification from Ultra Band Music</div>
         </div>
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   await transporter.sendMail(email);
 }
-
-// Add after sendCounterOfferNotification
 
 interface PaymentSuccessData {
   clientName: string;
@@ -870,6 +959,8 @@ interface PaymentSuccessData {
   };
 }
 
+
+// Success Mails
 export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
   const { clientName, clientEmail, amount, transactionId, bookingDetails } =
     data;
@@ -961,6 +1052,9 @@ export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
             
             <p style="margin-top:30px;">Best regards,<br><strong>Ultra Band Music Team</strong></p>
           </div>
+           <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
           <div class="footer">
             Keep this email as your receipt and booking confirmation.
           </div>
@@ -968,6 +1062,13 @@ export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Email to admin
@@ -998,11 +1099,21 @@ export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
 
             <p style="margin-top:20px;"><strong>Note:</strong> A private event has been automatically created in your dashboard. You can make it public when ready.</p>
           </div>
+           <div style="background:#000;padding:25px;text-align:center;">
+          <img src="cid:ultraband-logo" alt="Ultra Band Music" style="max-width:180px;height:auto;"/>
+        </div>
           <div class="footer">Automated notification from Ultra Band Music</div>
         </div>
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   await Promise.all([

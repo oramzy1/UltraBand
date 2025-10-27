@@ -114,6 +114,7 @@ export function YouTubeVideoSelection() {
         <div className="mt-6 flex justify-end">
           <Button
             variant="destructive"
+            className="cursor-pointer"
             onClick={async () => {
               try {
                 const response = await fetch("/api/admin/featured-video", {
@@ -176,7 +177,7 @@ export function YouTubeVideoSelection() {
                   variant={selectedVideoId === video.id ? "default" : "outline"}
                   onClick={() => handleSelectVideo(video.id)}
                   disabled={saving}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap cursor-pointer"
                 >
                   {selectedVideoId === video.id ? "Selected" : "Select"}
                 </Button>
