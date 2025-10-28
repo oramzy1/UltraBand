@@ -518,9 +518,11 @@ export function ServicesManagement({ services = [], onServicesUpdate }) {
                       className="border rounded-lg p-3 bg-muted/30"
                     >
                       <h4 className="font-semibold">{pkg.name}</h4>
-                      <p className="text-sm text-primary font-medium mb-2">
-                        ${pkg.price}
-                      </p>
+                     {pkg.price && (
+                       <p className="text-sm text-primary font-medium mb-2">
+                       ${pkg.price}
+                     </p>
+                     )}
                       <ul className="list-disc list-inside text-xs text-muted-foreground space-y-1">
                         {pkg.features?.map((f, i) => (
                           <li key={i}>{f}</li>

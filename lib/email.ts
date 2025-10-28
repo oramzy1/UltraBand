@@ -111,6 +111,13 @@ export async function sendContactEmails(data: ContactEmailData) {
   </body>
 </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Email to customer
@@ -152,6 +159,13 @@ export async function sendContactEmails(data: ContactEmailData) {
   </body>
 </html>
     `,
+    attachments: [
+      {
+        filename: "ultraband-logo.png",
+        path: logoPath,
+        cid: "ultraband-logo",
+      },
+    ],
   };
 
   // Send both emails
