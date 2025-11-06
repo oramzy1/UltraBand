@@ -826,7 +826,9 @@ export async function sendPaymentLinkEmail(data: {
   amount: number;
   paymentLink: string;
   eventDate: string;
+  bookingId: string;
 }) {
+  const responseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/booking-response/${data.bookingId}`;
   const email = {
     from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
     to: data.clientEmail,
@@ -864,7 +866,7 @@ export async function sendPaymentLinkEmail(data: {
             <div style="text-align:center;margin:30px 0;">
               <a href="${
                 data.paymentLink
-              }" class="button">Pay Now via PayPal</a>
+              }" class="button">Pay Now</a>
             </div>
 
             <p>Once payment is confirmed, your booking will be finalized!</p>

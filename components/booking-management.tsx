@@ -624,9 +624,9 @@ export function BookingManagement({
                             {booking.payment_confirmed_by_client &&
                               !booking.payment_confirmed_by_admin && (
                                 <div className="space-y-4 border-t pt-4">
-                                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                                  <div className="border border-amber-200 rounded-lg p-4">
                                     <p className="font-semibold text-amber-900 mb-2">
-                                      ⚠️ Payment Confirmation Pending
+                                      Payment Confirmation Pending
                                     </p>
                                     <p className="text-sm text-amber-800">
                                       Client has confirmed making the payment.

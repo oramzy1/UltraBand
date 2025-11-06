@@ -60,6 +60,7 @@ export async function POST(
       amount: finalAmount,
       paymentLink,
       eventDate: booking.event_date,
+      bookingId: params.id
     });
 
     return NextResponse.json({ booking: updatedBooking });

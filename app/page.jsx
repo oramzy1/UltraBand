@@ -11,6 +11,7 @@ import { FAQSection } from "@/components/faq-section";
 import SocialIcons from "@/components/social-icons"
 import { FeaturedVideos } from "@/components/featured-videos"
 import BackgroundContent from "@/components/BackgroundContent";
+import { HeroCarousel } from "@/components/hero-carousel";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -35,12 +36,18 @@ export default async function HomePage() {
     .eq("is_featured", true)
     .limit(3);
 
+  const { data: carouselImages } = await supabase
+    .from("hero_carousel")
+    .select("*")
+    .eq("is_public", true)
+    .order("display_order", { ascending: true });
+
   const heroInfo = bandInfo?.find((info) => info.section === "hero");
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div
+        {/* <div
           className="inset-0 fixed bg-cover bg-center bg-no-repeat -z-10"
           style={{
                   backgroundImage: `url('${heroInfo?.image_url || "/header-image.jpg"}')`,
@@ -48,7 +55,8 @@ export default async function HomePage() {
               }}
         >
           <div className="absolute inset-0 bg-black/60" />
-        </div>
+        </div> */}
+        <HeroCarousel images={carouselImages || []} defaultImage={heroInfo?.image_url || "/header-image.jpg"}/>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
           <h1

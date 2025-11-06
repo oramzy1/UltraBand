@@ -66,20 +66,20 @@ export async function POST(
       .single();
   
     // Send bank details email to client
-    try {
-      await sendBankDetailsEmail({
-        clientName: booking.client_name,
-        clientEmail: booking.client_email,
-        amount: booking.proposed_cost,
-        bookingId: params.id,
-        eventDate: booking.event_date,
-        eventTime: booking.event_time,
-        eventLocation: booking.event_location,
-      });
-      console.log("Bank details email sent");
-    } catch (emailError) {
-      console.error("Error sending bank details email:", emailError);
-    }
+    // try {
+    //   await sendBankDetailsEmail({
+    //     clientName: booking.client_name,
+    //     clientEmail: booking.client_email,
+    //     amount: booking.proposed_cost,
+    //     bookingId: params.id,
+    //     eventDate: booking.event_date,
+    //     eventTime: booking.event_time,
+    //     eventLocation: booking.event_location,
+    //   });
+    //   console.log("Bank details email sent");
+    // } catch (emailError) {
+    //   console.error("Error sending bank details email:", emailError);
+    // }
   
     return NextResponse.json({ 
       booking: updatedBooking,

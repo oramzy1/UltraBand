@@ -242,17 +242,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Loader2, XCircle, Building2, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BANK_DETAILS } from "@/lib/bank-details";
 
 export default function BookingResponsePage() {
+  const params = useParams();
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const bookingId = searchParams.get("booking_id");
-  const action = searchParams.get("action");
+  const bookingId = params.id as string; // Get from route params, not query params
+  const action = searchParams.get("action"); // This comes from query string
   
   const [booking, setBooking] = useState<any>(null);
   const [counterOffer, setCounterOffer] = useState("");
@@ -264,6 +264,12 @@ export default function BookingResponsePage() {
 
   useEffect(() => {
     const fetchBooking = async () => {
+      if (!bookingId) {
+        setError("Booking ID not found");
+        setFetchLoading(false);
+        return;
+      }
+
       try {
         const res = await fetch(`/api/bookings/${bookingId}`);
         if (!res.ok) throw new Error('Failed to fetch booking');
@@ -282,9 +288,7 @@ export default function BookingResponsePage() {
       }
     };
 
-    if (bookingId) {
-      fetchBooking();
-    }
+    fetchBooking();
   }, [bookingId]);
 
   const handleResponse = async (responseAction: string) => {
@@ -407,7 +411,7 @@ export default function BookingResponsePage() {
           {/* Bank Details Display */}
           {showBankDetails && (
             <div className="space-y-6">
-              <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-6">
+              <div className="border-2 border-gray-800 rounded-lg p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Building2 className="h-6 w-6 text-amber-600" />
                   <h3 className="text-lg font-semibold text-amber-900">Bank Transfer Details</h3>
@@ -416,7 +420,7 @@ export default function BookingResponsePage() {
                 <div className="space-y-3">
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-muted-foreground">Amount to Pay:</span>
-                    <strong className="text-xl text-amber-900">${booking?.proposed_cost?.toFixed(2)}</strong>
+                    <strong className="text-xl text-amber-700">${booking?.proposed_cost?.toFixed(2)}</strong>
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span>Bank Name:</span>
@@ -439,8 +443,8 @@ export default function BookingResponsePage() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-900 font-medium mb-2">📌 Important Instructions:</p>
+              <div className="border border-gray-800 rounded-lg p-4">
+                <p className="text-sm text-blue-900 font-medium mb-2">📌 Important:</p>
                 <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
                   <li>Include your full name in the transfer reference</li>
                   <li>Keep your payment receipt/confirmation</li>

@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { YouTubeVideoSelection } from "./youtube-video-selection";
 import { format } from "date-fns";
+import { HeroCarouselManagement } from "./hero-carousel-management";
 
 export function AdminDashboard({
   initialBookings,
@@ -42,7 +43,28 @@ export function AdminDashboard({
   const [loadingBand, setLoadingBand] = useState(true);
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [carouselImages, setCarouselImages] = useState([]);
   const router = useRouter();
+
+
+  useEffect(() => {
+    const fetchCarouselImages = async () => {
+      try {
+        const res = await fetch("/api/admin/carousel");
+        const data = await res.json();
+        setCarouselImages(data);
+      } catch (err) {
+        console.error("Error fetching carousel images", err);
+      }
+    };
+  
+    fetchCarouselImages();
+  }, []);
+  
+  // Add the handleCarouselUpdate function
+  const handleCarouselUpdate = (updatedImages) => {
+    setCarouselImages(updatedImages);
+  };
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -280,6 +302,10 @@ export function AdminDashboard({
               <BandMemberManagement
                 bandMembers={bandMembers}
                 onBandMembersUpdate={setBandMembers}
+              />
+              <HeroCarouselManagement
+                carouselImages={carouselImages || []}
+                onCarouselUpdate={handleCarouselUpdate}
               />
               <LocationManagement
                 locations={locations}
