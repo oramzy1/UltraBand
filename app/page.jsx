@@ -43,7 +43,7 @@ export default async function HomePage() {
         <div
           className="inset-0 fixed bg-cover bg-center bg-no-repeat -z-10"
           style={{
-                  backgroundImage: `url('${heroInfo?.image_url || "/headerimage.jpg"}')`,
+                  backgroundImage: `url('${heroInfo?.image_url || "/header-image.jpg"}')`,
                   willChange: "transform",
               }}
         >
@@ -76,7 +76,7 @@ export default async function HomePage() {
       </section>
       <section className="bg-black">
       <div className="absolute inset-0 z-0">
-    <BackgroundContent />
+    {/* <BackgroundContent /> */}
   </div>
         
       {/* Where We've Been */}

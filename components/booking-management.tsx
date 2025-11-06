@@ -26,7 +26,7 @@ import {
   Mail,
   Phone,
   DollarSign,
-  MessageSquare,
+  Loader2,
   Users,
   ChevronDown,
 } from "lucide-react";
@@ -223,7 +223,10 @@ export function BookingManagement({
         <div className="flex items-center gap-4">
           <Popover modal={false}>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="w-48 justify-between cursor-pointer">
+              <Button
+                variant="outline"
+                className="w-48 justify-between cursor-pointer"
+              >
                 {serviceFilter === "all" && "All Services"}
                 {serviceFilter === "events" && "Live Performance"}
                 {serviceFilter === "mixing" && "Audio Mixing"}
@@ -343,7 +346,7 @@ export function BookingManagement({
                           setSelectedBooking(booking);
                           setAdminNotes(booking.notes || "");
                         }}
-                        className='cursor-pointer'
+                        className="cursor-pointer"
                       >
                         Manage
                       </Button>
@@ -616,6 +619,74 @@ export function BookingManagement({
                                 rows={4}
                               />
                             </div>
+
+                            {/* Payment Confirmation - Only show if client confirmed payment */}
+                            {booking.payment_confirmed_by_client &&
+                              !booking.payment_confirmed_by_admin && (
+                                <div className="space-y-4 border-t pt-4">
+                                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                                    <p className="font-semibold text-amber-900 mb-2">
+                                      ⚠️ Payment Confirmation Pending
+                                    </p>
+                                    <p className="text-sm text-amber-800">
+                                      Client has confirmed making the payment.
+                                      Please verify the bank transfer and
+                                      confirm below.
+                                    </p>
+                                  </div>
+
+                                  <Button
+                                    onClick={async () => {
+                                      setIsUpdating(true);
+                                      try {
+                                        const response = await fetch(
+                                          `/api/bookings/${booking.id}/confirm-payment-admin`,
+                                          {
+                                            method: "POST",
+                                          }
+                                        );
+
+                                        if (!response.ok)
+                                          throw new Error(
+                                            "Failed to confirm payment"
+                                          );
+
+                                        // Remove from list (it's archived now)
+                                        const updatedBookings = bookings.filter(
+                                          (b) => b.id !== booking.id
+                                        );
+                                        onBookingsUpdate(updatedBookings);
+
+                                        toast({
+                                          title: "Payment Confirmed!",
+                                          description:
+                                            "Event created and booking archived. Client has been notified.",
+                                        });
+                                      } catch (error) {
+                                        toast({
+                                          title: "Error",
+                                          description:
+                                            "Failed to confirm payment",
+                                          variant: "destructive",
+                                        });
+                                      } finally {
+                                        setIsUpdating(false);
+                                      }
+                                    }}
+                                    disabled={isUpdating}
+                                    className="w-full"
+                                  >
+                                    {isUpdating ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Confirming...
+                                      </>
+                                    ) : (
+                                      "Confirm Payment Received"
+                                    )}
+                                  </Button>
+                                </div>
+                              )}
 
                             <div className="flex gap-2">
                               <Button

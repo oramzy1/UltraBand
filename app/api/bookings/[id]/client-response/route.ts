@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generatePayPalLink } from "@/lib/paypal";
-import { sendPaymentLinkEmail, sendCounterOfferNotification } from "@/lib/email";
+import { sendPaymentLinkEmail, sendBankDetailsEmail, sendCounterOfferNotification } from "@/lib/email";
 
 export async function POST(
   request: NextRequest,
@@ -29,17 +29,63 @@ export async function POST(
 
     if (action === 'accept') {
       // Generate PayPal link
-      paymentLink = await generatePayPalLink({
-        amount: booking.proposed_cost,
-        description: `Event Booking - ${booking.client_name}`,
-        bookingId: params.id,
-      });
+      // paymentLink = await generatePayPalLink({
+      //   amount: booking.proposed_cost,
+      //   description: `Event Booking - ${booking.client_name}`,
+      //   bookingId: params.id,
+      // });
+      
+
+      // negotiationEntry.action = 'accept';
+      // updatedData = {
+      //   status: 'accepted', // Use existing status
+      //   payment_link: paymentLink,
+      // };
 
       negotiationEntry.action = 'accept';
       updatedData = {
-        status: 'accepted', // Use existing status
-        payment_link: paymentLink,
+        status: 'awaiting_payment',
+        payment_method: 'bank_transfer',
       };
+    
+      console.log("Client accepted proposal - awaiting payment");
+      
+      const updatedHistory = [
+        ...(booking.negotiation_history || []),
+        negotiationEntry,
+      ];
+
+      const { data: updatedBooking } = await supabase
+      .from("bookings")
+      .update({
+        ...updatedData,
+        negotiation_history: updatedHistory,
+      })
+      .eq("id", params.id)
+      .select()
+      .single();
+  
+    // Send bank details email to client
+    try {
+      await sendBankDetailsEmail({
+        clientName: booking.client_name,
+        clientEmail: booking.client_email,
+        amount: booking.proposed_cost,
+        bookingId: params.id,
+        eventDate: booking.event_date,
+        eventTime: booking.event_time,
+        eventLocation: booking.event_location,
+      });
+      console.log("Bank details email sent");
+    } catch (emailError) {
+      console.error("Error sending bank details email:", emailError);
+    }
+  
+    return NextResponse.json({ 
+      booking: updatedBooking,
+      bankDetails: true // Flag to show bank details on frontend
+    });
+    
 
       // await sendPaymentLinkEmail({
       //   clientName: booking.client_name,
@@ -49,7 +95,7 @@ export async function POST(
       //   eventDate: booking.event_date,
       // });
 
-      console.log("Payment link generated:", paymentLink);
+      // console.log("Payment link generated:", paymentLink);
 
     } else if (action === 'counter') {
       negotiationEntry.action = 'counter_offer';

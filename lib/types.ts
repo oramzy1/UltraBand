@@ -1,10 +1,11 @@
 export interface Booking {
+  payment_confirmed_by_admin: any
   id: string
   service_category: string
   client_name: string
   client_email: string
   client_phone?: string
-  event_type: string
+  event_type: string 
   event_date: string
   event_time: string
   event_location: string
@@ -18,6 +19,7 @@ export interface Booking {
   proposed_cost?: number;
   client_counter_offer?: number;
   payment_link?: string;
+  payment_confirmed_by_client: boolean
   payment_status?: 'pending' | 'paid' | 'cancelled';
   negotiation_history?: NegotiationEntry[];
   created_at: string

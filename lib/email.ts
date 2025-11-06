@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import path from "path";
 import { format } from "date-fns";
+import { BANK_DETAILS } from "./bank-details";
 
 const logoPath = path.resolve("./public/Ultra Band white-logo (1).png");
 
@@ -1134,4 +1135,162 @@ export async function sendPaymentSuccessEmails(data: PaymentSuccessData) {
     transporter.sendMail(customerEmail),
     transporter.sendMail(adminEmail),
   ]);
+}
+
+
+export async function sendBankDetailsEmail(data: {
+  clientName: string;
+  clientEmail: string;
+  amount: number;
+  bookingId: string;
+  eventDate: string;
+  eventTime: string;
+  eventLocation: string;
+}) {
+  const email = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: data.clientEmail,
+    subject: "Payment Instructions - Ultra Band Music",
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#28a745,#20c997);color:white;padding:24px;text-align:center;}
+          .header h1{margin:0;font-size:22px;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .bank-box{background:#f2f0ff;border:2px solid #8328FA;padding:20px;border-radius:8px;margin:20px 0;}
+          .bank-box h3{color:#8328FA;margin-top:0;}
+          .bank-detail{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e5e7eb;}
+          .bank-detail:last-child{border-bottom:none;}
+          .bank-detail strong{color:#333;}
+          .amount-box{background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:6px;margin:20px 0;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>Payment Instructions</h1></div>
+          <div class="content">
+            <p>Hi ${data.clientName},</p>
+            <p>Thank you for accepting our proposal! Please make your payment using the bank details below:</p>
+            
+            <div class="amount-box">
+              <h3 style="margin:0 0 8px 0;color:#f59e0b;">Amount to Pay</h3>
+              <p style="font-size:28px;font-weight:bold;color:#92400e;margin:0;">$${data.amount.toFixed(2)}</p>
+            </div>
+
+            <div class="bank-box">
+              <h3>Bank Transfer Details</h3>
+              <div class="bank-detail">
+                <span>Bank Name:</span>
+                <strong>${BANK_DETAILS.bankName}</strong>
+              </div>
+              <div class="bank-detail">
+                <span>Account Name:</span>
+                <strong>${BANK_DETAILS.accountName}</strong>
+              </div>
+              <div class="bank-detail">
+                <span>Account Number:</span>
+                <strong>${BANK_DETAILS.accountNumber}</strong>
+              </div>
+              ${BANK_DETAILS.routingNumber ? `
+              <div class="bank-detail">
+                <span>Routing Number:</span>
+                <strong>${BANK_DETAILS.routingNumber}</strong>
+              </div>` : ''}
+            </div>
+
+            <div style="background:#dbeafe;border-left:4px solid #3b82f6;padding:16px;border-radius:6px;margin:20px 0;">
+              <p style="margin:0;"><strong>Important:</strong></p>
+              <ul style="margin:8px 0;padding-left:20px;">
+                <li>Please include your name in the transfer reference</li>
+                <li>After making payment, click the confirmation link in your booking page</li>
+                <li>Keep your payment receipt for records</li>
+              </ul>
+            </div>
+
+            <p><strong>Event Details:</strong></p>
+            <p>📅 ${format(new Date(data.eventDate), "PPP")}<br>
+            ⏰ ${data.eventTime}<br>
+            📍 ${data.eventLocation}</p>
+
+            <div style="text-align:center;margin:30px 0;">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/booking-response/${data.bookingId}?action=confirm-payment" 
+                 style="display:inline-block;background:#8328FA;color:#fff;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:600;">
+                I Have Made Payment
+              </a>
+            </div>
+
+            <p>Best regards,<br><strong>Ultra Band Music Team</strong></p>
+          </div>
+          <div class="footer">
+            This is an automated email from Ultra Band Music.
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  await transporter.sendMail(email);
+}
+
+export async function sendPaymentConfirmationToAdmin(data: {
+  clientName: string;
+  clientEmail: string;
+  amount: number;
+  bookingId: string;
+  eventDate: string;
+  eventTime: string;
+  eventLocation: string;
+}) {
+  const email = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    to: process.env.BUSINESS_EMAIL,
+    subject: `⚠️ Payment Confirmation Needed - ${data.clientName}`,
+    html: `
+      <html>
+      <head>
+        <style>
+          body{font-family:'Segoe UI',Roboto,sans-serif;background:#f7f7f8;margin:0;padding:0;color:#333;}
+          .wrapper{max-width:600px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);overflow:hidden;}
+          .header{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;padding:24px;text-align:center;}
+          .content{padding:32px 24px;line-height:1.6;}
+          .alert-box{background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:6px;margin:20px 0;}
+          .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="header"><h1>⚠️ Payment Confirmation Required</h1></div>
+          <div class="content">
+            <div class="alert-box">
+              <p style="margin:0;font-weight:600;color:#92400e;">Client has confirmed payment!</p>
+            </div>
+
+            <p><strong>Client:</strong> ${data.clientName}</p>
+            <p><strong>Email:</strong> ${data.clientEmail}</p>
+            <p><strong>Amount:</strong> $${data.amount.toFixed(2)}</p>
+            <p><strong>Event:</strong> ${format(new Date(data.eventDate), "PPP")} at ${data.eventTime}</p>
+            <p><strong>Location:</strong> ${data.eventLocation}</p>
+
+            <p style="margin-top:20px;">Please verify the payment in your bank account and confirm in the admin dashboard.</p>
+
+            <div style="text-align:center;margin:30px 0;">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/admin" 
+                 style="display:inline-block;background:#8328FA;color:#fff;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:600;">
+                Go to Admin Dashboard
+              </a>
+            </div>
+          </div>
+          <div class="footer">Internal notification from Ultra Band Music</div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  await transporter.sendMail(email);
 }
