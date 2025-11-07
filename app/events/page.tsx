@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, ExternalLink } from "lucide-react";
 import { format, isAfter, isBefore } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
+import { FAQSection } from "@/components/faq-section";
 
 export default async function EventsPage() {
   const supabase = await createClient();
@@ -215,6 +216,7 @@ export default async function EventsPage() {
             </CardContent>
           </Card>
         </div>
+        <FAQSection/>
       </div>
     </div>
   );

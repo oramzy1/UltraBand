@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FAQSection } from "@/components/faq-section";
 
 export default async function GalleryPage() {
   const supabase = await createClient();
@@ -127,6 +128,7 @@ export default async function GalleryPage() {
             </CardContent>
           </Card>
         </div>
+        <FAQSection/>
       </div>
     </div>
   );

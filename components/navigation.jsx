@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Moon, Sun } from "lucide-react";
@@ -29,10 +29,12 @@ const navItems = [
   { href: "/gallery", label: "Gallery" },
   { href: "/events", label: "Events" },
   { href: "/bookings", label: "Bookings" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -40,6 +42,26 @@ export function Navigation() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState();
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const scrollToFaq = () => {
+    const faqEl = document.getElementById("faq");
+    if (faqEl) faqEl.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Handle clicks on FAQ in nav
+  const handleNavClick = async (e, href) => {
+    if (href === "#faq") {
+      e.preventDefault();
+
+      // If already on the current page
+      if (pathname === "/") {
+        scrollToFaq();
+      } else {
+        // Delay a bit for component mount
+        setTimeout(scrollToFaq, 400);
+      }
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -115,6 +137,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href
@@ -217,7 +240,10 @@ export function Navigation() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        setIsOpen(false);
+                        handleNavClick(e, item.href)
+                      }}
                       className={cn(
                         "text-lg font-medium transition-colors hover:text-primary",
                         pathname === item.href

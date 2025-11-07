@@ -142,7 +142,7 @@ export function FAQSection() {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-secondary">
+    <section id="faq" className="py-20 px-4 bg-gradient-secondary">
       <div className="container mx-auto">
         <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
