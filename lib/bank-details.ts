@@ -1,8 +1,27 @@
 export const BANK_DETAILS = {
-    bankName: "Your Bank Name",
-    accountName: "Ultra Band Music Entertainment",
-    accountNumber: "1234567890",
-    // Optional: Add other details
-    routingNumber: "123456789", // If applicable
-    swiftCode: "ABCDEFGH", // For international
-  };
+  bankName: "Chase Bank",
+  accountName: "Ultra Band Music Entertainment",
+  accountNumber: "987364558",
+  // Optional: Add other details
+  routingNumberACH: "044000037",
+  routingNumberWire: "021000021",
+  swiftCode: "ABCDEFGH", // For international
+};
+
+export const PAYMENT_OPTIONS = [
+  {
+    id: "bank_transfer",
+    name: "Bank Transfer",
+    icon: "Building2",
+  },
+  {
+    id: "zelle",
+    name: "Zelle",
+    icon: "Smartphone",
+  },
+  {
+    id: "paypal",
+    name: "PayPal",
+    icon: "CreditCard",
+  },
+];

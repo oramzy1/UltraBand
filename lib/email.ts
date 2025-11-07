@@ -1195,10 +1195,10 @@ export async function sendBankDetailsEmail(data: {
                 <span>Account Number:</span>
                 <strong>${BANK_DETAILS.accountNumber}</strong>
               </div>
-              ${BANK_DETAILS.routingNumber ? `
+              ${BANK_DETAILS.routingNumberWire ? `
               <div class="bank-detail">
                 <span>Routing Number:</span>
-                <strong>${BANK_DETAILS.routingNumber}</strong>
+                <strong>${BANK_DETAILS.routingNumberWire}</strong>
               </div>` : ''}
             </div>
 
@@ -1245,7 +1245,15 @@ export async function sendPaymentConfirmationToAdmin(data: {
   eventDate: string;
   eventTime: string;
   eventLocation: string;
+  paymentMethod: string;
+  paymentProofUrl?: string;
 }) {
+  const paymentMethodNames = {
+    bank_transfer: 'Bank Transfer',
+    zelle: 'Zelle',
+    paypal: 'PayPal',
+  };
+
   const email = {
     from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
     to: process.env.BUSINESS_EMAIL,
@@ -1259,6 +1267,7 @@ export async function sendPaymentConfirmationToAdmin(data: {
           .header{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;padding:24px;text-align:center;}
           .content{padding:32px 24px;line-height:1.6;}
           .alert-box{background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:6px;margin:20px 0;}
+          .proof-box{background:#f3f4f6;border:1px solid #d1d5db;padding:16px;border-radius:8px;margin:20px 0;text-align:center;}
           .footer{background:#f7f7f8;padding:20px;text-align:center;font-size:13px;color:#777;}
         </style>
       </head>
@@ -1267,16 +1276,25 @@ export async function sendPaymentConfirmationToAdmin(data: {
           <div class="header"><h1>⚠️ Payment Confirmation Required</h1></div>
           <div class="content">
             <div class="alert-box">
-              <p style="margin:0;font-weight:600;color:#92400e;">Client has confirmed payment!</p>
+              <p style="margin:0;font-weight:600;color:#92400e;">Client has submitted payment proof!</p>
             </div>
 
             <p><strong>Client:</strong> ${data.clientName}</p>
             <p><strong>Email:</strong> ${data.clientEmail}</p>
             <p><strong>Amount:</strong> $${data.amount.toFixed(2)}</p>
+            <p><strong>Payment Method:</strong> ${paymentMethodNames[data.paymentMethod] || data.paymentMethod}</p>
             <p><strong>Event:</strong> ${format(new Date(data.eventDate), "PPP")} at ${data.eventTime}</p>
             <p><strong>Location:</strong> ${data.eventLocation}</p>
 
-            <p style="margin-top:20px;">Please verify the payment in your bank account and confirm in the admin dashboard.</p>
+            ${data.paymentProofUrl ? `
+            <div class="proof-box">
+              <p style="margin:0 0 10px 0;font-weight:600;">Payment Proof:</p>
+              <a href="${data.paymentProofUrl}" target="_blank" style="display:inline-block;background:#8328FA;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">
+                View Payment Receipt
+              </a>
+            </div>` : ''}
+
+            <p style="margin-top:20px;">Please verify the payment and confirm in the admin dashboard.</p>
 
             <div style="text-align:center;margin:30px 0;">
               <a href="${process.env.NEXT_PUBLIC_APP_URL}/admin" 

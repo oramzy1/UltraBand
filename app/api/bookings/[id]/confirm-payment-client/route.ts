@@ -9,6 +9,7 @@ export async function POST(
   try {
     const params = await context.params;
     const supabase = await createClient();
+    const { payment_method, payment_proof_url } = await request.json();
 
     const { data: booking } = await supabase
       .from("bookings")
@@ -26,6 +27,8 @@ export async function POST(
       .update({
         payment_confirmed_by_client: true,
         status: 'payment_processing',
+        selected_payment_method: payment_method,
+        payment_proof_url: payment_proof_url,
       })
       .eq("id", params.id);
 
@@ -38,6 +41,8 @@ export async function POST(
       eventDate: booking.event_date,
       eventTime: booking.event_time,
       eventLocation: booking.event_location,
+      paymentMethod: payment_method,
+      paymentProofUrl: payment_proof_url,
     });
 
     return NextResponse.json({ success: true });
