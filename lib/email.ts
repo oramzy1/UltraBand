@@ -864,9 +864,7 @@ export async function sendPaymentLinkEmail(data: {
             </div>
 
             <div style="text-align:center;margin:30px 0;">
-              <a href="${
-                data.paymentLink
-              }" class="button">Pay Now</a>
+              <a href="${responseUrl}?action=accept" class="button">Pay Now</a>
             </div>
 
             <p>Once payment is confirmed, your booking will be finalized!</p>
