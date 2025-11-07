@@ -161,14 +161,16 @@ export default async function AboutPage() {
         </section>
 
         {/* Band Members */}
-        <div>
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Meet the Band
-          </h2>
-          <div className="flex flex-col md:flex-row items-center justify-center mb-10 w-full">
-            <AnimatedTooltip items={formattedMembers} />
-          </div>
-        </div>
+       {formattedMembers.length > 0 && (
+         <div>
+         <h2 className="text-3xl font-bold text-center mb-12">
+           Meet the Band
+         </h2>
+         <div className="flex flex-col md:flex-row items-center justify-center mb-10 w-full">
+           <AnimatedTooltip items={formattedMembers} />
+         </div>
+       </div>
+       )}
         {/* FAQS */}
         <FAQSection />
       </div>
