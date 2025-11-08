@@ -73,7 +73,7 @@ export function Navigation() {
 
       // If already on the current page
       if (pathname === "/") {
-        scrollToConatact();
+        scrollToContact();
       } else {
         // Delay a bit for component mount
         setTimeout(scrollToContact, 400);
