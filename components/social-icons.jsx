@@ -70,7 +70,7 @@
 'use client';
 import { useState } from "react";
 import Link from "next/link";
-import { Instagram, Twitter, Facebook, Youtube, Plus } from "lucide-react";
+import { Instagram, Twitter, Facebook, Youtube, Plus, MessageCircleMoreIcon } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
 
 export default function SocialIcons() {
@@ -122,7 +122,7 @@ export default function SocialIcons() {
         hover:bg-purple-700 ${isOpen ? "rotate-45" : ""}
         animate-float`}
       >
-        <Plus size={24} />
+         {isOpen ? <Plus size={24} /> : <MessageCircleMoreIcon size={24} />}
       </button>
 
       {/* Elegant Floating Animation */}
