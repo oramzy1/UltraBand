@@ -46,7 +46,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative sm:mt-0 mt-[-2rem] h-[300px] sm:h-screen w-full flex items-center justify-center overflow-hidden">
         {/* <div
           className="inset-0 fixed bg-cover bg-center bg-no-repeat -z-10"
           style={{
@@ -61,16 +61,16 @@ export default async function HomePage() {
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
           <h1
             // style={{ fontFamily: "'Great Vibes', cursive" }}
-            className="hero-text text-2xl md:text-6xl font-bold mb-2 text-balance text-[#d4af37]"
+            className="hero-text text-lg md:text-6xl font-bold sm:mb-2 text-balance text-[#d4af37]"
           >
             {""}<TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
           </h1>
 
-          <p className="text-xl md:text-2xl mb-8 text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <p className="text-[.76rem] md:text-2xl mb-4 sm:mb-8 text-gray-300 text-pretty max-w-2xl mx-auto">
             {heroInfo?.content ||
               "Your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences"}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="hidden sm:flex flex-row gap-4 justify-center">
             <Button asChild size="lg" className="animate-pulse-glow">
               <Link href="/bookings">
                 Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
@@ -80,39 +80,48 @@ export default async function HomePage() {
               <Link href="/gallery">View Gallery</Link>
             </Button>
           </div>
+          <div className="sm:hidden flex flex-row gap-4 justify-center">
+            <Button asChild size="sm" className="animate-pulse-glow">
+              <Link href="/bookings">
+                Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/gallery">View Gallery</Link>
+            </Button>
+          </div>
         </div>
       </section>
       <section className="bg-black">
       <div className="absolute inset-0 z-0">
-    {/* <BackgroundContent /> */}
-  </div>
+      </div>
         
       {/* Where We've Been */}
-      <section className="py-10 px-4">
+      <section className="py-5 sm:py-10 px-4">
         <LocationsSection />
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4">
+      <section className="py-10 sm:py-20 px-4">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-xl md:text-4xl font-bold sm:mb-4">
               Why Choose Ultra Band Music?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
+            <p className="sm:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
               Professional musicians with years of experience creating memorable
               moments!
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="text-center p-3 sm:p-6 hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
-                <Music className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h3 className="text-xl font-semibold mb-2">
+                <Music className="sm:h-12 h-9 sm:w-12 w-9 mx-auto mb-4 text-primary" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   Versatile Repertoire
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm sm:text-base">
                   From rock and pop to jazz and acoustic sets, we adapt to any
                   event atmosphere
                 </p>
@@ -121,24 +130,24 @@ export default async function HomePage() {
 
             <Card className="text-center p-6 hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
-                <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h3 className="text-xl font-semibold mb-2">
+                <Users className="sm:h-12 h-9 sm:w-12 w-9 mx-auto mb-4 text-primary" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   Professional Experience
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm sm:text-base">
                   Over 10 years performing at weddings, corporate events, and
                   festivals
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="text-center p-3 sm:p-6 hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
-                <Star className="h-12 w-12 mx-auto mb-4 text-primary" />
-                <h3 className="text-xl font-semibold mb-2">
+                <Star className="sm:h-12 h-9 sm:w-12 w-9 mx-auto mb-4 text-primary" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   Unforgettable Performances
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm sm:text-base">
                   High-energy shows that keep your guests engaged and dancing
                   all night
                 </p>
@@ -150,13 +159,13 @@ export default async function HomePage() {
 
       {/* Upcoming Events */}
       {upcomingEvents && upcomingEvents.length > 0 && (
-        <section className="py-20 px-4 bg-muted/30">
+        <section className="py-10 sm:py-20 px-4 bg-muted/30">
           <div className="container mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <div className="text-center mb-10 sm:mb-16">
+              <h2 className="text-xl md:text-4xl font-bold sm:mb-4">
                 Upcoming Events
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="sm:text-xl text-muted-foreground">
                 Join us at our next performances
               </p>
             </div>
@@ -214,13 +223,13 @@ export default async function HomePage() {
       {/* Featured Gallery Preview */}
 
       {featuredGallery && featuredGallery.length > 0 && (
-        <section className="py-20 px-4">
+        <section className="py-10 sm:py-20 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-xl md:text-4xl font-bold sm:mb-4">
                 See Us in Action
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="sm:text-xl text-muted-foreground">
                 Highlights from our recent performances
               </p>
             </div>
@@ -249,12 +258,12 @@ export default async function HomePage() {
       <FAQSection/>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-primary/10">
+      <section className="py-10 sm:py-20 px-4 bg-primary/10">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-xl md:text-4xl font-bold sm:mb-4">
             Ready to Book Your Event?
           </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
+          <p className="sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
             Let's create an unforgettable musical experience for your special
             occasion
           </p>

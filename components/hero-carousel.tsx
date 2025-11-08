@@ -11,25 +11,28 @@ export function HeroCarousel({ images, defaultImage }) {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % displayImages.length);
-    }, 6000); // Change image every 5 seconds
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [displayImages.length]);
 
   return (
-    <div className="inset-0 fixed -z-10">
+    <div className="absolute inset-0">
       {displayImages.map((image, index) => (
         <div
           key={image.id || index}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1400 ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 w-full transition-opacity duration-1000 
+            ${index === currentIndex ? "opacity-100" : "opacity-0"} 
+            bg-center bg-no-repeat 
+            bg-contain sm:bg-cover 
+            h-[300px] sm:h-full`}
           style={{
             backgroundImage: `url('${image.image_url}')`,
             willChange: "transform",
           }}
         >
-          <div className="absolute inset-0 bg-black/60" />
+          {/* Overlay to darken image */}
+          <div className="absolute inset-0 bg-black/70 sm:bg-black/60" />
         </div>
       ))}
     </div>

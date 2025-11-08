@@ -232,8 +232,7 @@ export function LocationsSection() {
         {/* Map */}
         <div className="w-full md:w-1/2 h-[400px] rounded-lg overflow-hidden">
           {loading ? (
-            <div className="flex items-center justify-center h-full bg-transparent animate-bounce text-gray-400">
-              Loading map...
+            <div className="flex items-center justify-center h-full bg-transparent animate-spin text-gray-400">
             </div>
           ) : (
             <div ref={mapRef} className="w-full h-full" />
@@ -242,7 +241,7 @@ export function LocationsSection() {
 
         {/* Locations List */}
         <div className="w-full md:w-1/2">
-          <h2 className="text-2xl font-bold mb-4 text-white">
+          <h2 className="text-xl sm:text-2xl font-bold sm:mb-4 text-white">
             Where We've Been
           </h2>
           <div className="flex flex-wrap gap-2 text-lg text-gray-400">
@@ -252,14 +251,14 @@ export function LocationsSection() {
               <div>
                 {locations.map((loc, idx) => (
                   <span
-                    className="hover:text-white transition-colors cursor-pointer"
+                    className="hover:text-white text-sm sm:text-base transition-colors cursor-pointer"
                     key={loc.id}
                   >
                     {loc.name}
                     {idx < locations.length - 1 && <span className='hover:text-gray-400'> | </span>}
                   </span>
                 ))}
-                <span className="font-semibold">
+                <span className="font-semibold text-sm sm:text-base">
                   &nbsp; & All Around The World
                 </span>
               </div>

@@ -511,6 +511,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ResponsiveTooltip } from "./responsive-tooltip";
 
 interface GalleryManagementProps {
   gallery: GalleryItem[];
@@ -1047,16 +1048,11 @@ export function GalleryManagement({
         <CardContent className="p-4">
           <h3 className="font-semibold mb-1">{item.title}</h3>
           {item.description && (
-            <Tooltip>
-              <TooltipTrigger asChild>
+              <ResponsiveTooltip content={item.description}>
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2 cursor-help">
                   {item.description}
                 </p>
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
-                <p className="text-sm">{item.description}</p>
-              </TooltipContent>
-            </Tooltip>
+              </ResponsiveTooltip>
           )}
           <div className="flex justify-between items-center">
             <div className="flex gap-2">

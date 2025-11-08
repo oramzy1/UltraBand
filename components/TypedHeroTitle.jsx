@@ -29,7 +29,7 @@ export default function TypedHeroTitle({ defaultText }) {
   return (
     <span
       ref={el}
-      className="text-2xl md:text-5xl font-bold mb-6 inline-block"
+      className="text-xl md:text-5xl font-bold mb-2 sm:mb-6 inline-block"
     ></span>
   );
 }

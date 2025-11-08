@@ -28,8 +28,8 @@ export default async function EventsPage() {
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Events</h1>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <h1 className="text-2xl md:text-4xl font-bold sm:mb-6">Events</h1>
+          <p className="sm:text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
             Join us at our upcoming performances and experience Ultra Band Music
             live
           </p>
@@ -38,7 +38,7 @@ export default async function EventsPage() {
         {/* Upcoming Events */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <h2 className="text-2xl font-bold">Upcoming Events</h2>
+            <h2 className="sm:text-2xl font-bold">Upcoming Events</h2>
             <Badge variant="secondary">{upcomingEvents.length} Events</Badge>
           </div>
 
@@ -52,7 +52,7 @@ export default async function EventsPage() {
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg mb-2">
+                        <CardTitle className="sm:text-lg mb-2">
                           {event.title}
                         </CardTitle>
                         <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
@@ -69,7 +69,7 @@ export default async function EventsPage() {
                     )}
 
                     <div className="space-y-3 mb-4">
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm">
                         <Calendar className="h-4 w-4 text-primary" />
                         <span>
                           {format(
@@ -78,16 +78,16 @@ export default async function EventsPage() {
                           )}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm">
                         <Clock className="h-4 w-4 text-primary" />
                         <span>{event.event_time}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm">
                         <MapPin className="h-4 w-4 text-primary" />
                         <div>
                           <div>{event.venue}</div>
                           {event.venue_address && (
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-[.72rem] sm:text-xs text-muted-foreground">
                               {event.venue_address}
                             </div>
                           )}
@@ -134,7 +134,7 @@ export default async function EventsPage() {
         {pastEvents.length > 0 && (
           <div>
             <div className="flex items-center gap-3 mb-8">
-              <h2 className="text-2xl font-bold">Past Events</h2>
+              <h2 className="sm:text-2xl font-bold">Past Events</h2>
               <Badge variant="outline">{pastEvents.length} Events</Badge>
             </div>
 
@@ -147,7 +147,7 @@ export default async function EventsPage() {
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg mb-2">
+                        <CardTitle className="sm:text-lg mb-2">
                           {event.title}
                         </CardTitle>
                         <Badge
@@ -161,19 +161,19 @@ export default async function EventsPage() {
                   </CardHeader>
                   <CardContent>
                     {event.description && (
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-[.73rem] sm:text-sm text-muted-foreground mb-4">
                         {event.description}
                       </p>
                     )}
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
                         <span>
                           {format(new Date(event.event_date), "MMMM do, yyyy")}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                         <MapPin className="h-4 w-4" />
                         <span>{event.venue}</span>
                       </div>
@@ -198,18 +198,26 @@ export default async function EventsPage() {
         <div className="mt-16 text-center">
           <Card className="bg-primary/5 border-primary/20">
             <CardContent className="py-12">
-              <h3 className="text-2xl font-bold mb-4">
+              <h3 className="sm:text-2xl font-bold mb-4">
                 Want us at your event?
               </h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm sm:text-base">
                 We're always excited to perform at new venues and create
                 unforgettable experiences.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="hidden sm:flex flex-row gap-4 justify-center">
                 <Button asChild size="lg">
                   <a href="/bookings">Book Us Now</a>
                 </Button>
                 <Button asChild variant="outline" size="lg">
+                  <a href="/gallery">View Gallery</a>
+                </Button>
+              </div>
+              <div className="sm:hidden flex flex-row gap-4 justify-center">
+                <Button asChild size="sm">
+                  <a href="/bookings">Book Us Now</a>
+                </Button>
+                <Button asChild variant="outline" size="sm">
                   <a href="/gallery">View Gallery</a>
                 </Button>
               </div>

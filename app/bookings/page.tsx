@@ -10,10 +10,10 @@ export default function BookingsPage() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-2xl md:text-4xl font-bold sm:mb-6">
             Book Us Now
           </h1>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <p className="sm:text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
             Ready to make your event unforgettable? Fill out the form below and
             we'll get back to you within 24 hours.
           </p>
@@ -24,10 +24,10 @@ export default function BookingsPage() {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">
+                <CardTitle className="sm:text-2xl">
                   Event Booking Request
                 </CardTitle>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm sm:text-base">
                   Tell us about your event and we'll create a custom proposal
                   for you.
                 </p>

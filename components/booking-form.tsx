@@ -110,7 +110,7 @@ export function BookingForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Personal Information */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold border-b border-gray-500">
+        <h3 className="sm:text-lg font-semibold border-b border-gray-500">
           Contact Information
         </h3>
 

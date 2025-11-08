@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ImageIcon } from "lucide-react";
+import { ResponsiveTooltip } from "@/components/responsive-tooltip";
 
 export default async function ServiceDetail({ params }) {
   const supabase = await createClient();
@@ -21,8 +22,8 @@ export default async function ServiceDetail({ params }) {
 
   return (
     <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold mb-6 px-4">{service.title}</h1>
-      <p className="text-lg mb-8 text-muted-foreground px-4">
+      <h1 className="text-xl sm:text-4xl font-bold sm:mb-6 px-4">{service.title}</h1>
+      <p className="sm:text-lg mb-8 text-muted-foreground px-4">
         {service.description}
       </p>
 
@@ -30,9 +31,9 @@ export default async function ServiceDetail({ params }) {
         <div className="grid md:grid-cols-2 gap-6 px-4">
           {service.packages.map((pkg, idx) => (
             <div key={idx} className="border rounded-lg p-6 bg-card">
-              <h3 className="text-xl font-semibold mb-2">{pkg.name}</h3>
+              <h3 className="sm:text-xl font-semibold mb-2">{pkg.name}</h3>
               {pkg.price && (
-                <p className="text-sm text-primary font-medium mb-2">
+                <p className="text:xs sm:not-visited:text-sm text-primary font-medium mb-2">
                   ${pkg.price}
                 </p>
               )}
@@ -48,8 +49,8 @@ export default async function ServiceDetail({ params }) {
 
       {/* Portfolio Section */}
       {service.portfolio?.length > 0 && (
-        <div className="my-12">
-          <h2 className="text-2xl font-bold mb-6 px-4">
+        <div className="my-8 sm:my-12">
+          <h2 className="sm:text-2xl font-bold mb-2 sm:mb-6 px-4">
             {service.title} — Portfolio Highlights
           </h2>
           <div className="h-1 w-24 bg-purple-600 rounded-full mb-6 ml-4"></div>
@@ -83,16 +84,11 @@ export default async function ServiceDetail({ params }) {
                       <h3 className="font-semibold mb-1">{item.client_name}</h3>
                     )}
                     {item.description && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                        <ResponsiveTooltip content={item.description}>
                           <p className="text-sm text-muted-foreground line-clamp-2 cursor-help">
                             {item.description}
                           </p>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p className="text-sm">{item.description}</p>
-                        </TooltipContent>
-                      </Tooltip>
+                        </ResponsiveTooltip>
                     )}
                   </CardContent>
                 </Card>

@@ -142,13 +142,13 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-20 px-4 bg-gradient-secondary">
+    <section id="faq" className="py-10 sm:py-20 bg-gradient-secondary">
       <div className="container mx-auto">
         <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-xl md:text-4xl font-bold sm:mb-6">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <p className="sm:text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
             Everything you need to know about booking Ultra Band Music for your
             event. Can't find what you're looking for? Contact us directly.
           </p>
@@ -156,11 +156,11 @@ export function FAQSection() {
 
         <Card className="bg-gradient-card shadow-elegant border-border/20 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-2xl">
+            <CardTitle className="flex items-center gap-3 text-lg sm:text-2xl">
               <HelpCircle className="h-6 w-6 text-primary" />
               Event Booking FAQs
             </CardTitle>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm sm:text-base">
               Get answers to the most common questions about our services
             </p>
           </CardHeader>
@@ -170,7 +170,7 @@ export function FAQSection() {
                 <AccordionItem
                   key={faq.id}
                   value={faq.id}
-                  className="border border-border/20 rounded-lg px-4 transition-smooth hover:shadow-md hover:border-primary/20"
+                  className="border border-border/20 rounded-lg px-1 sm:px-4 transition-smooth hover:shadow-md hover:border-primary/20"
                 >
                   <AccordionTrigger className="text-left hover:no-underline group">
                     <div className="flex items-center gap-3">
@@ -198,8 +198,8 @@ export function FAQSection() {
           {/* Contact Form */}
           <Card className="shadow-elegant border-border/20 backdrop-blur-sm bg-background">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold">Get in Touch</CardTitle>
-              <p className="text-muted-foreground">
+              <CardTitle className="text-lg sm:text-2xl font-bold">Get in Touch</CardTitle>
+              <p className="text-muted-foreground text-sm sm:text-base">
                 Have more questions? Fill out the form and we'll get back to you.
               </p>
             </CardHeader>
