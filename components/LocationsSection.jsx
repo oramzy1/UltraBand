@@ -212,8 +212,13 @@ export function LocationsSection() {
             parseFloat(loc.longitude),
           ])
         );
-        map.fitBounds(bounds, { padding: [50, 40], maxZoom: 4 });
-        map.setZoom(Math.min(map.getZoom() + 0.5, 10));
+        // map.fitBounds(bounds, { padding: [50, 40], maxZoom: 4 });
+        map.fitBounds(bounds, { padding: [50, 40] });
+
+        // Prevent excessive zoom-in if markers are close
+        if (map.getZoom() > 10) {
+          map.setZoom(10);
+        }
       }
     };
 
@@ -257,7 +262,9 @@ export function LocationsSection() {
                     key={loc.id}
                   >
                     {loc.name}
-                    {idx < locations.length - 1 && <span className='hover:text-gray-400'> | </span>}
+                    {idx < locations.length - 1 && (
+                      <span className="hover:text-gray-400"> | </span>
+                    )}
                   </span>
                 ))}
                 <span className="font-semibold text-sm sm:text-base">
