@@ -29,7 +29,7 @@ export function HeroCarousel({ images, defaultImage }) {
             willChange: "transform",
           }}
         >
-          <div className="absolute inset-0 bg-black/80" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
       ))}
     </div>
