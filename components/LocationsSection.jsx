@@ -61,6 +61,7 @@
 
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 export function LocationsSection() {
@@ -228,11 +229,12 @@ export function LocationsSection() {
 
   return (
     <section className="relative py-12">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-8">
         {/* Map */}
-        <div className="w-full md:w-1/2 h-[400px] rounded-lg overflow-hidden">
+        <div className="w-full md:w-1/2 h-[300px] md:h-[350px] rounded-lg overflow-hidden">
           {loading ? (
-            <div className="flex items-center justify-center h-full bg-transparent animate-spin text-gray-400">
+            <div className="flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin" />
             </div>
           ) : (
             <div ref={mapRef} className="w-full h-full" />

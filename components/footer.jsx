@@ -69,7 +69,7 @@ export default function Footer() {
               +1 281-760-8305
               </a>
             </li>
-            <li>Location: North America, United States</li>
+            <li>Location: United States of America</li>
           </ul>
         </div>
 

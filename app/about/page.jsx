@@ -80,7 +80,7 @@ export default async function AboutPage() {
               loading="lazy"
               height={100}
               width={100}
-              src={aboutInfo?.image_url || "/about-image.jpg"}
+              src={aboutInfo?.image_url || "/about-image.png"}
               alt="Ultra Band Music band"
               className="rounded-lg shadow-lg w-full"
             />

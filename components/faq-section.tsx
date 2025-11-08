@@ -45,7 +45,7 @@ const faqData: FAQItem[] = [
     id: "pricing-payment",
     question: "How does pricing work and when is payment due?",
     answer:
-      "Our pricing is based on event size, duration, location, and specific requirements. A 50% deposit is required to secure your date, with the remaining balance due 7 days before your event. We accept all major credit cards, bank transfers, and certified checks.",
+      "Our pricing is based on event size, duration, location, and specific requirements. A 50% deposit is required to secure your date, with the remaining balance due on or before your event. We accept bank transfers and certified checks.",
     icon: <CreditCard className="h-4 w-4" />,
   },
   {
@@ -60,7 +60,7 @@ const faqData: FAQItem[] = [
     question:
       "What equipment do you provide and how much setup space is needed?",
     answer:
-      "We provide a complete professional sound system, wireless microphones, DJ equipment, and ambient lighting. We need approximately 8x8 feet of space near power outlets. All setup and breakdown is included in our service.",
+      "We provide a complete professional sound system, wireless microphones, DJ equipment, and ambient lighting. We need approximately 16x16 feet with access to power outlet. All setup and breakdown is included in our service.",
     icon: <Shield className="h-4 w-4" />,
   },
   {
@@ -142,9 +142,9 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-10 sm:py-20 bg-gradient-secondary">
+    <section className="py-10 sm:py-20 bg-gradient-secondary">
       <div className="container mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div id="faq" className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-xl md:text-4xl font-bold sm:mb-6">
             Frequently Asked Questions
           </h2>
@@ -196,7 +196,7 @@ export function FAQSection() {
           </div>
 
           {/* Contact Form */}
-          <Card className="shadow-elegant border-border/20 backdrop-blur-sm bg-background">
+          <Card id="contact" className="shadow-elegant border-border/20 backdrop-blur-sm bg-background">
             <CardHeader>
               <CardTitle className="text-lg sm:text-2xl font-bold">Get in Touch</CardTitle>
               <p className="text-muted-foreground text-sm sm:text-base">

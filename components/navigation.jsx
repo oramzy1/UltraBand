@@ -30,6 +30,7 @@ const navItems = [
   { href: "/events", label: "Events" },
   { href: "/bookings", label: "Bookings" },
   { href: "#faq", label: "FAQ" },
+  { href: "#contact", label: "Contact Us" },
 ];
 
 export function Navigation() {
@@ -47,6 +48,10 @@ export function Navigation() {
     const faqEl = document.getElementById("faq");
     if (faqEl) faqEl.scrollIntoView({ behavior: "smooth" });
   };
+  const scrollToContact = () => {
+    const faqEl = document.getElementById("contact");
+    if (faqEl) faqEl.scrollIntoView({ behavior: "smooth" });
+  };
 
   // Handle clicks on FAQ in nav
   const handleNavClick = async (e, href) => {
@@ -59,6 +64,19 @@ export function Navigation() {
       } else {
         // Delay a bit for component mount
         setTimeout(scrollToFaq, 400);
+      }
+    }
+  };
+  const handleContactClick = async (e, href) => {
+    if (href === "#contact") {
+      e.preventDefault();
+
+      // If already on the current page
+      if (pathname === "/") {
+        scrollToConatact();
+      } else {
+        // Delay a bit for component mount
+        setTimeout(scrollToContact, 400);
       }
     }
   };
@@ -137,7 +155,11 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
+                onClick={(e) => {
+                  handleNavClick(e, item.href);
+                  handleContactClick(e, item.href)
+
+                }}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href
@@ -242,7 +264,8 @@ export function Navigation() {
                       href={item.href}
                       onClick={() => {
                         setIsOpen(false);
-                        handleNavClick(e, item.href)
+                        handleNavClick(e, item.href);
+                        handleContactClick(e, item.href)
                       }}
                       className={cn(
                         "text-lg font-medium transition-colors hover:text-primary",
