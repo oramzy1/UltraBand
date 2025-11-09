@@ -53,6 +53,7 @@ export function BookingForm() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const turnstileTokenRef = useRef<string | null>(null);
   const turnstileWidgetIdRef = useRef<number | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   // Load the Turnstile script
@@ -93,6 +94,41 @@ export function BookingForm() {
       } catch (e) {}
     };
   }, []);
+
+  useEffect(() => {
+    if (!scriptLoaded || typeof window === "undefined") return;
+    
+    const renderTurnstile = () => {
+      const container = turnstileContainerRef.current;
+      if (container && (window as any).turnstile && !turnstileWidgetIdRef.current) {
+        try {
+          turnstileWidgetIdRef.current = (window as any).turnstile.render(container, {
+            sitekey: TURNSTILE_SITE_KEY,
+            theme: 'dark',
+            callback: (token: string) => {
+              turnstileTokenRef.current = token;
+            },
+          });
+        } catch (err) {
+          console.error("Turnstile render error:", err);
+        }
+      }
+    };
+  
+    const timeoutId = setTimeout(renderTurnstile, 100);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      if (turnstileWidgetIdRef.current !== null && (window as any).turnstile) {
+        try {
+          (window as any).turnstile.remove(turnstileWidgetIdRef.current);
+          turnstileWidgetIdRef.current = null;
+        } catch (err) {
+          console.error("Turnstile cleanup error:", err);
+        }
+      }
+    };
+  }, [scriptLoaded]);
 
   const resetTurnstile = () => {
     if (
@@ -558,13 +594,10 @@ export function BookingForm() {
       </div>
 
       <div className="mt-2 w-full">
-        <div className="flex justify-center w-full overflow-hidden">
+        <div className="flex justify-center md:justify-start w-full overflow-hidden">
           <div
+            ref={turnstileContainerRef}
             className="cf-turnstile w-full max-w-[300px]"
-            data-sitekey={TURNSTILE_SITE_KEY}
-            data-theme="light"
-            data-callback="onTurnstileSuccess"
-            data-size="normal"
           />
         </div>
 
