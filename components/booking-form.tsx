@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Loader2, Check, ChevronDown,Clock } from "lucide-react";
+import { CalendarIcon, Loader2, Check, ChevronDown, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -32,6 +32,8 @@ interface BookingFormData {
   budgetRange: string;
 }
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY;
+
 export function BookingForm() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -48,11 +50,102 @@ export function BookingForm() {
     budgetRange: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const turnstileTokenRef = useRef<string | null>(null);
+  const turnstileWidgetIdRef = useRef<number | null>(null);
   const { toast } = useToast();
+
+  // Load the Turnstile script
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (
+      document.querySelector(
+        'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]'
+      )
+    ) {
+      setScriptLoaded(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.defer = true;
+
+    script.onload = () => {
+      setScriptLoaded(true);
+    };
+    script.onerror = () => {
+      setScriptLoaded(false);
+      console.error("Turnstile script failed to load");
+    };
+
+    document.body.appendChild(script);
+
+    (window as any).onTurnstileSuccess = (token: string) => {
+      turnstileTokenRef.current = token;
+    };
+
+    return () => {
+      try {
+        delete (window as any).onTurnstileSuccess;
+      } catch (e) {}
+    };
+  }, []);
+
+  const resetTurnstile = () => {
+    if (
+      typeof window !== "undefined" &&
+      (window as any).turnstile &&
+      turnstileWidgetIdRef.current !== null
+    ) {
+      try {
+        (window as any).turnstile.reset(turnstileWidgetIdRef.current);
+        turnstileTokenRef.current = null;
+      } catch (err) {
+        console.error("Turnstile reset error:", err);
+      }
+    } else {
+      turnstileTokenRef.current = null;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const form = e.currentTarget;
+
+    const honeyValue = (form.elements.namedItem("website") as HTMLInputElement)
+      ?.value;
+
+    if (honeyValue) {
+      console.warn("Bot detected — submission blocked");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!scriptLoaded) {
+      toast({
+        title: "Error",
+        description: "CAPTCHA failed to load. Please try again later.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const turnstileToken = turnstileTokenRef.current;
+
+    if (!turnstileToken) {
+      toast({
+        title: "Error",
+        description: "Please complete the CAPTCHA verification.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/bookings", {
@@ -69,6 +162,7 @@ export function BookingForm() {
           eventLocation: formData.eventLocation,
           eventDescription: formData.eventDescription,
           budgetRange: formData.budgetRange,
+          turnstileToken,
         }),
       });
 
@@ -93,6 +187,7 @@ export function BookingForm() {
         eventDescription: "",
         budgetRange: "",
       });
+      resetTurnstile();
     } catch (error) {
       console.error("Error submitting booking:", error);
       toast({
@@ -438,6 +533,16 @@ export function BookingForm() {
           />
         </div>
 
+        {/* Honeypot Field */}
+        <input
+          type="text"
+          name="website"
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          style={{ display: "none" }}
+        />
+
         <div className="space-y-2">
           <Label htmlFor="eventDescription">Event Description</Label>
           <Textarea
@@ -450,6 +555,24 @@ export function BookingForm() {
             rows={4}
           />
         </div>
+      </div>
+
+      <div className="mt-2 w-full">
+        <div className="flex justify-center w-full overflow-hidden">
+          <div
+            className="cf-turnstile w-full max-w-[300px]"
+            data-sitekey={TURNSTILE_SITE_KEY}
+            data-theme="light"
+            data-callback="onTurnstileSuccess"
+            data-size="normal"
+          />
+        </div>
+
+        {!scriptLoaded && (
+          <p className="text-[.71rem] text-muted-foreground mt-2">
+            CAPTCHA failed to load — please refresh the page.
+          </p>
+        )}
       </div>
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>

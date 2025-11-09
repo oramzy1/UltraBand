@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -93,9 +93,71 @@ const faqData: FAQItem[] = [
   },
 ];
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY
+console.log("turnstile", TURNSTILE_SITE_KEY)
+
 export function FAQSection() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const turnstileTokenRef = useRef<string | null>(null);
+  const turnstileWidgetIdRef = useRef<number | null>(null);
+
+    // Load the Turnstile script
+    useEffect(() => {
+      if (typeof window === "undefined") return;
+  
+      if (
+        document.querySelector(
+          'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]'
+        )
+      ) {
+        setScriptLoaded(true);
+        return;
+      }
+  
+      const script = document.createElement("script");
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      script.async = true;
+      script.defer = true;
+  
+      script.onload = () => {
+        setScriptLoaded(true);
+      };
+      script.onerror = () => {
+        setScriptLoaded(false);
+        console.error("Turnstile script failed to load");
+      };
+  
+      document.body.appendChild(script);
+  
+      (window as any).onTurnstileSuccess = (token: string) => {
+        turnstileTokenRef.current = token;
+      };
+  
+      return () => {
+        try {
+          delete (window as any).onTurnstileSuccess;
+        } catch (e) {}
+      };
+    }, []);
+  
+    const resetTurnstile = () => {
+      if (
+        typeof window !== "undefined" &&
+        (window as any).turnstile &&
+        turnstileWidgetIdRef.current !== null
+      ) {
+        try {
+          (window as any).turnstile.reset(turnstileWidgetIdRef.current);
+          turnstileTokenRef.current = null;
+        } catch (err) {
+          console.error("Turnstile reset error:", err);
+        }
+      } else {
+        turnstileTokenRef.current = null;
+      }
+    };
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -109,12 +171,49 @@ export function FAQSection() {
       email: formData.get('email') as string,
       message: formData.get('message') as string,
     };
+
+    const honeyValue = (form.elements.namedItem("website") as HTMLInputElement)
+    ?.value;
+
+  if (honeyValue) {
+    console.warn("Bot detected — submission blocked");
+    setIsSubmitting(false);
+    return;
+  }
+
+  if (!scriptLoaded) {
+    toast({
+      title: "Error",
+      description: "CAPTCHA failed to load. Please try again later.",
+      variant: "destructive"
+    });
+    setIsSubmitting(false);
+    return;
+  }
+
+  const turnstileToken = turnstileTokenRef.current;
+
+  if (!turnstileToken) {
+    toast({
+      title: "Error",
+      description: "Please complete the CAPTCHA verification.",
+      variant: "destructive"
+    });
+    setIsSubmitting(false);
+    return;
+  }
   
     try {
+
+      const payload = {
+        ...data,
+        turnstileToken,
+      }
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -129,6 +228,7 @@ export function FAQSection() {
       });
   
       form.reset();
+      resetTurnstile();
     } catch (error) {
       console.error('Contact form error:', error);
       toast({
@@ -219,6 +319,15 @@ export function FAQSection() {
                   required 
                   disabled={isSubmitting}
                 />
+                 {/* Honeypot Field */}
+                 <input
+                  type="text"
+                  name="website"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  style={{ display: "none" }}
+                />
                 <Textarea 
                   name="message"
                   placeholder="Your Message" 
@@ -226,6 +335,26 @@ export function FAQSection() {
                   required 
                   disabled={isSubmitting}
                 />
+
+                 {/* TURNSTILE WIDGET */}
+                 <div className="mt-2 w-full">
+                  <div className="flex justify-center w-full overflow-hidden">
+                    <div
+                      className="cf-turnstile w-full max-w-[300px]"
+                      data-sitekey={TURNSTILE_SITE_KEY}
+                      data-theme="light"
+                      data-callback="onTurnstileSuccess"
+                      data-size="normal"
+                    />
+                  </div>
+
+                  {!scriptLoaded && (
+                    <p className="text-[.71rem] text-muted-foreground mt-2">
+                      CAPTCHA failed to load — please refresh the page.
+                    </p>
+                  )}
+                </div>
+
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
