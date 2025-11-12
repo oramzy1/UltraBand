@@ -6,12 +6,12 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata = {
-  title: "Ultra Band Music - Owambe Maestros",
+  title: "UltraBand Entertainment",
   description:
     "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
   generator: "Oramzy",
   openGraph: {
-    title: "Ultra Band Music - Owambe Maetros",
+    title: "UltraBand Entertainment ",
     description: "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
     url: "https://ultrabandentertainment.com",
     images: [
@@ -22,12 +22,12 @@ export const metadata = {
         alt: "Ultra Band Music Preview",
       },
     ],
-    siteName: "Vendora",
+    siteName: "Ultraband Entertainment",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ultra Band Music - Owambe Maetros",
+    title: "UltraBand Entertainment",
     description: "Live music band for weddings, corporate events, and special occasions. Book Ultra Band Music for unforgettable performances.",
     images: ["https://ultrabandentertainment.com/meta-image.jpg"],
   },

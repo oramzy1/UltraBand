@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-export function HeroCarousel({ images, defaultImage }) {
+export function HeroCarousel<>({ images, defaultImage }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const displayImages = images.length > 0 ? images : [{ image_url: defaultImage }];
 
@@ -17,8 +17,8 @@ export function HeroCarousel({ images, defaultImage }) {
   }, [displayImages.length]);
 
   return (
-    <div className="absolute inset-0">
-      {displayImages.map((image, index) => (
+    <div className="absolute inset-0 rounded-3xl overflow-hidden sm:mt-10 mt-0">
+      {displayImages.map((image: { id: any; image_url: any; }, index: number) => (
         <div
           key={image.id || index}
           className={`absolute inset-0 w-full transition-opacity duration-1000 

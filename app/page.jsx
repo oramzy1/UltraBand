@@ -43,6 +43,47 @@ export default async function HomePage() {
     .order("display_order", { ascending: true });
 
   const heroInfo = bandInfo?.find((info) => info.section === "hero");
+
+  const HeroSection = () => {
+      return (
+          <>
+              <HeroCarousel images={carouselImages || []} defaultImage={heroInfo?.image_url || "/header-image.jpg"}/>
+              <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
+                  <h1
+                      // style={{ fontFamily: "'Great Vibes', cursive" }}
+                      className="hero-text text-lg md:text-6xl font-bold sm:mb-2 text-balance text-[#d4af37]"
+                  >
+                      {""}<TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
+                  </h1>
+
+                  <p className="text-[.76rem] md:text-2xl mb-4 sm:mb-8 text-gray-300 text-pretty max-w-2xl mx-auto">
+                      {heroInfo?.content ||
+                          "Your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences"}
+                  </p>
+                  <div className="hidden sm:flex flex-row gap-4 justify-center">
+                      <Button asChild size="lg" className="animate-pulse-glow">
+                          <Link href="/bookings">
+                              Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                      </Button>
+                      <Button asChild variant="outline" size="lg">
+                          <Link href="/gallery">View Gallery</Link>
+                      </Button>
+                  </div>
+                  <div className="sm:hidden flex flex-row gap-4 justify-center">
+                      <Button asChild size="sm" className="animate-pulse-glow">
+                          <Link href="/bookings">
+                              Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                      </Button>
+                      <Button asChild variant="outline" size="sm">
+                          <Link href="/gallery">View Gallery</Link>
+                      </Button>
+                  </div>
+              </div>
+          </>
+      )
+    }
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
@@ -56,41 +97,7 @@ export default async function HomePage() {
         >
           <div className="absolute inset-0 bg-black/60" />
         </div> */}
-        <HeroCarousel images={carouselImages || []} defaultImage={heroInfo?.image_url || "/header-image.jpg"}/>
-
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
-          <h1
-            // style={{ fontFamily: "'Great Vibes', cursive" }}
-            className="hero-text text-lg md:text-6xl font-bold sm:mb-2 text-balance text-[#d4af37]"
-          >
-            {""}<TypedHeroTitle defaultText={heroInfo?.title || "Welcome Home!"} />
-          </h1>
-
-          <p className="text-[.76rem] md:text-2xl mb-4 sm:mb-8 text-gray-300 text-pretty max-w-2xl mx-auto">
-            {heroInfo?.content ||
-              "Your ultimate choice for an Owambe live band experience that transcends the ordinary, and your premier destination for timeless live music experiences"}
-          </p>
-          <div className="hidden sm:flex flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="animate-pulse-glow">
-              <Link href="/bookings">
-                Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/gallery">View Gallery</Link>
-            </Button>
-          </div>
-          <div className="sm:hidden flex flex-row gap-4 justify-center">
-            <Button asChild size="sm" className="animate-pulse-glow">
-              <Link href="/bookings">
-                Book Us Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/gallery">View Gallery</Link>
-            </Button>
-          </div>
-        </div>
+       <HeroSection />
       </section>
       <section className="bg-black">
       <div className="absolute inset-0 z-0">

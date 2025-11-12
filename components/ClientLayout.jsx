@@ -84,7 +84,7 @@ export default function ClientLayout({ children }) {
       <BackgroundContent />
       <Navigation />
       <main
-        className={`min-h-screen transition-opacity duration-700 ${
+        className={`min-h-screen p-1 sm:p-5 transition-opacity duration-700 ${
           contentVisible ? "opacity-100" : "opacity-0"
         }`}
       >

@@ -135,7 +135,7 @@ export function Navigation() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 h-24 w-full border-b supports-[backdrop-filter]:bg-background/60 border-border/40 backdrop-blur items-center justify-center flex">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -147,6 +147,9 @@ export function Navigation() {
               width={80}
               src={"/logo.png"}
             />
+              <div>
+                  <span className=" text-xs sm:text-xl uppercase text-white font-light">UltraBand Entertainment</span>
+              </div>
           </Link>
 
           {/* Desktop Navigation */}
