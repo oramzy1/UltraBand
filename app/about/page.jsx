@@ -59,7 +59,7 @@ export default async function AboutPage() {
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-          <div className="space-y-6 order-2 lg:order-1">
+          <div className="space-y-6 order-2">
             <h2 className="sm:text-2xl font-semibold">Our Story</h2>
             <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
               {aboutInfo?.content ||
@@ -75,7 +75,7 @@ export default async function AboutPage() {
             </p>
           </div>
 
-          <div className="relative order-1 lg:order-2">
+          <div className="relative order-1 ">
             <Image
               loading="lazy"
               height={100}
