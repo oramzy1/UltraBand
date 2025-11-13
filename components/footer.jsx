@@ -208,7 +208,7 @@ export default function Footer() {
                 </div>
 
                 {/* Social Media */}
-                <div>
+                <div className={'flex flex-col items-end'}>
                     <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
                     <div className="flex space-x-4">
                         <Link

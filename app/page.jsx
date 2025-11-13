@@ -46,8 +46,8 @@ export default async function HomePage() {
 
   const HeroSection = () => {
       return (
-          <>
-              <HeroCarousel images={carouselImages || []} defaultImage={heroInfo?.image_url || "/header-image.jpg"}/>
+          <section className="relative rounded-3xl sm:mt-0 mt-[-2rem] h-[300px] sm:h-screen w-full flex items-center justify-center overflow-hidden">
+          <HeroCarousel images={carouselImages || []} defaultImage={heroInfo?.image_url || "/header-image.jpg"}/>
               <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up">
                   <h1
                       // style={{ fontFamily: "'Great Vibes', cursive" }}
@@ -81,24 +81,13 @@ export default async function HomePage() {
                       </Button>
                   </div>
               </div>
-          </>
+          </section>
       )
     }
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
-      <section className="relative sm:mt-0 mt-[-2rem] h-[300px] sm:h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* <div
-          className="inset-0 fixed bg-cover bg-center bg-no-repeat -z-10"
-          style={{
-                  backgroundImage: `url('${heroInfo?.image_url || "/header-image.jpg"}')`,
-                  willChange: "transform",
-              }}
-        >
-          <div className="absolute inset-0 bg-black/60" />
-        </div> */}
        <HeroSection />
-      </section>
       <section className="bg-black">
       <div className="absolute inset-0 z-0">
       </div>

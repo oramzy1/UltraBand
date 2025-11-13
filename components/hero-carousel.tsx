@@ -17,7 +17,7 @@ export function HeroCarousel<>({ images, defaultImage }) {
   }, [displayImages.length]);
 
   return (
-    <div className="absolute inset-0 rounded-3xl overflow-hidden sm:mt-10 mt-0">
+    <div className="absolute inset-0 overflow-hidden">
       {displayImages.map((image: { id: any; image_url: any; }, index: number) => (
         <div
           key={image.id || index}
